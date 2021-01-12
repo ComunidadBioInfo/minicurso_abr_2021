@@ -1,6 +1,6 @@
-# Mini curso abril 2021: Parnoráma general de análisis de datos de RNA-seq con R
+# Mini curso abril 2021: Panorama general de análisis de datos de RNA-seq con R
 
-Este es el material del mini curso "Parnoráma general de análisis de datos de RNA-seq con R" ofrecido por la Red Mexicana de Bioinformática.
+Este es el material del mini curso "Panorama general de análisis de datos de RNA-seq con R" ofrecido por la Red Mexicana de Bioinformática.
 
 Fecha: 16 de abril de 2021
 
