@@ -1,0 +1,66 @@
+---
+title: '1: Introducción a RNA-seq'
+author: "Ana BVA"
+date: "2/2/2021"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      countIncrementalSlides: false
+      beforeInit: "macros.js"
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Transcriptómica
+
+Estudio de la expresión genética
+
+- ¿Cuánto RNA hay?
+
+```{r, out.width = "900px",fig.align='center'}
+knitr::include_graphics("images/transcriptomica.png")
+```
+
+
+
+---
+
+## Tecnologías
+
+```{r, out.width = "800px",fig.align='center'}
+knitr::include_graphics("images/book.png")
+```
+
+
+---
+## RNA-seq
+
+
+```{r, out.width = "660px",fig.align='center'}
+knitr::include_graphics("https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Summary_of_RNA-Seq.svg/800px-Summary_of_RNA-Seq.svg.png")
+```
+
+---
+
+## Aplicaciones
+
+```{r, out.width = "570px",fig.align='center'}
+knitr::include_graphics("images/book.png")
+```
+
+---
+
+## Bases de datos
+
+```{r, out.width = "450px",fig.align='center'}
+knitr::include_graphics("images/book.png")
+```
+
+
+
