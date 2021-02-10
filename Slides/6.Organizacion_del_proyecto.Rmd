@@ -1,0 +1,270 @@
+---
+title: "6.Organizacion del proyecto"
+author: "Rodolfo Luis Chávez Domínguez"
+date: "`r Sys.Date()`"
+output: 
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+# Crisis de reproducibilidad en la ciencia
+
+La reproducibilidad en la ciencia impica que dos o más personas (o grupos de trabajo) realicen el mismo experimento bajo condiciones experimentales similares y obtengan resultados similares.
+
+Para ello se requiere los siguientes elementos:
+
+--
+
+- Descripción de materiales y métodos
+
+--
+
+- Datos crudos o semi-crudos
+
+--
+
+- Código de cómputo utilizado
+
+--
+
+- Versión del software utilizado
+
+--
+
+- Información suplementaria para realizar el análisis de los datos
+
+---
+
+# Crisis de reproducibilidad en la ciencia
+
+Actuamente, existe una **crisis de reproducibilidad** en la ciencia -> Perseguir explicaciones incorrectas -> Diseñar tratamientos incorrectos para ciertas enfermedades
+
+Para combatir este problema:
+
+--
+
+- Transparencia de datos en publicaciones científicas
+
+--
+
+- Apertura de la información (Open science)
+
+--
+
+- Código abierto para el análisis de datos
+
+--
+
+- Repositiorios o bases de datos públicas donde se almacene la información
+
+--
+
+- Software depositado en repositorios o servidores a largo plazo
+
+---
+
+# Crisis de la reproducibilidad en la ciencia
+
+```{r, out.width="400px", fig.align='center', echo=F}
+knitr::include_graphics("../Images/Repo.png")
+```
+
+
+Proyecto organizado en directorios y subdirectorios para reproducir el análisis de datos
+
+---
+
+# Organización del proyecto  
+# README
+
+Un **README** es un archivo en texto plano (formado .md) que permite documentar el proyecto
+
+--
+
+- El contenido de un proyecto (repositorio)
+
+--
+
+- Las funciones de los scripts contenidos en el proyecto
+
+--
+
+- El orden en el cual deben ser ejecutados los scripts para realizar los análisis
+
+--
+
+- Software necesario para los análisis
+
+--
+
+- Información suplementaria sobre los datos/scripts/software
+
+--
+
+La función del **README** es explicar la organización del proyecto y que otros entiendan su contenido
+
+---
+
+# Organización del proyecto  
+# README
+
+Tips:
+
+--
+
+- Importante actualizar el README durante el desarrollo del proyecto
+
+--
+
+- Editarlo en formato plano (Nano, TextWrangler, MacDown, ...)
+
+--
+
+- Información clara y concisa
+
+```{r, out.width="600px", fig.align='center', echo=F}
+knitr::include_graphics("../Images/README2.png")
+```
+
+
+---
+
+# Organización del proyecto  
+# Datos
+
+Los datos deben de almacenarse en un directorio especial (considerar espacio en disco):
+
+--
+
+- Datos crudos
+
+--
+
+- Datos semi-crudos
+
+--
+
+- Datos procesados
+
+--
+
+Considerar almacenar los datos en un repositorio como respaldo [OSF](https://osf.io/)
+
+---
+
+# Organización del proyecto  
+#Datos
+
+Es recomendable llevar una tabla de metadatos durante el desarrollo del proyecto:
+
+--
+
+- Almacenar información de cada muestra
+
+--
+
+- Información de la corrida -> Lotes
+
+--
+
+- Comentarios respecto a la corrida
+
+--
+
+- Fechas de creación/modificación de los datos
+
+---
+
+## Organización del proyecto
+# Código
+
+**El código es una de las partes más importantes del proyecto**
+
+--
+
+- Instrucciones que recibe el equipo para el análisis de datos
+
+--
+
+- Diseñado  a partir del pipeline o estrategia para abordar el análisis de datos
+
+--
+
+- Elemento dinámico dentro del proyecto
+
+--
+
+```{r, out.width="400px", fig.align='center', echo=F}
+knitr::include_graphics("../Images/Script.png")
+```
+
+---
+
+## Organización del proyecto
+# Código
+
+--
+
+- Enumerar los scripts de acuerdo al orden en que serán ejecutados
+
+```
++-- 1.QualityControl.sh
++-- 2.Trimming.sh
++-- 3.ReadAlignment.sh
++-- 4.DifferentialExpression.R
+```
+
+--
+
+- Utilizar rutas relativas hacia los archivos *input*
+
+```
+fastqc ../Data/*.fastqc -o ../Results/
+```
+--
+
+- Comentar el script -> facilita que sea entendido por humanos
+
+```
+#Change the location of bam files
+mv ../Data/*.bam ../Results/
+```
+--
+
+- ¡Mejorar el código! -> *Less is more*
+
+---
+
+## Organización del proyecto
+# Código
+.pull-left[
+- **[DRY](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself)** Don't Repeat Yourself
+
+- **[KISS](https://en.wikipedia.org/wiki/KISS_principle)** Keep It Simple Soldier
+
+- **[YAGNI](https://en.wikipedia.org/wiki/You_aren%27t_gonna_need_it)** You Aren't Gonna Need It
+
+- **[POLA](https://en.wikipedia.org/wiki/Principle_of_least_astonishment)** Principle of Least Astonishment
+
+- **[POLP](https://digitalguardian.com/blog/what-principle-least-privilege-polp-best-practice-information-security-and-compliance)** Principle of Least Privilege
+]
+.pull-right[
+```{r, out.width="200px", fig.align='right', echo=F}
+knitr::include_graphics("../Images/Development.png")
+```
+]
+
+---
+
+## Organización del proyecto
+# Resultados
+
+```{r, out.width="700px", fig.align='center', echo=F}
+knitr::include_graphics("../Images/Results.png")
+```
+
+
