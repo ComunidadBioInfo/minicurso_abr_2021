@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="" xml:lang="">
   <head>
-    <title>4.Archivos</title>
+    <title>6.Organizacion del proyecto</title>
     <meta charset="utf-8" />
+    <meta name="author" content="Rodolfo Luis Chávez Domínguez" />
     <meta name="date" content="2021-02-09" />
     <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
     <link href="libs/remark-css-0.0.1/default-fonts.css" rel="stylesheet" />
@@ -11,281 +12,258 @@
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
-# 4.Archivos
+# 6.Organizacion del proyecto
+### Rodolfo Luis Chávez Domínguez
 ### 2021-02-09
 
 ---
 
 
-# Flujo de trabajo
+# Crisis de reproducibilidad en la ciencia
 
-![Workflow](../Images/workflow.png)
+La reproducibilidad en la ciencia impica que dos o más personas (o grupos de trabajo) realicen el mismo experimento bajo condiciones experimentales similares y obtengan resultados similares.
+
+Para ello se requiere los siguientes elementos:
+
+--
+
+- Descripción de materiales y métodos
+
+--
+
+- Datos crudos o semi-crudos
+
+--
+
+- Código de cómputo utilizado
+
+--
+
+- Versión del software utilizado
+
+--
+
+- Información suplementaria para realizar el análisis de los datos
+
 ---
 
-# FastQ
+# Crisis de reproducibilidad en la ciencia
+
+Actuamente, existe una **crisis de reproducibilidad** en la ciencia -&gt; Perseguir explicaciones incorrectas -&gt; Diseñar tratamientos incorrectos para ciertas enfermedades
+
+Para combatir este problema:
 
 --
 
-- Derivado del formato FASTA
+- Transparencia de datos en publicaciones científicas
 
 --
 
-- FASTA + Id secuencia + **Calidad**
+- Apertura de la información (Open science)
 
 --
 
-- Generalmente no está comprimido (.fastq) &gt; comprimir (.fastq.gz)
+- Código abierto para el análisis de datos
 
 --
 
-- Comprende 4 líneas por secuencia:
-  * @ ID del read + información de la corrida
-  * Secuencia 
-  * Símbolo "+"
-  * Calidad (Escala **Phred** y código **ASCII**)
-  
+- Repositiorios o bases de datos públicas donde se almacene la información
+
+--
+
+- Software depositado en repositorios o servidores a largo plazo
+
 ---
 
-# FastQ  
-## Identificador
+# Crisis de la reproducibilidad en la ciencia
+
+&lt;img src="../Images/Repo.png" width="400px" style="display: block; margin: auto;" /&gt;
+
+
+Proyecto organizado en directorios y subdirectorios para reproducir el análisis de datos
+
+---
+
+# Organización del proyecto  
+# README
+
+Un **README** es un archivo en texto plano (formado .md) que permite documentar el proyecto
 
 --
 
-- El identificador de la secuencia es la primera línea del archivo .fastq
+- El contenido de un proyecto (repositorio)
 
 --
 
-- Plataformas de Illumina superiores a 1.8 contienen la siguiente información:
+- Las funciones de los scripts contenidos en el proyecto
 
 --
 
-**@machneID:run number:flowCell ID:lane:tile:read:control number:index**
+- El orden en el cual deben ser ejecutados los scripts para realizar los análisis
 
+--
+
+- Software necesario para los análisis
+
+--
+
+- Información suplementaria sobre los datos/scripts/software
+
+--
+
+La función del **README** es explicar la organización del proyecto y que otros entiendan su contenido
+
+---
+
+# Organización del proyecto  
+# README
+
+Tips:
+
+--
+
+- Importante actualizar el README durante el desarrollo del proyecto
+
+--
+
+- Editarlo en formato plano (Nano, TextWrangler, MacDown, ...)
+
+--
+
+- Información clara y concisa
+
+&lt;img src="../Images/README2.png" width="600px" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+# Organización del proyecto  
+# Datos
+
+Los datos deben de almacenarse en un directorio especial (considerar espacio en disco):
+
+--
+
+- Datos crudos
+
+--
+
+- Datos semi-crudos
+
+--
+
+- Datos procesados
+
+--
+
+Considerar almacenar los datos en un repositorio como respaldo [OSF](https://osf.io/)
+
+---
+
+# Organización del proyecto  
+#Datos
+
+Es recomendable llevar una tabla de metadatos durante el desarrollo del proyecto:
+
+--
+
+- Almacenar información de cada muestra
+
+--
+
+- Información de la corrida -&gt; Lotes
+
+--
+
+- Comentarios respecto a la corrida
+
+--
+
+- Fechas de creación/modificación de los datos
+
+---
+
+## Organización del proyecto
+# Código
+
+**El código es una de las partes más importantes del proyecto**
+
+--
+
+- Instrucciones que recibe el equipo para el análisis de datos
+
+--
+
+- Diseñado  a partir del pipeline o estrategia para abordar el análisis de datos
+
+--
+
+- Elemento dinámico dentro del proyecto
+
+--
+
+&lt;img src="../Images/Script.png" width="400px" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Organización del proyecto
+# Código
+
+--
+
+- Enumerar los scripts de acuerdo al orden en que serán ejecutados
 
 ```
-## @SRR12038075.1 D00635:426:CD19YANXX:5:2301:1410:2130/1
++-- 1.QualityControl.sh
++-- 2.Trimming.sh
++-- 3.ReadAlignment.sh
++-- 4.DifferentialExpression.R
 ```
 
----
-
-# FastQ
-## Calidad
-
-La calidad de cada base secuenciada, en la escala **Phred**, se calcula de acuerdo la siguiente ecuación:
-
-
-`$$Q = -10 * log10(p)$$`
-
 --
 
-Q = Calidad 
+- Utilizar rutas relativas hacia los archivos *input*
 
+```
+fastqc ../Data/*.fastqc -o ../Results/
+```
 --
 
-p = Probabilidad de que el base call sea incorrecto
+- Comentar el script -&gt; facilita que sea entendido por humanos
 
+```
+#Change the location of bam files
+mv ../Data/*.bam ../Results/
+```
 --
 
-Valores de **p** cercanos a cero -&gt; Alta calidad
-
---
-
-¿Cuál es la calidad si el valor p del basecall es de 0.01?
-
---
-
-`$$Q = -10 * log10(0.01) = -10 * -2 = 20$$`
+- ¡Mejorar el código! -&gt; *Less is more*
 
 ---
 
-# FastQ
-## Calidad
-
---
-
-- Para evitar colocar los valores numéricos de la calidad en el archivo .fastq y saturarlo de información -&gt; **ASCII**
-
---
-
-- El código ASCII lo pueden consultar [aquí](https://www.ascii-code.com/)
-
---
-
-- Phred + 33 -&gt; Plataformas de Illumina a partir de 1.8 (símbolos especiales + alfanuméricos)
-
---
-
-- Phred + 64 -&gt; Plataformas de Illumina anteriores a 1.8
-
+## Organización del proyecto
+# Código
 .pull-left[
-![Phred0](../Images/ASCII0.png)
-]
+- **[DRY](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself)** Don't Repeat Yourself
 
+- **[KISS](https://en.wikipedia.org/wiki/KISS_principle)** Keep It Simple Soldier
+
+- **[YAGNI](https://en.wikipedia.org/wiki/You_aren%27t_gonna_need_it)** You Aren't Gonna Need It
+
+- **[POLA](https://en.wikipedia.org/wiki/Principle_of_least_astonishment)** Principle of Least Astonishment
+
+- **[POLP](https://digitalguardian.com/blog/what-principle-least-privilege-polp-best-practice-information-security-and-compliance)** Principle of Least Privilege
+]
 .pull-right[
-![Phred0](../Images/ASCII33.png)
+&lt;img src="../Images/Development.png" width="200px" style="display: block; margin: auto 0 auto auto;" /&gt;
 ]
----
-
-# FastQ
-
-![FastQ](../Images/Fastq.png)
 
 ---
 
-# SAM/BAM
+## Organización del proyecto
+# Resultados
 
---
-
-- De manera posterior al lineamiento se generan archivos **"Sequence Alignment Map"** -&gt; **SAM**
-
---
-
-- Archivos delimitados por tabuladores (TAB)
-
---
-
-- Convertidos a valores binarios como **"Binary Alignment Map"** -&gt; **BAM**
-
---
-
-- **BAM** -&gt; Mayor espacio en disco -&gt; Acceso aleatorio más eficiente
-
---
-
-- Las secuencias en formato BAM se pueden ordenar por coordenadas
-
---
-
-- Conversion entre formatos [SamTools!](https://github.com/samtools/samtools)
-
----
-
-# SAM/BAM
-
-- Los archivos en formato **SAM** se dividen en dos secciones:
---
-
-* **HEADER**: Información general del archivo
-
---
-
-* **Alignment**: Información sobre el alineamiento de cada lectura
-
----
-
-# SAM/BAM
-## HEADER
-
---
-
-- La sección HEADER incuye unformación sobre cómo se generó el alineamiento y su almacenamiento
-
---
-
-- **Todas** las líneas del HEADER están separadas por tabuladores
-
---
-
-- La estructura general de las líneas es la siguiente:
-
-   @ TAG:VALUE
-
-* TAG: Código de dos letras -&gt; Contenido
-* VALUE: Valores del TAG
-
----
-
-# SAM/BAM
-##HEADER
-
-Ejemplos de diferentes **TAG**:
-
---
-
-- @HD -&gt; Metadatos del alineamiento
-
---
-
-- @SQ -&gt; Datos de la secuencia de referencia
-
---
-
-- @RG -&gt; Grupo de lecturas 
-
---
-
-- @PG -&gt; Información del alineador y el código del alineamiento
-
----
-
-# SAM/BAM
-## ALLIGNMENT
-
-Esta sección procede al **HEADER** y contiene:
-
---
-
-- Cada línea corresponde a una lectura alineada
-
---
-
-- Para cada lectura se muestran los resultados de los siguientes campos obligatorios:
-
-  QNAME : **FLAG** : RNAME : POS : MAPQ : **CIGAR** : MRNM : MPOS : ISIZE : SEQ : QUAL
-
----
-
-# SAM/BAM
-## FLAG
-
---
-
-- Los valores del FLAG contestan preguntas relacionadas con el alineamiento del read
-
---
-
-- Sí = 1, No = 0
-
---
-
-- Cada respuesta se encuentra codificada en valores **binarios, decimales y hexadecimales**
-
---
-
-- Información útil para lecturas pareadas -&gt; ¿La lectura es pareada? 
-¿Ambos reads alinearon adecuadamente?
-
----
-
-# SAM/BAM
-# FLAG
-
-![Flag](../Images/flag.png)
-
----
-
-# SAM/BAM
-## Concise Idiosyncratic Gapped Alignment Report (CIGAR)
-
-- Almacena información relacionada con las operaciones necesarias para alinear el read
-- Se reporta con valores alfanuméricos:
-
---
-  * M -&gt; Alineamiento correcto
-  * I -&gt; Inserción comparado con la referencia
-  * D -&gt; Deleción comparado con la referencia
-  * N -&gt; Región con corrimiento (intrón)
-  * S -&gt; Soft clipping
-  * H -&gt; Hard clipping
-  * P -&gt; Padding o mutación silenciosa
-
---
----
- 
-# SAM/BAM
-## CIGAR
-
-![CIGAR](../Images/cigar.png)
+&lt;img src="../Images/Results.png" width="700px" style="display: block; margin: auto;" /&gt;
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

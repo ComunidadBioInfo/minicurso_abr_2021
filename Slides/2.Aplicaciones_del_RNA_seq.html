@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="" xml:lang="">
   <head>
-    <title>4.Archivos</title>
+    <title>2.Aplicaciones del RNA-Seq</title>
     <meta charset="utf-8" />
     <meta name="date" content="2021-02-09" />
     <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
@@ -11,281 +11,142 @@
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
-# 4.Archivos
+# 2.Aplicaciones del RNA-Seq
 ### 2021-02-09
 
 ---
 
 
-# Flujo de trabajo
-
-![Workflow](../Images/workflow.png)
----
-
-# FastQ
+# Principales aplicaciones
 
 --
 
-- Derivado del formato FASTA
+- Estudio de splicing alternativo
 
 --
 
-- FASTA + Id secuencia + **Calidad**
+- Detección de variantes y expresión alelo-específica
 
 --
 
-- Generalmente no está comprimido (.fastq) &gt; comprimir (.fastq.gz)
+- Redes de co-expresión
 
 --
 
-- Comprende 4 líneas por secuencia:
-  * @ ID del read + información de la corrida
-  * Secuencia 
-  * Símbolo "+"
-  * Calidad (Escala **Phred** y código **ASCII**)
-  
----
-
-# FastQ  
-## Identificador
+- Fusión de genes
 
 --
 
-- El identificador de la secuencia es la primera línea del archivo .fastq
 
---
-
-- Plataformas de Illumina superiores a 1.8 contienen la siguiente información:
-
---
-
-**@machneID:run number:flowCell ID:lane:tile:read:control number:index**
-
-
-```
-## @SRR12038075.1 D00635:426:CD19YANXX:5:2301:1410:2130/1
-```
+- **Análisis de expresión diferencial**
 
 ---
 
-# FastQ
-## Calidad
-
-La calidad de cada base secuenciada, en la escala **Phred**, se calcula de acuerdo la siguiente ecuación:
-
-
-`$$Q = -10 * log10(p)$$`
+# Estudio de splicing alternativo
 
 --
 
-Q = Calidad 
+- El RNA-seq permite el estudio de nueveas "splice junctions" causadas por mutaciones
 
 --
 
-p = Probabilidad de que el base call sea incorrecto
+- Caracterización de isoformas expresadas de manera tejido-específicas
 
 --
 
-Valores de **p** cercanos a cero -&gt; Alta calidad
+- Descubrir nuevas isoformas
 
 --
 
-¿Cuál es la calidad si el valor p del basecall es de 0.01?
-
---
-
-`$$Q = -10 * log10(0.01) = -10 * -2 = 20$$`
+- El código del splicing alternativo pueda ser descifrado
 
 ---
 
-# FastQ
-## Calidad
+# Detección de variantes
 
 --
 
-- Para evitar colocar los valores numéricos de la calidad en el archivo .fastq y saturarlo de información -&gt; **ASCII**
+- No es la principal estrategia para el estudio de variantes (WGS)
 
 --
 
-- El código ASCII lo pueden consultar [aquí](https://www.ascii-code.com/)
+- Presenta limitaciones relacionadas con la cobertura y la profundidad
 
 --
 
-- Phred + 33 -&gt; Plataformas de Illumina a partir de 1.8 (símbolos especiales + alfanuméricos)
+- El alineamiento de las lecturas requiere de la eliminación de secuencias duplicadas
 
 --
 
-- Phred + 64 -&gt; Plataformas de Illumina anteriores a 1.8
-
-.pull-left[
-![Phred0](../Images/ASCII0.png)
-]
-
-.pull-right[
-![Phred0](../Images/ASCII33.png)
-]
----
-
-# FastQ
-
-![FastQ](../Images/Fastq.png)
+- El pipeline es similar al llamado de variantes para DNA-Seq
 
 ---
 
-# SAM/BAM
+# Expresión alelo específica
 
 --
 
-- De manera posterior al lineamiento se generan archivos **"Sequence Alignment Map"** -&gt; **SAM**
+- SNP heterocigotos -&gt; alelos distintos
 
 --
 
-- Archivos delimitados por tabuladores (TAB)
+- Expresión diferencial de alelos -&gt; desarrollo de enfermedades
 
 --
 
-- Convertidos a valores binarios como **"Binary Alignment Map"** -&gt; **BAM**
+- RNA-seq permite conocer la expresión diferencial de los alelos
 
 --
 
-- **BAM** -&gt; Mayor espacio en disco -&gt; Acceso aleatorio más eficiente
+- Secuencias codificantes y no codificantes del genoma
 
 --
 
-- Las secuencias en formato BAM se pueden ordenar por coordenadas
-
---
-
-- Conversion entre formatos [SamTools!](https://github.com/samtools/samtools)
+- WGS y (variantes) y epigenómica (silencialmiento) para complementar los datos
 
 ---
 
-# SAM/BAM
-
-- Los archivos en formato **SAM** se dividen en dos secciones:
---
-
-* **HEADER**: Información general del archivo
+# Redes de co-expresión
 
 --
 
-* **Alignment**: Información sobre el alineamiento de cada lectura
+- Asociación entre dos o más genes por medio de expresión coordinada
+
+--
+
+- Genes co-expresados -&gt; funciones relacionadas, mecanismos de regulación similar 
+
+--
+
+- RNA-seq permite obtener redes de co-expresión más completas que los microarreglos
+
+--
+
+- Requiere amplio número de muestras (al menos 20) 
 
 ---
 
-# SAM/BAM
-## HEADER
+# Análisis de expresión diferencial
+
+--  
+
+- Aplicación más común del RNA-seq
 
 --
 
-- La sección HEADER incuye unformación sobre cómo se generó el alineamiento y su almacenamiento
+- Permite identificar y cuantificar la expresión de transcritos entre dos grupos distintos
 
 --
 
-- **Todas** las líneas del HEADER están separadas por tabuladores
+- Etapas del desarrollo, tejidos distintos, efecto de estímulos o tratamientos
 
 --
 
-- La estructura general de las líneas es la siguiente:
-
-   @ TAG:VALUE
-
-* TAG: Código de dos letras -&gt; Contenido
-* VALUE: Valores del TAG
-
----
-
-# SAM/BAM
-##HEADER
-
-Ejemplos de diferentes **TAG**:
+- Requiere del uso de modelos estadísticos que evaluen la expresión diferencial 
 
 --
 
-- @HD -&gt; Metadatos del alineamiento
-
---
-
-- @SQ -&gt; Datos de la secuencia de referencia
-
---
-
-- @RG -&gt; Grupo de lecturas 
-
---
-
-- @PG -&gt; Información del alineador y el código del alineamiento
-
----
-
-# SAM/BAM
-## ALLIGNMENT
-
-Esta sección procede al **HEADER** y contiene:
-
---
-
-- Cada línea corresponde a una lectura alineada
-
---
-
-- Para cada lectura se muestran los resultados de los siguientes campos obligatorios:
-
-  QNAME : **FLAG** : RNAME : POS : MAPQ : **CIGAR** : MRNM : MPOS : ISIZE : SEQ : QUAL
-
----
-
-# SAM/BAM
-## FLAG
-
---
-
-- Los valores del FLAG contestan preguntas relacionadas con el alineamiento del read
-
---
-
-- Sí = 1, No = 0
-
---
-
-- Cada respuesta se encuentra codificada en valores **binarios, decimales y hexadecimales**
-
---
-
-- Información útil para lecturas pareadas -&gt; ¿La lectura es pareada? 
-¿Ambos reads alinearon adecuadamente?
-
----
-
-# SAM/BAM
-# FLAG
-
-![Flag](../Images/flag.png)
-
----
-
-# SAM/BAM
-## Concise Idiosyncratic Gapped Alignment Report (CIGAR)
-
-- Almacena información relacionada con las operaciones necesarias para alinear el read
-- Se reporta con valores alfanuméricos:
-
---
-  * M -&gt; Alineamiento correcto
-  * I -&gt; Inserción comparado con la referencia
-  * D -&gt; Deleción comparado con la referencia
-  * N -&gt; Región con corrimiento (intrón)
-  * S -&gt; Soft clipping
-  * H -&gt; Hard clipping
-  * P -&gt; Padding o mutación silenciosa
-
---
----
- 
-# SAM/BAM
-## CIGAR
-
-![CIGAR](../Images/cigar.png)
+- Normalización de los datos (tamaño de la librería, longitud de los genes, composición de la librería...)
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
