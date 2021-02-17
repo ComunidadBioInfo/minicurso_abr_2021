@@ -1,0 +1,65 @@
+---
+title: '5: Flujo de trabajo para el análsis de RNA-seq'
+author: "Ana BVA"
+date: "16/2/2021"
+output:
+  xaringan::moon_reader:
+    css: ["default", "default-fonts", "hygge"]
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      countIncrementalSlides: false
+      beforeInit: "macros.js"
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+# Flujo general de trabajo
+
+
+```{r, out.width = "550px",fig.align='center'}
+knitr::include_graphics("https://biocorecrg.github.io/RNAseq_course_2019/images/RNAseq_workflow.png")
+```
+
+---
+
+# Primeros pasos
+
+
+```{r, out.width = "540px",fig.align='center'}
+knitr::include_graphics("images/step1.png")
+```
+
+
+---
+
+# Alineamiento y Quantificación
+
+
+```{r, out.width = "950px",fig.align='center'}
+knitr::include_graphics("images/step2.png")
+```
+
+
+---
+
+# Expresión Diferencial y análisis funcionales
+
+
+```{r, out.width = "750px",fig.align='center'}
+knitr::include_graphics("images/step3.png")
+```
+
+---
+
+# Flujo general de trabajo
+
+
+```{r, out.width = "550px",fig.align='center'}
+knitr::include_graphics("https://biocorecrg.github.io/RNAseq_course_2019/images/RNAseq_workflow.png")
+```
+

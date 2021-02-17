@@ -17,6 +17,28 @@ editor_options:
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
+
+
+## Agradecimientos
+
+Este material está basado en [Love, Michael I., et al. "RNA-Seq workflow: gene-level exploratory analysis and differential expression." F1000Research 4 (2015).](https://www.bioconductor.org/packages/devel/workflows/vignettes/rnaseqGene/inst/doc/rnaseqGene.html) de Bioconductor.
+
+```{r, out.width = "300px",fig.align='center'}
+knitr::include_graphics("https://images.squarespace-cdn.com/content/v1/5423875be4b03f0c482a58c4/1532953317705-W6TYTE70KG5E6KQEZU1K/ke17ZwdGBToddI8pDm48kNVP8RwsgCc7XlHc2zPQeqdZw-zPPgdn4jUwVcJE1ZvWQUxwkmyExglNqGp0IvTJZUJFbgE-7XRK3dMEBRBhUpxA5wn4368HhrDKfvXqORu9oTEmTJkjlQ2gdQcVngofpWQcE5w-MKnvigIPwIMqpXs/Bioconductor.png")
+```
+
+---
+## Agradecimientos
+
+También está basado en el curso de ["Next generation sequencing bioiformatics" (Santiago, Chile 2019)](https://coursesandconferences.wellcomegenomecampus.org/our-events/next-generation-sequencing-bioinformatics-chile-2019/).
+
+```{r, out.width = "600px",fig.align='center'}
+knitr::include_graphics("images/module7.png")
+```
+
+
+---
+
 ## Transcriptómica
 
 Estudio de la expresión genética

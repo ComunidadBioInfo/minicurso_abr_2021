@@ -1,18 +1,19 @@
 <!DOCTYPE html>
 <html lang="" xml:lang="">
   <head>
-    <title>1: Introducción a RNA-seq</title>
+    <title>3: Consideraciones para el diseño experimental</title>
     <meta charset="utf-8" />
     <meta name="author" content="Ana BVA" />
     <script src="libs/header-attrs-2.6/header-attrs.js"></script>
     <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
     <link href="libs/remark-css-0.0.1/default-fonts.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/hygge.css" rel="stylesheet" />
   </head>
   <body>
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
-# 1: Introducción a RNA-seq
+# 3: Consideraciones para el diseño experimental
 ### Ana BVA
 ### 2/2/2021
 
@@ -21,42 +22,159 @@ class: center, middle, inverse, title-slide
 
 
 
-## Transcriptómica
+# ¿Cúal es la pregunta que se quiere contestar?
 
-Estudio de la expresión genética
 
-- ¿Cuánto RNA hay?
-
-&lt;img src="images/transcriptomica.png" width="900px" style="display: block; margin: auto;" /&gt;
+&lt;img src="images/experiment.png" width="290px" style="display: block; margin: auto;" /&gt;
 
 
 
 ---
 
-## Tecnologías
+## ¿Cúal es la pregunta que se quiere contestar?
 
-&lt;img src="images/book.png" width="800px" style="display: block; margin: auto;" /&gt;
+Consideraciones importantes:
+
+- **Single vs paired-end** (análisis de isoformas).
+
+- **Stranded vs unstranded** (antisense y overlapping
+transcripts).
+
+- **Profundidad de la secuenciación** (detección de transcritos con baja abundancia). 
+
+- **Número de replicas**:
+
+  - *Biológicas* = independientes, muestras biologicamente distintas.
+  
+  - *Técnicas* = repetir la medición de la misma muestra.
+  
+
+.full-width[.content-box-red[Para el análisis de expresión diferencial es mejor **incrementar el número de replicas** que incrementar la profundidad de la secuenciación.]]
+
+---
+
+# ¿Qué es single-end y paired-end?
+
+**Single-end**:  Lectura de un único extremo de cada fragmento. 
+
+
+&lt;img src="images/s-p-end.png" width="900px" style="display: block; margin: auto;" /&gt;
+
+**Paired-end**: La secuenciación pareada proporciona la secuencia de ambos extremos de cada fragmento, siempre separados por una distancia conocida.
+
+.footnote[[Martínez, Javier María Rodríguez. "Secuenciación de genomas." Arbor 177.698 (2004): 285-310.](http://www.encuentros.uma.es/encuentros138_9/secuenciacion.pdf)]
+
+---
+
+# Profundidad de la secuenciación
+
+- Mayor profundidad permite deterctar transcritos con baja expresión (Entre más *reads* tengas, encontrarás mayor cantidad de genes).
+
+- Se requiere un incremento logarítmico en la profundidad de secuenciación para obtener un aumento lineal el la deteción de los genes. 
+
+&lt;img src="images/depth.png" width="900px" style="display: block; margin: auto;" /&gt;
 
 
 ---
-## RNA-seq
+
+# Precios
+
+Es importante contemplar los costos dentro del diseño. La tabla muestra costos NO actualizados pero la tendencia es similar:
+
+- Single-end es más baráto que paired-end.
+
+- Mayor profundidad de secuenciación es más costoso. 
+
+- Mayor longitud de bp por read aumenta el precio.
 
 
-&lt;img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Summary_of_RNA-Seq.svg/800px-Summary_of_RNA-Seq.svg.png" width="660px" style="display: block; margin: auto;" /&gt;
+&lt;img src="images/cost.png" width="800px" style="display: block; margin: auto;" /&gt;
 
 ---
 
-## Aplicaciones
+# Precios del langebio
 
-&lt;img src="images/book.png" width="570px" style="display: block; margin: auto;" /&gt;
+Tomados de su página de internet [langebio](http://labsergen.langebio.cinvestav.mx/en/?services=sbssequencing)
+
+.pull-left[
+### Precios de librerias
+
+- 1 Library from DNA: $ 222.00
+
+- 16 Libraries from DNA: $ 89.00 c/u
+
+- 1 Library from total RNA or messenger RNA: $ 408.00
+
+- 16 Libraries from RNA: $ 153.00 c/u
+
+- 8 Small libraries RNA: $ 191.00 c/u
+
+]
+
+.pull-right[
+### Precios de secuenciación
+
+
+- Running on MiSeq 2x300: $ 2,687.00
+
+- Run on NextSeq 2x150, High Yield: $ 7,396.00
+
+- Running on a HiSeq 2x100 lane : $ 3,490.00
+
+]
+
+.small[
+*Note: The price of libraries may vary depending on the number of samples to process.
+]
+---
+
+## ¿Cuáles son las posibles fuentes de variación? 
+
+.full-width[.content-box-blue[Conoce el fenómeno que quieres estudiar]]
+
+
+.pull-left[
+
+&lt;img src="images/experiment.png" width="200px" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+
+- **Variación biológica**: Sexo, edad, background genético, etnicidad, etc.
+
+- **Variación técnica**: Día de procesamiento de la muestra, lotes de reactivos, tiempo de recoleción de muestras, personal, etc.
+]
+
+
 
 ---
 
-## Bases de datos
+# Diseño experimental 
 
-&lt;img src="images/book.png" width="450px" style="display: block; margin: auto;" /&gt;
+Es importante considerar la **variación biológica** al planear el experimento, porque puede generar variación no deseada que no puede ser eliminada.
+
+&lt;img src="images/batch.jpg" width="900px" style="display: block; margin: auto;" /&gt;
 
 
+.footnotesize[[doi.org/10.1101/025528](http://doi.org/10.1101/025528)]
+
+
+---
+
+# Diseño experimental balanceado
+
+Cuando las muestras se colectan en diferentes lotes es importante incluir diferentes grupos para detectar la **variación técnica**. Visualizar los datos usando algoritmos de redución de dimensiones ayuda a observar si las muestras tienen efectos por lote. 
+
+&lt;img src="images/balanced.jpg" width="900px" style="display: block; margin: auto;" /&gt;
+
+
+.footnotesize[[doi.org/10.1101/025528](http://doi.org/10.1101/025528)]
+
+
+
+---
+
+# Quiz 
 
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
