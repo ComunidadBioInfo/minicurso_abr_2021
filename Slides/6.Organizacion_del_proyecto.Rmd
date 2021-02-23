@@ -13,7 +13,7 @@ output:
 
 # Crisis de reproducibilidad en la ciencia
 
-La reproducibilidad en la ciencia impica que dos o más personas (o grupos de trabajo) realicen el mismo experimento bajo condiciones experimentales similares y obtengan resultados similares.
+La reproducibilidad en la ciencia implica que dos o más personas (o grupos de trabajo) realicen el mismo experimento bajo condiciones experimentales similares y obtengan resultados similares.
 
 Para ello se requiere los siguientes elementos:
 

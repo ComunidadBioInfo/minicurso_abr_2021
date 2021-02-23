@@ -14,15 +14,19 @@ date: "`r Sys.Date()`"
 
 --
 
-- Estudio de splicing alternativo
+- Expresión cuantitativa de loci
 
 --
 
-- Detección de variantes y expresión alelo-específica
+- Detección de variantes 
 
 --
 
 - Redes de co-expresión
+
+--
+
+- Secuenciación de célula única
 
 --
 
@@ -35,23 +39,27 @@ date: "`r Sys.Date()`"
 
 ---
 
-# Estudio de splicing alternativo
+# Expresión cuantitativa de loci (EQTL)
 
 --
 
-- El RNA-seq permite el estudio de nueveas "splice junctions" causadas por mutaciones
+- Relacionado con el estudio de rasgos
 
 --
 
-- Caracterización de isoformas expresadas de manera tejido-específicas
+- Relaciona cambios en la expresión de genes a SNPs conocidos
 
 --
 
-- Descubrir nuevas isoformas
+- Determinar el efecto en el fenotipo -> mecanismos en *cis-* o en *trans-*
 
 --
 
-- El código del splicing alternativo pueda ser descifrado
+- WGS y (variantes) y epigenómica (silencialmiento) para complementar los datos
+
+--
+
+- Útil para la investigación de enfermedades o agronomía
 
 ---
 
@@ -59,43 +67,19 @@ date: "`r Sys.Date()`"
 
 --
 
-- No es la principal estrategia para el estudio de variantes (WGS)
+- Alternativa al estudio clásico de variantes (WGS o WES)
 
 --
 
-- Presenta limitaciones relacionadas con la cobertura y la profundidad
+- Presenta limitaciones relacionadas con la cobertura y la profundidad (cobertura mayor a 10X)
 
 --
 
-- El alineamiento de las lecturas requiere de la eliminación de secuencias duplicadas
+- Se han reportado resultados en donde se identificaron > 8000 SNPs en músculo de *Longissimus thoraci*
 
 --
 
-- El pipeline es similar al llamado de variantes para DNA-Seq
-
----
-
-# Expresión alelo específica
-
---
-
-- SNP heterocigotos -> alelos distintos
-
---
-
-- Expresión diferencial de alelos -> desarrollo de enfermedades
-
---
-
-- RNA-seq permite conocer la expresión diferencial de los alelos
-
---
-
-- Secuencias codificantes y no codificantes del genoma
-
---
-
-- WGS y (variantes) y epigenómica (silencialmiento) para complementar los datos
+- Enfocado en la porción transcrita del genoma
 
 ---
 
@@ -116,6 +100,27 @@ date: "`r Sys.Date()`"
 --
 
 - Requiere amplio número de muestras (al menos 20) 
+
+---
+
+# Fusión de genes
+
+--
+
+- Asociado a eventos de rearreglos genómicos como amplificaciones, deleciones y translocaciones
+
+--
+
+- Región 5' gen A -> Region 3' gen B
+
+--
+
+- RNA-seq permite conocer fusiones génicas en el desarrollo de enfermedades como cáncer
+
+--
+
+- Permite conocer las diferencias en la expresión de genes fusionados entre dos condiciones
+
 
 ---
 

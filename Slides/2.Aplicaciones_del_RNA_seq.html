@@ -3,7 +3,7 @@
   <head>
     <title>2.Aplicaciones del RNA-Seq</title>
     <meta charset="utf-8" />
-    <meta name="date" content="2021-02-09" />
+    <meta name="date" content="2021-02-17" />
     <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
     <link href="libs/remark-css-0.0.1/default-fonts.css" rel="stylesheet" />
   </head>
@@ -12,7 +12,7 @@
 class: center, middle, inverse, title-slide
 
 # 2.Aplicaciones del RNA-Seq
-### 2021-02-09
+### 2021-02-17
 
 ---
 
@@ -21,15 +21,19 @@ class: center, middle, inverse, title-slide
 
 --
 
-- Estudio de splicing alternativo
+- Expresión cuantitativa de loci
 
 --
 
-- Detección de variantes y expresión alelo-específica
+- Detección de variantes 
 
 --
 
 - Redes de co-expresión
+
+--
+
+- Secuenciación de célula única
 
 --
 
@@ -42,23 +46,27 @@ class: center, middle, inverse, title-slide
 
 ---
 
-# Estudio de splicing alternativo
+# Expresión cuantitativa de loci (EQTL)
 
 --
 
-- El RNA-seq permite el estudio de nueveas "splice junctions" causadas por mutaciones
+- Relacionado con el estudio de rasgos
 
 --
 
-- Caracterización de isoformas expresadas de manera tejido-específicas
+- Relaciona cambios en la expresión de genes a SNPs conocidos
 
 --
 
-- Descubrir nuevas isoformas
+- Determinar el efecto en el fenotipo -&gt; mecanismos en *cis-* o en *trans-*
 
 --
 
-- El código del splicing alternativo pueda ser descifrado
+- WGS y (variantes) y epigenómica (silencialmiento) para complementar los datos
+
+--
+
+- Útil para la investigación de enfermedades o agronomía
 
 ---
 
@@ -66,43 +74,19 @@ class: center, middle, inverse, title-slide
 
 --
 
-- No es la principal estrategia para el estudio de variantes (WGS)
+- Alternativa al estudio clásico de variantes (WGS o WES)
 
 --
 
-- Presenta limitaciones relacionadas con la cobertura y la profundidad
+- Presenta limitaciones relacionadas con la cobertura y la profundidad (cobertura mayor a 10X)
 
 --
 
-- El alineamiento de las lecturas requiere de la eliminación de secuencias duplicadas
+- Se han reportado resultados en donde se identificaron &gt; 8000 SNPs en músculo de *Longissimus thoraci*
 
 --
 
-- El pipeline es similar al llamado de variantes para DNA-Seq
-
----
-
-# Expresión alelo específica
-
---
-
-- SNP heterocigotos -&gt; alelos distintos
-
---
-
-- Expresión diferencial de alelos -&gt; desarrollo de enfermedades
-
---
-
-- RNA-seq permite conocer la expresión diferencial de los alelos
-
---
-
-- Secuencias codificantes y no codificantes del genoma
-
---
-
-- WGS y (variantes) y epigenómica (silencialmiento) para complementar los datos
+- Enfocado en la porción transcrita del genoma
 
 ---
 
@@ -123,6 +107,27 @@ class: center, middle, inverse, title-slide
 --
 
 - Requiere amplio número de muestras (al menos 20) 
+
+---
+
+# Fusión de genes
+
+--
+
+- Asociado a eventos de rearreglos genómicos como amplificaciones, deleciones y translocaciones
+
+--
+
+- Región 5' gen A -&gt; Region 3' gen B
+
+--
+
+- RNA-seq permite conocer fusiones génicas en el desarrollo de enfermedades como cáncer
+
+--
+
+- Permite conocer las diferencias en la expresión de genes fusionados entre dos condiciones
+
 
 ---
 

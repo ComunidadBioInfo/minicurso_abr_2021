@@ -1,0 +1,103 @@
+---
+title: "Alineadores"
+author: "Rodolfo Chavez"
+date: "`r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r, out.width="600px", fig.align='center', echo = F}
+knitr::include_graphics("../Images/RNAseq_workflow2.png")
+```
+Imagen tomada de [aquí](https://biocorecrg.github.io/RNAseq_course_2019/salmon.html)
+---
+
+# Alineamiento
+```{r, out.width="600px", fig.align='center', echo = F}
+knitr::include_graphics("../Images/ReadAlignment.jpg")
+```
+
+Buscar la región del genoma/transcriptoma a partir de la cual se originaron los reads
+
+---
+
+# Alineamiento
+
+- Indexar genoma/transcriptoma (FASTA, GTF3/GFF3)
+
+```{r, out.width="500px", fig.align='center', echo = F}
+knitr::include_graphics("../Images/GenomeIndexing.png")
+```
+
+--
+
+- Alinear los reads (Fastq) al genoma/transcriptoma indexado
+
+```{r, out.width="500px", fig.align='center', echo = F}
+knitr::include_graphics("../Images/ReadAlignment1.png")
+```
+
+Imágenes tomadas de [aquí](https://almob.biomedcentral.com/articles/10.1186/s13015-016-0069-5/figures/1) y [aquí](https://figshare.com/articles/figure/_Comparison_of_stranded_and_unstranded_RNA_seq_library_methods_and_their_influence_on_interpretation_and_analysis_/1504417/1)
+---
+
+# Alineamiento
+# Spliced reads 
+
+```{r, out.width="600px", fig.align='center', echo = F}
+knitr::include_graphics("../Images/SplicedReads2.png")
+```
+
+---
+
+# Alineamiento
+
+Alineadores tipo splice aware:
+
+- TopHat 2
+```{r, out.width="600px", fig.align='center',echo = F}
+knitr::include_graphics("../Images/SpliceAware.png")
+```
+
+--
+
+- HISAT
+```{r, out.width="600px", fig.align='center', echo = F}
+knitr::include_graphics("../Images/HISAT.png")
+```
+
+--
+
+- STAR
+```{r, out.width="400px", fig.align='center', echo = F}
+knitr::include_graphics("../Images/STAR.png")
+```
+
+---
+
+# Alineamiento
+# Pseudo-alineadores
+
+Pseudo-alineadores (quasi-alineadores):
+
+- Kallisto
+
+- Sailfish
+
+- **Salmon**
+
+---
+
+# Alineamiento
+# Pseudo-alineadores
+
+```{r, out.width="600px", fig.align='center', echo = F}
+knitr::include_graphics("../Images/Pseudoalignment.png")
+```
+
+
+---
