@@ -25,6 +25,8 @@ knitr::opts_chunk$set(echo = FALSE)
 knitr::include_graphics("https://biocorecrg.github.io/RNAseq_course_2019/images/RNAseq_workflow.png")
 ```
 
+.tiny[Imagen tomada de [aquí](https://biocorecrg.github.io/RNAseq_course_2019/salmon.html)]
+
 ---
 
 # Primeros pasos
@@ -59,7 +61,9 @@ knitr::include_graphics("images/step3.png")
 # Flujo general de trabajo
 
 
+
 ```{r, out.width = "550px",fig.align='center'}
 knitr::include_graphics("https://biocorecrg.github.io/RNAseq_course_2019/images/RNAseq_workflow.png")
 ```
 
+.tiny[Imagen tomada de [aquí](https://biocorecrg.github.io/RNAseq_course_2019/salmon.html)]

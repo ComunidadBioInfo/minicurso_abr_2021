@@ -8,6 +8,7 @@ output:
     lib_dir: libs
     nature:
       highlightStyle: github
+      highlightLines: true
       countIncrementalSlides: false
       beforeInit: "macros.js"
 editor_options: 
@@ -31,21 +32,37 @@ knitr::include_graphics("images/experiment.png")
 
 ## ¿Cúal es la pregunta que se quiere contestar?
 
+--
+
 Consideraciones importantes:
 
+--
+
 - **Single vs paired-end** (análisis de isoformas).
+
+--
 
 - **Stranded vs unstranded** (antisense y overlapping
 transcripts).
 
+--
+
 - **Profundidad de la secuenciación** (detección de transcritos con baja abundancia). 
+
+--
 
 - **Número de replicas**:
 
+--
+
   - *Biológicas* = independientes, muestras biologicamente distintas.
+  
+--
   
   - *Técnicas* = repetir la medición de la misma muestra.
   
+
+--
 
 .full-width[.content-box-red[Para el análisis de expresión diferencial es mejor **incrementar el número de replicas** que incrementar la profundidad de la secuenciación.]]
 
@@ -59,6 +76,8 @@ transcripts).
 ```{r, out.width = "900px",fig.align='center'}
 knitr::include_graphics("images/s-p-end.png")
 ```
+
+--
 
 **Paired-end**: La secuenciación pareada proporciona la secuencia de ambos extremos de cada fragmento, siempre separados por una distancia conocida.
 
@@ -85,11 +104,15 @@ Es importante contemplar los costos dentro del diseño. La tabla muestra costos 
 
 - Single-end es más baráto que paired-end.
 
+--
+
 - Mayor profundidad de secuenciación es más costoso. 
+
+--
 
 - Mayor longitud de bp por read aumenta el precio.
 
-
+--
 ```{r, out.width = "800px",fig.align='center'}
 knitr::include_graphics("images/cost.png")
 ```
@@ -115,6 +138,8 @@ Tomados de su página de internet [langebio](http://labsergen.langebio.cinvestav
 
 ]
 
+--
+
 .pull-right[
 ### Precios de secuenciación
 
@@ -136,7 +161,6 @@ Tomados de su página de internet [langebio](http://labsergen.langebio.cinvestav
 
 .full-width[.content-box-blue[Conoce el fenómeno que quieres estudiar]]
 
-
 .pull-left[
 
 ```{r, out.width = "200px",fig.align='center'}
@@ -144,9 +168,13 @@ knitr::include_graphics("images/experiment.png")
 ```
 ]
 
+--
+
 .pull-right[
 
 - **Variación biológica**: Sexo, edad, background genético, etnicidad, etc.
+
+--
 
 - **Variación técnica**: Día de procesamiento de la muestra, lotes de reactivos, tiempo de recoleción de muestras, personal, etc.
 ]

@@ -33,21 +33,37 @@ class: center, middle, inverse, title-slide
 
 ## ¿Cúal es la pregunta que se quiere contestar?
 
+--
+
 Consideraciones importantes:
 
+--
+
 - **Single vs paired-end** (análisis de isoformas).
+
+--
 
 - **Stranded vs unstranded** (antisense y overlapping
 transcripts).
 
+--
+
 - **Profundidad de la secuenciación** (detección de transcritos con baja abundancia). 
+
+--
 
 - **Número de replicas**:
 
+--
+
   - *Biológicas* = independientes, muestras biologicamente distintas.
+  
+--
   
   - *Técnicas* = repetir la medición de la misma muestra.
   
+
+--
 
 .full-width[.content-box-red[Para el análisis de expresión diferencial es mejor **incrementar el número de replicas** que incrementar la profundidad de la secuenciación.]]
 
@@ -59,6 +75,8 @@ transcripts).
 
 
 &lt;img src="images/s-p-end.png" width="900px" style="display: block; margin: auto;" /&gt;
+
+--
 
 **Paired-end**: La secuenciación pareada proporciona la secuencia de ambos extremos de cada fragmento, siempre separados por una distancia conocida.
 
@@ -83,11 +101,15 @@ Es importante contemplar los costos dentro del diseño. La tabla muestra costos 
 
 - Single-end es más baráto que paired-end.
 
+--
+
 - Mayor profundidad de secuenciación es más costoso. 
+
+--
 
 - Mayor longitud de bp por read aumenta el precio.
 
-
+--
 &lt;img src="images/cost.png" width="800px" style="display: block; margin: auto;" /&gt;
 
 ---
@@ -111,6 +133,8 @@ Tomados de su página de internet [langebio](http://labsergen.langebio.cinvestav
 
 ]
 
+--
+
 .pull-right[
 ### Precios de secuenciación
 
@@ -132,15 +156,18 @@ Tomados de su página de internet [langebio](http://labsergen.langebio.cinvestav
 
 .full-width[.content-box-blue[Conoce el fenómeno que quieres estudiar]]
 
-
 .pull-left[
 
 &lt;img src="images/experiment.png" width="200px" style="display: block; margin: auto;" /&gt;
 ]
 
+--
+
 .pull-right[
 
 - **Variación biológica**: Sexo, edad, background genético, etnicidad, etc.
+
+--
 
 - **Variación técnica**: Día de procesamiento de la muestra, lotes de reactivos, tiempo de recoleción de muestras, personal, etc.
 ]
@@ -182,6 +209,7 @@ Cuando las muestras se colectan en diferentes lotes es importante incluir difere
 <script src="macros.js"></script>
 <script>var slideshow = remark.create({
 "highlightStyle": "github",
+"highlightLines": true,
 "countIncrementalSlides": false
 });
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
@@ -248,7 +276,24 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
       links[i].target = '_blank';
     }
   }
-})();</script>
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
 
 <script>
 slideshow._releaseMath = function(el) {

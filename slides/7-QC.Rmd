@@ -1,0 +1,214 @@
+---
+title: '7: Limpieza de datos'
+author: "Ana BVA"
+date: "24/2/2021"
+output:
+  xaringan::moon_reader:
+    css: ["default", "default-fonts", "hygge"]
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      beforeInit: "macros.js"
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+```{css, echo = FALSE}
+/* From https://github.com/yihui/xaringan/issues/147  */
+.scroll-output {
+  height: 80%;
+  overflow-y: scroll;
+}
+/* https://stackoverflow.com/questions/50919104/horizontally-scrollable-output-on-xaringan-slides */
+pre {
+  max-width: 100%;
+  overflow-x: scroll;
+}
+
+```
+
+
+## ¿Porqué es importante revisar los datos crudos?
+--
+
+.full-width[.content-box-blue[Para checar la caldad de los datos (*QC: quality conrol*)]]
+
+--
+
+- Los datos influencian los análisis posteriores
+
+--
+
+.pull-left[
+```{r, out.width = "200px",fig.align='center'}
+knitr::include_graphics("https://miro.medium.com/max/470/1*DVLpt3zCNaqeZOGNpgME7Q.png")
+knitr::include_graphics("https://i.pinimg.com/originals/30/66/ac/3066ac69ae68ac200ace0ca8fe3882c3.jpg")
+```
+]
+
+.pull-right[
+
+```{r, out.width = "300px",fig.align='center'}
+knitr::include_graphics("https://memegenerator.net/img/instances/68955295.jpg")
+```
+
+]
+
+
+---
+
+## FastQC
+
+Usaremos el programa de [fastQC](https://www.bioinformatics.babraham.ac.uk/projects/download.html#fastqc) para checar la calidad de los datos.
+
+--
+
+Podemos usar la interfaz gráfica o la línea de comandos, en este caso usaremos la línea de comandos.
+
+```{r, out.width = "400px",fig.align='center'}
+knitr::include_graphics("https://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc.png")
+````
+
+---
+
+### Pasos para installar FastQC:
+--
+
+1- Descargar el programa de su página web [fastQC](https://www.bioinformatics.babraham.ac.uk/projects/download.html#fastqc)
+
+--
+
+2- Hacer el archivo ejecutable
+
+```{bash echo=TRUE}
+# chmod 755 /Applications/FastQC.app/Contents/MacOS/fastqc
+ls -l /Applications/FastQC.app/Contents/MacOS/fastqc
+```
+
+--
+
+3- Crear una liga simbolica para ejecutar `fastqc` desde cualquier ubicación
+
+```{bash echo=TRUE, eval=FALSE}
+ln -s /Applications/FastQC.app/Contents/MacOS/fastqc /usr/local/bin/fastqc
+```
+
+--
+4- Correr `fastqc`
+
+```{bash echo=TRUE}
+fastqc --help
+```
+
+
+---
+
+### Pasos para correr FastQC:
+
+.scroll-output[
+
+1- Checar los datos fastq
+```{bash echo=TRUE}
+pwd
+ls ../data/Archivos_fastq
+```
+
+--
+
+2- Crear un directorio para guardar el output
+
+```{bash echo=TRUE, eval=FALSE}
+mkdir ../output/QC
+```
+
+--
+
+3- Correr `FastQC`
+
+```{bash echo=TRUE, eval=FALSE}
+# la opción -o es para elejir el directorio de salida
+fastqc ../data/Archivos_fastq/*.fastq.gz -o ../output/QC/
+```
+
+--
+
+4- Checar los archivos generados
+
+```{bash echo=TRUE}
+ls ../output/QC
+```
+
+
+
+]
+
+
+
+---
+
+## Buena calidad
+
+El eje x = longitud de la read, y =  calidad (phred score)
+
+Los datos a continuación muestran reads de buena calidad (Verde = buena, amarilla = aceptable, roja = baja). 
+
+```{r, out.width = "550px",fig.align='center'}
+knitr::include_graphics("https://gwu-omics2019.readthedocs.io/en/latest/_images/fastqc_good.png")
+```
+
+
+---
+
+## Mala calidad
+
+¿Hasta donde los datos son de buena calidad? ¿Estos datos los usarías?
+
+```{r, out.width = "650px",fig.align='center'}
+knitr::include_graphics("https://gwu-omics2019.readthedocs.io/en/latest/_images/fastqc_bad.png")
+```
+
+
+---
+
+## Ejercicio
+
+¿Cómo se ven nuestros datos? 
+
+
+---
+## MultiQC
+
+[MultiQC](https://multiqc.info/) te permite juntar los output en un solo archivo y poder visualizarlos mejor.
+
+*Esta parte es opcional, pero si trabajas con RNA-seq te puede intersar.
+
+.scroll-output[
+
+1. La instalación se hace con conda, así que primero activamos un ambiente conda
+
+```{bash echo=TRUE, eval=FALSE}
+conda activate base
+pip install multiqc
+```
+
+
+2. Correr MultiQC
+
+```{bash multiqc, echo=TRUE, eval=FALSE}
+cd ../output/.
+multiQC .
+```
+
+3. Checar el [output.html](file:///Users/user/Documents/Doctorado/Courses/Taught/minicurso_abr_2021/output/QC/multiqc_report.html#fastqc_per_base_sequence_content)
+
+]
+
+
+
