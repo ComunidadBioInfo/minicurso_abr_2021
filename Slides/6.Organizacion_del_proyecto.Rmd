@@ -79,7 +79,7 @@ Proyecto organizado en directorios y subdirectorios para reproducir el análisis
 ---
 
 # Organización del proyecto  
-# README
+## README
 
 Un **README** es un archivo en texto plano (formado .md) que permite documentar el proyecto
 
@@ -110,7 +110,7 @@ La función del **README** es explicar la organización del proyecto y que otros
 ---
 
 # Organización del proyecto  
-# README
+## README
 
 Tips:
 
@@ -134,7 +134,7 @@ knitr::include_graphics("../Images/README2.png")
 ---
 
 # Organización del proyecto  
-# Datos
+## Datos
 
 Los datos deben de almacenarse en un directorio especial (considerar espacio en disco):
 
@@ -157,7 +157,7 @@ Considerar almacenar los datos en un repositorio como respaldo [OSF](https://osf
 ---
 
 # Organización del proyecto  
-#Datos
+## Datos
 
 Es recomendable llevar una tabla de metadatos durante el desarrollo del proyecto:
 
@@ -179,8 +179,8 @@ Es recomendable llevar una tabla de metadatos durante el desarrollo del proyecto
 
 ---
 
-## Organización del proyecto
-# Código
+# Organización del proyecto
+## Código
 
 **El código es una de las partes más importantes del proyecto**
 
@@ -204,8 +204,8 @@ knitr::include_graphics("../Images/Script.png")
 
 ---
 
-## Organización del proyecto
-# Código
+# Organización del proyecto
+## Código
 
 --
 
@@ -239,8 +239,12 @@ mv ../Data/*.bam ../Results/
 
 ---
 
-## Organización del proyecto
-# Código
+.center[![cat](../Images/cat.png)]
+
+---
+
+# Organización del proyecto
+## Código
 .pull-left[
 - **[DRY](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself)** Don't Repeat Yourself
 
@@ -259,12 +263,20 @@ knitr::include_graphics("../Images/Development.png")
 ]
 
 ---
-
-## Organización del proyecto
-# Resultados
+# Organización del proyecto
+## Resultados
 
 ```{r, out.width="700px", fig.align='center', echo=F}
 knitr::include_graphics("../Images/Results.png")
 ```
 
+---
+# Organización del proyecto
+```{r, out.width="450px", fig.align='center', echo = F}
+knitr::include_graphics("../Images/Proyecto.png")
+```
 
+---
+# Experimento
+
+Número de acceso GEO: GSE152699

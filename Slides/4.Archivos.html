@@ -3,7 +3,7 @@
   <head>
     <title>4.Archivos</title>
     <meta charset="utf-8" />
-    <meta name="date" content="2021-02-09" />
+    <meta name="date" content="2021-03-01" />
     <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
     <link href="libs/remark-css-0.0.1/default-fonts.css" rel="stylesheet" />
   </head>
@@ -12,14 +12,15 @@
 class: center, middle, inverse, title-slide
 
 # 4.Archivos
-### 2021-02-09
+### 2021-03-01
 
 ---
 
 
 # Flujo de trabajo
 
-![Workflow](../Images/workflow.png)
+&lt;img src="../Images/RNAseq_workflow.png" width="550px" style="display: block; margin: auto;" /&gt;
+
 ---
 
 # FastQ
@@ -30,7 +31,7 @@ class: center, middle, inverse, title-slide
 
 --
 
-- FASTA + Id secuencia + **Calidad**
+- Id secuencia + **Calidad**
 
 --
 
@@ -97,17 +98,19 @@ Valores de **p** cercanos a cero -&gt; Alta calidad
 `$$Q = -10 * log10(0.01) = -10 * -2 = 20$$`
 
 ---
+# Fastq
+## Calidad
 
+&lt;img src="../Images/Fastqc.png" width="700px" style="display: block; margin: auto;" /&gt;
+
+
+---
 # FastQ
 ## Calidad
 
 --
 
-- Para evitar colocar los valores numéricos de la calidad en el archivo .fastq y saturarlo de información -&gt; **ASCII**
-
---
-
-- El código ASCII lo pueden consultar [aquí](https://www.ascii-code.com/)
+- Para evitar colocar los valores numéricos de la calidad en el archivo .fastq y saturarlo de información -&gt; **[ASCII](https://www.ascii-code.com/)**
 
 --
 
@@ -117,18 +120,18 @@ Valores de **p** cercanos a cero -&gt; Alta calidad
 
 - Phred + 64 -&gt; Plataformas de Illumina anteriores a 1.8
 
-.pull-left[
-![Phred0](../Images/ASCII0.png)
-]
 
-.pull-right[
-![Phred0](../Images/ASCII33.png)
-]
+&lt;img src="../Images/ASCII0.png" width="400px" style="display: block; margin: auto;" /&gt;
+
+
+&lt;img src="../Images/ASCII33.png" width="400px" style="display: block; margin: auto;" /&gt;
+
 ---
 
 # FastQ
 
-![FastQ](../Images/Fastq.png)
+
+&lt;img src="../Images/Fastq.png" width="700px" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -136,7 +139,7 @@ Valores de **p** cercanos a cero -&gt; Alta calidad
 
 --
 
-- De manera posterior al lineamiento se generan archivos **"Sequence Alignment Map"** -&gt; **SAM**
+- De manera posterior al alineamiento se generan archivos **"Sequence Alignment Map"** -&gt; **SAM**
 
 --
 
@@ -163,18 +166,22 @@ Valores de **p** cercanos a cero -&gt; Alta calidad
 # SAM/BAM
 
 - Los archivos en formato **SAM** se dividen en dos secciones:
---
-
-* **HEADER**: Información general del archivo
 
 --
 
-* **Alignment**: Información sobre el alineamiento de cada lectura
+- **HEADER**: Información general del archivo
+
+--
+
+- **ALIGNMENT**: Información relacionada con el alineamiento de los reads
+
+--
+&lt;img src="../Images/SAM-BAM.png" width="550px" style="display: block; margin: auto;" /&gt;
 
 ---
 
-# SAM/BAM
-## HEADER
+
+&lt;img src="../Images/Header.png" width="600px" style="display: block; margin: auto;" /&gt;
 
 --
 
@@ -218,8 +225,9 @@ Ejemplos de diferentes **TAG**:
 
 ---
 
-# SAM/BAM
-## ALLIGNMENT
+&lt;img src="../Images/Alignment.png" width="600px" style="display: block; margin: auto;" /&gt;
+
+--
 
 Esta sección procede al **HEADER** y contiene:
 
@@ -231,7 +239,8 @@ Esta sección procede al **HEADER** y contiene:
 
 - Para cada lectura se muestran los resultados de los siguientes campos obligatorios:
 
-  QNAME : **FLAG** : RNAME : POS : MAPQ : **CIGAR** : MRNM : MPOS : ISIZE : SEQ : QUAL
+&lt;img src="../Images/Alignment2.png" width="400px" style="display: block; margin: auto;" /&gt;
+
 
 ---
 
@@ -258,9 +267,9 @@ Esta sección procede al **HEADER** y contiene:
 ---
 
 # SAM/BAM
-# FLAG
+## FLAG
 
-![Flag](../Images/flag.png)
+&lt;img src="../Images/flag.png" width="600px" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -285,7 +294,7 @@ Esta sección procede al **HEADER** y contiene:
 # SAM/BAM
 ## CIGAR
 
-![CIGAR](../Images/cigar.png)
+&lt;img src="../Images/cigar.png" width="600px" style="display: block; margin: auto;" /&gt;
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

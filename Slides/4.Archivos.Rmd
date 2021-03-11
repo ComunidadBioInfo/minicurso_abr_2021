@@ -12,7 +12,10 @@ date: "`r Sys.Date()`"
 
 # Flujo de trabajo
 
-![Workflow](../Images/workflow.png)
+```{r, out.width="550px", fig.align='center', echo = F}
+knitr::include_graphics("../Images/RNAseq_workflow.png")
+```
+
 ---
 
 # FastQ
@@ -23,7 +26,7 @@ date: "`r Sys.Date()`"
 
 --
 
-- FASTA + Id secuencia + **Calidad**
+- Id secuencia + **Calidad**
 
 --
 
@@ -89,17 +92,21 @@ Valores de **p** cercanos a cero -> Alta calidad
 $$Q = -10 * log10(0.01) = -10 * -2 = 20$$
 
 ---
+# Fastq
+## Calidad
 
+```{r, out.width="700px", fig.align='center', echo = F}
+knitr::include_graphics("../Images/Fastqc.png")
+```
+
+
+---
 # FastQ
 ## Calidad
 
 --
 
-- Para evitar colocar los valores numéricos de la calidad en el archivo .fastq y saturarlo de información -> **ASCII**
-
---
-
-- El código ASCII lo pueden consultar [aquí](https://www.ascii-code.com/)
+- Para evitar colocar los valores numéricos de la calidad en el archivo .fastq y saturarlo de información -> **[ASCII](https://www.ascii-code.com/)**
 
 --
 
@@ -109,18 +116,24 @@ $$Q = -10 * log10(0.01) = -10 * -2 = 20$$
 
 - Phred + 64 -> Plataformas de Illumina anteriores a 1.8
 
-.pull-left[
-![Phred0](../Images/ASCII0.png)
-]
 
-.pull-right[
-![Phred0](../Images/ASCII33.png)
-]
+```{r, out.width="400px", fig.align='center', echo = F}
+knitr::include_graphics("../Images/ASCII0.png")
+```
+
+
+```{r, out.width="400px", fig.align='center', echo = F}
+knitr::include_graphics("../Images/ASCII33.png")
+```
+
 ---
 
 # FastQ
 
-![FastQ](../Images/Fastq.png)
+
+```{r, out.width="700px", fig.align='center',echo = F}
+knitr::include_graphics("../Images/Fastq.png")
+```
 
 ---
 
@@ -128,7 +141,7 @@ $$Q = -10 * log10(0.01) = -10 * -2 = 20$$
 
 --
 
-- De manera posterior al lineamiento se generan archivos **"Sequence Alignment Map"** -> **SAM**
+- De manera posterior al alineamiento se generan archivos **"Sequence Alignment Map"** -> **SAM**
 
 --
 
@@ -155,18 +168,26 @@ $$Q = -10 * log10(0.01) = -10 * -2 = 20$$
 # SAM/BAM
 
 - Los archivos en formato **SAM** se dividen en dos secciones:
---
-
-* **HEADER**: Información general del archivo
 
 --
 
-* **Alignment**: Información sobre el alineamiento de cada lectura
+- **HEADER**: Información general del archivo
+
+--
+
+- **ALIGNMENT**: Información relacionada con el alineamiento de los reads
+
+--
+```{r, out.width="550px", fig.align='center', echo = F}
+knitr::include_graphics("../Images/SAM-BAM.png")
+```
 
 ---
 
-# SAM/BAM
-## HEADER
+
+```{r, out.width="600px", fig.align='center', echo = F}
+knitr::include_graphics("../Images/Header.png")
+```
 
 --
 
@@ -210,8 +231,11 @@ Ejemplos de diferentes **TAG**:
 
 ---
 
-# SAM/BAM
-## ALLIGNMENT
+```{r, out.width="600px", fig.align='center', echo = F}
+knitr::include_graphics("../Images/Alignment.png")
+```
+
+--
 
 Esta sección procede al **HEADER** y contiene:
 
@@ -223,7 +247,10 @@ Esta sección procede al **HEADER** y contiene:
 
 - Para cada lectura se muestran los resultados de los siguientes campos obligatorios:
 
-  QNAME : **FLAG** : RNAME : POS : MAPQ : **CIGAR** : MRNM : MPOS : ISIZE : SEQ : QUAL
+```{r, out.width="400px", fig.align='center', echo = F}
+knitr::include_graphics("../Images/Alignment2.png")
+```
+
 
 ---
 
@@ -250,9 +277,11 @@ Esta sección procede al **HEADER** y contiene:
 ---
 
 # SAM/BAM
-# FLAG
+## FLAG
 
-![Flag](../Images/flag.png)
+```{r, out.width="600px", fig.align='center', echo = F}
+knitr::include_graphics("../Images/flag.png")
+```
 
 ---
 
@@ -277,5 +306,8 @@ Esta sección procede al **HEADER** y contiene:
 # SAM/BAM
 ## CIGAR
 
-![CIGAR](../Images/cigar.png)
+```{r, out.width="600px", fig.align='center', echo = F}
+knitr::include_graphics("../Images/cigar.png")
+```
+
 
