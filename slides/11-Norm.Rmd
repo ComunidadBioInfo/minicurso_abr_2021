@@ -1,0 +1,260 @@
+---
+title: '11: Normalización'
+author: "Ana BVA"
+date: "10/3/2021"
+output:
+  xaringan::moon_reader:
+    css: ["default", "default-fonts", "hygge"]
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      beforeInit: "macros.js"
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+```{css, echo = FALSE}
+/* From https://github.com/yihui/xaringan/issues/147  */
+.scroll-output {
+  height: 80%;
+  overflow-y: scroll;
+}
+/* https://stackoverflow.com/questions/50919104/horizontally-scrollable-output-on-xaringan-slides */
+pre {
+  max-width: 100%;
+  overflow-x: scroll;
+}
+
+```
+
+
+## Normalización 
+
+
+Es el primer paso del análisis de expresión diferencial y es necesario para hacer comparaciones acertadas entre muestras. 
+
+--
+
+Las cuentas crudas están conformadas por un componente "interesante" (la expresión de RNA) y componentes "no interesantes" (como los batch effects, ruido de la plataforma, etc.).
+
+--
+
+La normalzación escala las cuentas para tratar de reducir los componentes "no interesantes" y poder comparar las muestras entre si. 
+
+---
+
+## Criteríos para normalizar
+
+Se puede normalizar considerando:
+
+- La profundidad (tamaño de librería)
+
+```{r, out.width = "450px",fig.align='center'}
+knitr::include_graphics("https://hbctraining.github.io/DGE_workshop/img/normalization_methods_depth.png")
+```
+
+---
+
+## Criteríos para normalizar
+
+Se puede normalizar considerando:
+
+- El tamaño del gen
+
+```{r, out.width = "450px",fig.align='center'}
+knitr::include_graphics("https://hbctraining.github.io/DGE_workshop/img/normalization_methods_length.png")
+```
+
+
+---
+
+## Criteríos para normalizar
+
+Se puede normalizar considerando:
+
+- Composición de RNA
+
+```{r, out.width = "350px",fig.align='center'}
+knitr::include_graphics("https://hbctraining.github.io/DGE_workshop/img/normalization_methods_composition.png")
+```
+
+
+
+.tiny[Imagen tomada de [aquí](https://biocorecrg.github.io/RNAseq_course_2019/salmon.html)]
+
+
+---
+## Métodos comunes
+
+.scroll-output[
+
+| Método de normalización | Descripción | Factores de evaluación | Recomendaciones de uso |
+|:-----------------------------------------------------------------------------------:|:----------------------------------------------------------------------------------------------------------------------------:|:--------------------------------------------------:|:-------------------------------------------------------------------------------------------------------------------:|
+| CPM (cuentas por millón): cuentas escalados por el número total de lecturas | profundidad de secuenciación | comparaciones de cuentas de genes entre réplicas del mismo grupo de muestras| NO para comparaciones dentro de la muestra o análisis de DE.| 
+| TPM (transcritos por kilobase por millón de lecturas): cuentas por longitud de transcripción (kb) por millón de lecturas mapeadas | profundidad de secuenciación y longitud de genes| comparaciones de cuentas de genes dentro de una muestra o entre muestras del mismo grupo de muestras| NO para análisis de DE. |
+| RPKM/FPKM (lecturas/fragmentos por kilobase de exón por millón de lecturas/fragmentos mapeados| similar a TPM, profundidad de secuenciación y longitud del gen | comparaciones de cuentas entre genes dentro de una muestra | NO para comparaciones entre muestras o análisis de DE.|
+| Mdiana de ratios de DESeq2 | cuentas divididas por factores de tamaño específicos de la muestra determinados por la mediana del ratio de cuentas de genes en relación con la media geométrica por gen | profundidad de secuenciación y composición del RNA | comparaciones de cuentas de genes entre muestras y para el análisis de DE; NO para comparaciones dentro de la muestra |
+| La media cortada de los valores M de EdgeR (TMM) | utiliza una media recortada ponderada de los ratios de expresión logarítmica entre las muestras | profundidad de secuenciación | composición de RNA y longitud de los genes. |
+
+.tiny[
+
+[Tabla tomada de Intro to DGE](https://hbctraining.github.io/DGE_workshop/lessons/02_DGE_count_normalization.html#:~:text=Normalization%20is%20the%20process%20of,between%20and%2For%20within%20samples.)
+]
+
+]
+
+
+---
+## DESeq2
+
+.scroll-output[
+
+`DESeq2`ajusta a un modelo lineal generalizado (GLM) de la familia binomial negativa (NB).
+
+```{r include=FALSE}
+library(tidyverse)
+```
+
+
+```{r}
+df <- tibble(gene = c("gene1", "gene2"),
+                 muestraA = c(1749, 35),
+                 muestraB = c(943, 29)
+                 )
+df
+```
+
+1. Crea una pseudo-referencia por muestra (promedio geometrico por fila) `sqrt(muestraA * mueestra B)`
+```{r}
+df <- df %>%
+  rowwise() %>% 
+  mutate(prom_geom = sqrt(muestraA * muestraB))
+df
+```
+
+2. Se calcula la fración `muestra/pseudo-referencia`
+```{r}
+df <- df %>% 
+  rowwise() %>% 
+  mutate(muestraA_pseudo_ref = muestraA / prom_geom) %>% 
+  mutate(muestraB_pseudo_ref = muestraB / prom_geom)
+
+df
+```
+
+3. Se calcula un factor de normalización (size factor) utilizando la `median` por columnas.
+```{r}
+norm_factor_muestraA <- median(df$muestraA_pseudo_ref)
+norm_factor_muestraA
+
+norm_factor_muestraB <- median(df$muestraB_pseudo_ref)
+norm_factor_muestraB
+
+```
+
+4. Se dividen las `cuentas crudas/size factor` para calcular las cuentas normalizadas.
+```{r}
+df %>% 
+  select(gene, muestraA, muestraB)
+
+df$norm_muestraA <- df$muestraA/norm_factor_muestraA
+df$norm_muestraB <- df$muestraB/norm_factor_muestraB
+
+df
+```
+
+
+]
+
+---
+
+## Ejercicio 
+
+.scroll-output[
+
+Se pueden ocupar otras transformaciones en la paquetería de `DESeq2`pero no son las mas recomendadas para DE. 
+
+```{r include=FALSE}
+info <- read.delim(here::here("output/salmon_quants/metadata.txt"))
+info$names <- info$Unique_id
+dir <- file.path(here::here("output/salmon_quants"))
+info$files <- file.path(dir,paste0(info$Sample,"_quant"),"quant.sf")
+library("tximeta")
+gse <- tximeta(info)
+```
+
+Para normalizar, primero construimos el objeto `DESeqDataSet`, para ello necesitamos definir el modelo de DE (Quienes son Controles y quienes tratamiento). 
+
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+library("DESeq2")
+library("dplyr")
+library("ggplot2")
+```
+
+```{r echo=TRUE}
+
+gse$Condition <- factor(gse$Condition)
+table(gse$Condition)
+
+dds <- DESeqDataSet(gse, design = ~ Condition)
+dds <- DESeq(dds)
+
+```
+
+]
+
+
+---
+
+## Otras transformaciones
+
+.scroll-output[
+
+Puedes realizar otras transformaciones en `DESeq2` para estabilizar la varianza a través de los differentes valores promedio de expresión.  
+
+```{r}
+library(vsn)
+meanSdPlot(counts(dds), ranks = F)
+meanSdPlot(log2(counts(dds) +1), ranks = F)
+```
+
+
+```{r echo=TRUE}
+# variance stabilizing transformation (VST), (Anders and Huber 2010)
+vsd <- vst(dds, blind = FALSE)
+head(assay(vsd), 3)
+
+# regularized-logarithm transformation (rlog), (Love, Huber, and Anders 2014)
+rld <- rlog(dds, blind = FALSE)
+head(assay(rld), 3)
+
+dds <- estimateSizeFactors(dds)
+
+df <- bind_rows(
+  as_data_frame(log2(counts(dds, normalized=TRUE)[, 1:2]+1)) %>%
+         mutate(transformation = "log2(x + 1)"),
+  as_data_frame(assay(vsd)[, 1:2]) %>% mutate(transformation = "vst"),
+  as_data_frame(assay(rld)[, 1:2]) %>% mutate(transformation = "rlog"))
+  
+colnames(df)[1:2] <- c("x", "y")  
+
+lvls <- c("log2(x + 1)", "vst", "rlog")
+df$transformation <- factor(df$transformation, levels=lvls)
+
+ggplot(df, aes(x = x, y = y)) + geom_hex(bins = 80) +
+  coord_fixed() + facet_grid( . ~ transformation)  
+
+
+```
+
+
+]
+
