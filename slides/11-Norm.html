@@ -107,6 +107,18 @@ Se puede normalizar considerando:
 
 ]
 
+---
+## DESeq2
+
+- Normalización para análisis de expresión diferencial:
+
+  - Factor de normalización de `DESeq2`
+
+- Normalización para visualización u otras aplicaciones:
+
+  - Variance stabilizing transformation (VST)
+  
+  - Regularized-logarithm transformation (rlog)
 
 ---
 ## DESeq2
@@ -171,13 +183,12 @@ Se puede normalizar considerando:
 ```
 
 ```
-## # A tibble: 2 x 8
+## # A tibble: 2 x 2
 ## # Rowwise: 
-##   gene  muestraA muestraB prom_geom muestraA_pseudo_ref muestraB_pseudo_ref
-##   &lt;chr&gt;    &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;               &lt;dbl&gt;               &lt;dbl&gt;
-## 1 gene1     1749      943    1284.                 1.36               0.734
-## 2 gene2       35       29      31.9                1.10               0.910
-## # … with 2 more variables: norm_muestraA &lt;dbl&gt;, norm_muestraB &lt;dbl&gt;
+##   norm_muestraA norm_muestraB
+##           &lt;dbl&gt;         &lt;dbl&gt;
+## 1        1422.         1147. 
+## 2          28.4          35.3
 ```
 
 
@@ -201,6 +212,7 @@ Para normalizar, primero construimos el objeto `DESeqDataSet`, para ello necesit
 library("DESeq2")
 library("dplyr")
 library("ggplot2")
+library("vsn")
 ```
 
 
@@ -265,11 +277,6 @@ dds &lt;- DESeq(dds)
 .scroll-output[
 
 Puedes realizar otras transformaciones en `DESeq2` para estabilizar la varianza a través de los differentes valores promedio de expresión.  
-
-
-```
-## Warning: package 'vsn' was built under R version 4.0.3
-```
 
 ![](11-Norm_files/figure-html/unnamed-chunk-14-1.png)&lt;!-- --&gt;![](11-Norm_files/figure-html/unnamed-chunk-14-2.png)&lt;!-- --&gt;
 

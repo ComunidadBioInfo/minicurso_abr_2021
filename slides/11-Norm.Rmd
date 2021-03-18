@@ -110,6 +110,18 @@ knitr::include_graphics("https://hbctraining.github.io/DGE_workshop/img/normaliz
 
 ]
 
+---
+## DESeq2
+
+- Normalización para análisis de expresión diferencial:
+
+  - Factor de normalización de `DESeq2`
+
+- Normalización para visualización u otras aplicaciones:
+
+  - Variance stabilizing transformation (VST)
+  
+  - Regularized-logarithm transformation (rlog)
 
 ---
 ## DESeq2
@@ -167,7 +179,8 @@ df %>%
 df$norm_muestraA <- df$muestraA/norm_factor_muestraA
 df$norm_muestraB <- df$muestraB/norm_factor_muestraB
 
-df
+df %>%  
+  select(norm_muestraA, norm_muestraB)
 ```
 
 
@@ -197,6 +210,7 @@ Para normalizar, primero construimos el objeto `DESeqDataSet`, para ello necesit
 library("DESeq2")
 library("dplyr")
 library("ggplot2")
+library("vsn")
 ```
 
 ```{r echo=TRUE}
@@ -206,7 +220,6 @@ table(gse$Condition)
 
 dds <- DESeqDataSet(gse, design = ~ Condition)
 dds <- DESeq(dds)
-
 ```
 
 ]
@@ -221,7 +234,6 @@ dds <- DESeq(dds)
 Puedes realizar otras transformaciones en `DESeq2` para estabilizar la varianza a través de los differentes valores promedio de expresión.  
 
 ```{r}
-library(vsn)
 meanSdPlot(counts(dds), ranks = F)
 meanSdPlot(log2(counts(dds) +1), ranks = F)
 ```
@@ -251,7 +263,6 @@ df$transformation <- factor(df$transformation, levels=lvls)
 
 ggplot(df, aes(x = x, y = y)) + geom_hex(bins = 80) +
   coord_fixed() + facet_grid( . ~ transformation)  
-
 
 ```
 

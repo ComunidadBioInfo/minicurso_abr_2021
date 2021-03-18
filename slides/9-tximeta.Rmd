@@ -80,7 +80,7 @@ knitr::include_graphics("https://journals.plos.org/ploscompbiol/article/figure/i
 
 Utilizamos `tximeta` para importar los datos. 
 
-..content-box-red[
+.content-box-red[
 
 Nota: `tximeta` espera dos columnas:
 
