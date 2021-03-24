@@ -1,0 +1,214 @@
+---
+title: "Alineadores"
+author: "Rodolfo Chavez"
+date: "`r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r, out.width="600px", fig.align='center', echo = F}
+knitr::include_graphics("../Images/RNAseq_workflow2.png")
+```
+Imagen tomada de [aquí](https://biocorecrg.github.io/RNAseq_course_2019/salmon.html)
+---
+
+# Alineamiento
+```{r, out.width="600px", fig.align='center', echo = F}
+knitr::include_graphics("../Images/ReadAlignment.jpg")
+```
+
+Buscar la región del genoma/transcriptoma a partir de la cual se originaron los reads
+
+---
+
+# Alineamiento
+
+- Indexar genoma/transcriptoma (FASTA, GTF3/GFF3)
+
+```{r, out.width="500px", fig.align='center', echo = F}
+knitr::include_graphics("../Images/GenomeIndexing.png")
+```
+
+--
+
+- Alinear los reads (Fastq) al genoma/transcriptoma indexado
+
+```{r, out.width="500px", fig.align='center', echo = F}
+knitr::include_graphics("../Images/ReadAlignment1.png")
+```
+
+Imágenes tomadas de [aquí](https://almob.biomedcentral.com/articles/10.1186/s13015-016-0069-5/figures/1) y [aquí](https://figshare.com/articles/figure/_Comparison_of_stranded_and_unstranded_RNA_seq_library_methods_and_their_influence_on_interpretation_and_analysis_/1504417/1)
+---
+
+# Alineamiento
+## Spliced reads 
+
+```{r, out.width="600px", fig.align='center', echo = F}
+knitr::include_graphics("../Images/SplicedReads2.png")
+```
+
+---
+
+# Alineamiento
+
+Alineadores tipo splice aware -> Alineamiento de secuencias exon spanning -> Segmentan las secuencias en las regiones de dos exones
+
+- TopHat 2
+```{r, out.width="600px", fig.align='center',echo = F}
+knitr::include_graphics("../Images/SpliceAware.png")
+```
+
+--
+
+- HISAT
+```{r, out.width="600px", fig.align='center', echo = F}
+knitr::include_graphics("../Images/HISAT.png")
+```
+
+--
+
+- STAR
+```{r, out.width="400px", fig.align='center', echo = F}
+knitr::include_graphics("../Images/STAR.png")
+```
+Imágenes tomadas de [aquí]()
+---
+
+# Alineamiento
+## Pseudo-alineadores
+
+Pseudo-alineadores (quasi-alineadores):
+
+- Kallisto
+
+- Sailfish
+
+- **Salmon**
+
+---
+
+# Alineamiento
+## Pseudo-alineadores
+
+```{r, out.width="600px", fig.align='center', echo = F}
+knitr::include_graphics("../Images/Pseudoalignment.png")
+```
+
+
+---
+
+# Alineamiento
+## Pseudo-alineadores
+
+```{r, out.width="500px", fig.align='center', echo = F}
+knitr::include_graphics("../Images/PseudoAlignment1.png")
+```
+
+--
+
+```{r, out.width="500px", fig.align='center', echo = F}
+knitr::include_graphics("../Images/PseudoAlignment2.png")
+```
+
+---
+
+# Alineamiento
+## Pseudo-alineadores
+
+```{r, out.width="600px", fig.align='center', echo = F}
+knitr::include_graphics("../Images/PseudoAlignment3.png")
+```
+
+---
+background-size: cover
+class: center, bottom, inverse
+background-image: 
+```{r, echo = F}
+knitr::include_graphics("../Images/hands_on.png")
+```
+
+---
+# Hands on
+## Generar índice del transcriptoma
+
+Para ello vamos a requerir:
+
+--
+
+- Archivo **Fasta** del transcriptoma de referencia del humano.
+
+Descargado del sitio de [GeneCode](https://www.gencodegenes.org/human/)
+
+Lo pueden encontrar en el folder de `Transcriptome/`
+
+--
+
+- Código para genear el índice
+
+```
+salmon index -t --genecode path_to_transcriptome.fa.gz -i path_to_save_index
+```
+
+`-t`: Ubicación al archivo Fasta del transcriptoma
+
+`-i`: Ubicación para salvar el índice
+
+`--genecode`: El Fasta del transcriptoma de referencia está en formato de GENECODE
+
+---
+
+```{bash engine.opts = '-l'}
+salmon index -t ../transcriptome/gencode.v37.transcripts.fa.gz -i ../transcriptome/genecode.v37.salmon141 -p 6
+```
+
+---
+# Hands on
+## Cuantificar la abundancia de los transcritos
+
+Requerimientos:
+
+--
+
+- Archivos **Fastq** de las lecturas -> Paired end R1 y R2
+
+Ubicados en el folder de `data`
+
+--
+
+- Índice generado en el paso anterior
+
+--
+
+- Código para producir cuantificar los transcritos
+
+```
+salmon quant -i path_to_index 
+             -l A -1 path_to_R1 -2 path_to_R2 
+             -o path_to_store_results
+```
+`-i`: Ubicación del índice
+
+`-l`: Tipo de librería
+
+`-1 y -2`: Ubicación a las lecturas R1 y R2
+
+`-o`: Ubicación para almacenar los resultados
+
+---
+
+```{bash engine.opts = '-l'}
+##Crear un directorio para almacenar los datos de los conteos
+mkdir -p ../salmon_quant
+##Llamar salmon para realizar el conteo
+salmon quant -i ../transcriptome/genecode.v37.salmon141 \
+             -l A \
+             -1 ../Data/s1_R1.fastq.gz -2 ../Data/s1_R2.fastq.gz \
+             -p 6 --validateMappings \
+             -o ../salmon_quant/s1_quant
+```
+

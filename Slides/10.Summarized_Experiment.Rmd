@@ -1,0 +1,230 @@
+---
+title: "Summarized Experiment"
+author: "Rodolfo Chavez"
+date: "`r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    css: xaringan-themer.css
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+--- 
+```{css, echo = F}
+.remark-slide-content {
+  font-size: 28px;
+  padding: 20px 80px 20px 80px;
+}
+.remark-code, .remark-inline-code {
+  background: #f0f0f0;
+}
+.remark-code {
+  font-size: 24px;
+}
+.huge .remark-code { /*Change made here*/
+  font-size: 200% !important;
+}
+.tiny .remark-code { /*Change made here*/
+  font-size: 50% !important;
+}
+
+.center2 {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+```
+
+```{r xaringan-themer, include=F, warning=F, echo=F}
+library(xaringanthemer)
+style_xaringan(
+  text_font_family = "Droid Serif",
+  text_font_url = "https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic",
+  header_font_google = google_font("Yanone Kaffeesatz"), 
+  colors = c(red = "#f34213",
+  purple = "#3e2f5b",
+  orange = "#ff8811",
+  green = "#136f63",
+  white = "#FFFFFF"
+  )
+)
+
+```
+
+.center2[
+```{r, out.width="700px", echo=FALSE}
+knitr::include_graphics("../Images/Slots.png")
+```
+]
+---
+
+# Summarized Experiment
+
+```{r, out.width="400px", fig.align='center',echo = FALSE}
+knitr::include_graphics("../Images/Summarized_experiment.png")
+```
+
+---
+# Summarized Experiment
+
+```{r, out.width="400px", fig.align='center', echo = F}
+knitr::include_graphics("../Images/ColData.png")
+```
+
+---
+
+# Summarized Experiment
+## ColData
+
+--
+
+```{r, echo = F, include = F}
+library(tximeta)
+library(SummarizedExperiment)
+dir <- ("../salmon_quants/")
+samples <- read.table(file.path(dir,  "metadata.txt"), he = T)
+files <- file.path(dir, paste0(samples$Sample, "_quant"), "quant.sf")
+data.frame(file = files,  exist = file.exists(files))
+coldata <- data.frame(files,  names = samples$Unique_id, condition = samples$Condition, stringsAsFactors = F)
+se <- tximeta(coldata)
+gse <- summarizeToGene(se)
+```
+
+
+- El cajón o slot correspondiente a `ColData` contiene la tabla de metadatos creada para importar las cuentas con tximeta
+
+--
+
+- Para acceder a **.red[ColData]** usar el siguiente comando:
+.tiny[
+```{r}
+colData(se)
+```
+]
+---
+
+# Summarized Experiment
+## ColData
+
+- El slot **ColData** es un objeto con clase de *DataFrame*
+.tiny[
+```{r}
+class(colData(se))
+```
+]
+
+--
+
+- *Rownames* de **ColData** corresponden a los *Colnames* en el slot **Assay**- **.red[Importante para análisis con DESeq2]**
+.tiny[
+```{r}
+rownames(colData(se))
+```
+]
+---
+
+# Summarized experiment
+
+```{r, out.width="400px", fig.align='center', echo = F}
+knitr::include_graphics("../Images/RowRanges.png")
+```
+
+---
+# Summarized experiment
+## rowRanges
+- El cajón de `rowRanges` hace referencia a las coordenadas de cada transcrito
+
+--
+
+- Para acceder al **.red[rowRanges]** usar:
+.tiny[
+```{r}
+rowRanges(se)
+```
+]
+---
+# Summarized Experiment
+## rowRanges
+
+El cajón **rowRanges** almacena metadatos de cada secuencia (en este caso cromosomas)
+.tiny[
+```{r}
+seqinfo(rowRanges(se))
+```
+]
+---
+
+# Summarized experiment
+
+```{r, out.width="400px", fig.align='center', echo = F}
+knitr::include_graphics("../Images/Assay.png")
+```
+
+---
+# Summarized experiment
+--
+
+- El slot `assay` almacena la información de las cuentas para cada transcrito dividida en tres niveles:
+
+--
+
+.tiny[
+```{r}
+assayNames(se)
+```
+]
+
+--
+
+- Para acceder a la matriz de cuentas estimadas por **Salmon**, correr:
+
+.tiny[
+```{r}
+head(assay(se), 5)
+```
+]
+
+---
+# Summarized experiment
+## Assay
+- Las matriz de abundancia *(TPM)* puede obtenerse:
+
+.tiny[
+```{r}
+## Obtener matriz de TPM
+head(se@assays@data$abundance, 5)
+```
+]
+
+---
+# Summarized experiment
+
+¿Recuerdan a qué tiene que ser igual *Rownames* del slot colData?
+
+--
+.tiny[
+```{r}
+rownames(colData(se))
+```
+]
+
+--
+.tiny[
+```{r, include=F, echo=T}
+colnames(assay(se))
+```
+]
+
+--
+.tiny[
+```{r}
+## Comprobar que rownames de colData es igual a colnames de assay
+row.names(colData(se)) == colnames(assay(se))
+```
+]
+

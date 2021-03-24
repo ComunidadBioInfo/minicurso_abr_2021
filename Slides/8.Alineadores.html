@@ -1,0 +1,1270 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Alineadores</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Rodolfo Chavez" />
+    <meta name="date" content="2021-03-02" />
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/default-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Alineadores
+### Rodolfo Chavez
+### 2021-03-02
+
+---
+
+
+&lt;img src="../Images/RNAseq_workflow2.png" width="600px" style="display: block; margin: auto;" /&gt;
+Imagen tomada de [aquí](https://biocorecrg.github.io/RNAseq_course_2019/salmon.html)
+---
+
+# Alineamiento
+&lt;img src="../Images/ReadAlignment.jpg" width="600px" style="display: block; margin: auto;" /&gt;
+
+Buscar la región del genoma/transcriptoma a partir de la cual se originaron los reads
+
+---
+
+# Alineamiento
+
+- Indexar genoma/transcriptoma (FASTA, GTF3/GFF3)
+
+&lt;img src="../Images/GenomeIndexing.png" width="500px" style="display: block; margin: auto;" /&gt;
+
+--
+
+- Alinear los reads (Fastq) al genoma/transcriptoma indexado
+
+&lt;img src="../Images/ReadAlignment1.png" width="500px" style="display: block; margin: auto;" /&gt;
+
+Imágenes tomadas de [aquí](https://almob.biomedcentral.com/articles/10.1186/s13015-016-0069-5/figures/1) y [aquí](https://figshare.com/articles/figure/_Comparison_of_stranded_and_unstranded_RNA_seq_library_methods_and_their_influence_on_interpretation_and_analysis_/1504417/1)
+---
+
+# Alineamiento
+## Spliced reads 
+
+&lt;img src="../Images/SplicedReads2.png" width="600px" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Alineamiento
+
+Alineadores tipo splice aware -&gt; Alineamiento de secuencias exon spanning -&gt; Segmentan las secuencias en las regiones de dos exones
+
+- TopHat 2
+&lt;img src="../Images/SpliceAware.png" width="600px" style="display: block; margin: auto;" /&gt;
+
+--
+
+- HISAT
+&lt;img src="../Images/HISAT.png" width="600px" style="display: block; margin: auto;" /&gt;
+
+--
+
+- STAR
+&lt;img src="../Images/STAR.png" width="400px" style="display: block; margin: auto;" /&gt;
+Imágenes tomadas de [aquí]()
+---
+
+# Alineamiento
+## Pseudo-alineadores
+
+Pseudo-alineadores (quasi-alineadores):
+
+- Kallisto
+
+- Sailfish
+
+- **Salmon**
+
+---
+
+# Alineamiento
+## Pseudo-alineadores
+
+&lt;img src="../Images/Pseudoalignment.png" width="600px" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+# Alineamiento
+## Pseudo-alineadores
+
+&lt;img src="../Images/PseudoAlignment1.png" width="500px" style="display: block; margin: auto;" /&gt;
+
+--
+
+&lt;img src="../Images/PseudoAlignment2.png" width="500px" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Alineamiento
+## Pseudo-alineadores
+
+&lt;img src="../Images/PseudoAlignment3.png" width="600px" style="display: block; margin: auto;" /&gt;
+
+---
+background-size: cover
+class: center, bottom, inverse
+background-image: 
+&lt;img src="../Images/hands_on.png" width="1315" /&gt;
+
+---
+# Hands on
+## Generar índice del transcriptoma
+
+Para ello vamos a requerir:
+
+--
+
+- Archivo **Fasta** del transcriptoma de referencia del humano.
+
+Descargado del sitio de [GeneCode](https://www.gencodegenes.org/human/)
+
+Lo pueden encontrar en el folder de `Transcriptome/`
+
+--
+
+- Código para genear el índice
+
+```
+salmon index -t --genecode path_to_transcriptome.fa.gz -i path_to_save_index
+```
+
+`-t`: Ubicación al archivo Fasta del transcriptoma
+
+`-i`: Ubicación para salvar el índice
+
+`--genecode`: El Fasta del transcriptoma de referencia está en formato de GENECODE
+
+---
+
+
+```bash
+salmon index -t ../transcriptome/gencode.v37.transcripts.fa.gz -i ../transcriptome/genecode.v37.salmon141 -p 6
+```
+
+```
+## Version Info: ### PLEASE UPGRADE SALMON ###
+## ### A newer version of salmon with bug fixes is available. ####
+## ###
+## The newest version, available at https://github.com/COMBINE-lab/salmon/releases
+## contains new features, improvements, and bug fixes; please upgrade at your
+## earliest convenience.
+## ###
+## Sign up for the salmon mailing list to hear about new versions, features and updates at:
+## https://oceangenomics.com/subscribe
+## ###
+## [2021-03-02 20:56:36.869] [jLog] [info] building index
+## [2021-03-02 20:56:36.886] [jointLog] [info] [Step 1 of 4] : counting k-mers
+## [2021-03-02 20:56:36.904] [jointLog] [warning] It appears that this may be a GENCODE transcriptome (from analyzing the separators in the FASTA header).  However, you have not set '|' as a header separator.  If this is a GENCODE transcriptome, consider passing --gencode to the salmon index command.
+## 
+## 
+## [2021-03-02 20:56:38.808] [jointLog] [warning] Entry with header [ENST00000473810.1|ENSG00000239255.1|OTTHUMG00000157482.1|OTTHUMT00000348942.1|AC007620.1-201|AC007620.1|25|processed_pseudogene|], had length less than the k-mer length of 31 (perhaps after poly-A clipping)
+## [2021-03-02 20:56:38.934] [jointLog] [warning] Entry with header [ENST00000603775.1|ENSG00000271544.1|OTTHUMG00000184300.1|OTTHUMT00000468575.1|AC006499.8-201|AC006499.8|23|processed_pseudogene|], had length less than the k-mer length of 31 (perhaps after poly-A clipping)
+## [2021-03-02 20:56:40.504] [jointLog] [warning] Entry with header [ENST00000632684.1|ENSG00000282431.1|OTTHUMG00000190602.2|OTTHUMT00000485301.2|TRBD1-202|TRBD1|12|TR_D_gene|], had length less than the k-mer length of 31 (perhaps after poly-A clipping)
+## [2021-03-02 20:56:42.379] [jointLog] [warning] Entry with header [ENST00000626826.1|ENSG00000281344.1|OTTHUMG00000189570.1|OTTHUMT00000479989.1|HELLPAR-201|HELLPAR|205012|lncRNA|] was longer than 200000 nucleotides.  Are you certain that we are indexing a transcriptome and not a genome?
+## [2021-03-02 20:56:42.462] [jointLog] [warning] Entry with header [ENST00000543745.1|ENSG00000255972.1|OTTHUMG00000168883.1|OTTHUMT00000401485.1|AC026333.1-201|AC026333.1|28|processed_pseudogene|], had length less than the k-mer length of 31 (perhaps after poly-A clipping)
+## [2021-03-02 20:56:42.682] [jointLog] [warning] Entry with header [ENST00000415118.1|ENSG00000223997.1|OTTHUMG00000170844.2|OTTHUMT00000410670.2|TRDD1-201|TRDD1|8|TR_D_gene|], had length less than the k-mer length of 31 (perhaps after poly-A clipping)
+## [2021-03-02 20:56:42.682] [jointLog] [warning] Entry with header [ENST00000434970.2|ENSG00000237235.2|OTTHUMG00000170845.2|OTTHUMT00000410671.2|TRDD2-201|TRDD2|9|TR_D_gene|], had length less than the k-mer length of 31 (perhaps after poly-A clipping)
+## [2021-03-02 20:56:42.682] [jointLog] [warning] Entry with header [ENST00000448914.1|ENSG00000228985.1|OTTHUMG00000170846.2|OTTHUMT00000410672.2|TRDD3-201|TRDD3|13|TR_D_gene|], had length less than the k-mer length of 31 (perhaps after poly-A clipping)
+## [2021-03-02 20:56:42.949] [jointLog] [warning] Entry with header [ENST00000439842.1|ENSG00000236597.1|OTTHUMG00000152435.2|OTTHUMT00000326213.2|IGHD7-27-201|IGHD7-27|11|IG_D_gene|], had length less than the k-mer length of 31 (perhaps after poly-A clipping)
+## [2021-03-02 20:56:42.949] [jointLog] [warning] Entry with header [ENST00000390567.1|ENSG00000211907.1|OTTHUMG00000152429.2|OTTHUMT00000326207.2|IGHD1-26-201|IGHD1-26|20|IG_D_gene|], had length less than the k-mer length of 31 (perhaps after poly-A clipping)
+## [2021-03-02 20:56:42.949] [jointLog] [warning] Entry with header [ENST00000452198.1|ENSG00000225825.1|OTTHUMG00000152436.2|OTTHUMT00000326214.2|IGHD6-25-201|IGHD6-25|18|IG_D_gene|], had length less than the k-mer length of 31 (perhaps after poly-A clipping)
+## [2021-03-02 20:56:42.949] [jointLog] [warning] Entry with header [ENST00000390569.1|ENSG00000211909.1|OTTHUMG00000152427.2|OTTHUMT00000326205.2|IGHD5-24-201|IGHD5-24|20|IG_D_gene|], had length less than the k-mer length of 31 (perhaps after poly-A clipping)
+## [2021-03-02 20:56:42.949] [jointLog] [warning] Entry with header [ENST00000437320.1|ENSG00000227196.1|OTTHUMG00000152438.2|OTTHUMT00000326216.2|IGHD4-23-201|IGHD4-23|19|IG_D_gene|], had length less than the k-mer length of 31 (perhaps after poly-A clipping)
+## [2021-03-02 20:56:42.949] [jointLog] [warning] Entry with header [ENST00000390572.1|ENSG00000211912.1|OTTHUMG00000152428.2|OTTHUMT00000326206.2|IGHD2-21-201|IGHD2-21|28|IG_D_gene|], had length less than the k-mer length of 31 (perhaps after poly-A clipping)
+## [2021-03-02 20:56:42.949] [jointLog] [warning] Entry with header [ENST00000450276.1|ENSG00000237020.1|OTTHUMG00000152432.2|OTTHUMT00000326210.2|IGHD1-20-201|IGHD1-20|17|IG_D_gene|], had length less than the k-mer length of 31 (perhaps after poly-A clipping)
+## [2021-03-02 20:56:42.974] [jointLog] [warning] Entry with header [ENST00000390574.1|ENSG00000211914.1|OTTHUMG00000152431.2|OTTHUMT00000326209.2|IGHD6-19-201|IGHD6-19|21|IG_D_gene|], had length less than the k-mer length of 31 (perhaps after poly-A clipping)
+## [2021-03-02 20:56:42.974] [jointLog] [warning] Entry with header [ENST00000390575.1|ENSG00000211915.1|OTTHUMG00000152433.2|OTTHUMT00000326211.2|IGHD5-18-201|IGHD5-18|20|IG_D_gene|], had length less than the k-mer length of 31 (perhaps after poly-A clipping)
+## [2021-03-02 20:56:42.974] [jointLog] [warning] Entry with header [ENST00000431870.1|ENSG00000227800.1|OTTHUMG00000152437.2|OTTHUMT00000326215.2|IGHD4-17-201|IGHD4-17|16|IG_D_gene|], had length less than the k-mer length of 31 (perhaps after poly-A clipping)
+## [2021-03-02 20:56:42.974] [jointLog] [warning] Entry with header [ENST00000451044.1|ENSG00000227108.1|OTTHUMG00000152369.2|OTTHUMT00000326003.2|IGHD1-14-201|IGHD1-14|17|IG_D_gene|], had length less than the k-mer length of 31 (perhaps after poly-A clipping)
+## [2021-03-02 20:56:42.974] [jointLog] [warning] Entry with header [ENST00000390580.1|ENSG00000211920.1|OTTHUMG00000152370.2|OTTHUMT00000326004.2|IGHD6-13-201|IGHD6-13|21|IG_D_gene|], had length less than the k-mer length of 31 (perhaps after poly-A clipping)
+## [2021-03-02 20:56:42.974] [jointLog] [warning] Entry with header [ENST00000390581.1|ENSG00000211921.1|OTTHUMG00000152367.2|OTTHUMT00000326001.2|IGHD5-12-201|IGHD5-12|23|IG_D_gene|], had length less than the k-mer length of 31 (perhaps after poly-A clipping)
+## [2021-03-02 20:56:42.974] [jointLog] [warning] Entry with header [ENST00000431440.2|ENSG00000232543.2|OTTHUMG00000152368.2|OTTHUMT00000326002.2|IGHD4-11-201|IGHD4-11|16|IG_D_gene|], had length less than the k-mer length of 31 (perhaps after poly-A clipping)
+## [2021-03-02 20:56:42.974] [jointLog] [warning] Entry with header [ENST00000430425.1|ENSG00000237197.1|OTTHUMG00000152357.2|OTTHUMT00000325963.2|IGHD1-7-201|IGHD1-7|17|IG_D_gene|], had length less than the k-mer length of 31 (perhaps after poly-A clipping)
+## [2021-03-02 20:56:42.974] [jointLog] [warning] Entry with header [ENST00000454691.1|ENSG00000228131.1|OTTHUMG00000152353.2|OTTHUMT00000325959.2|IGHD6-6-201|IGHD6-6|18|IG_D_gene|], had length less than the k-mer length of 31 (perhaps after poly-A clipping)
+## [2021-03-02 20:56:42.974] [jointLog] [warning] Entry with header [ENST00000390588.1|ENSG00000211928.1|OTTHUMG00000152360.2|OTTHUMT00000325966.2|IGHD5-5-201|IGHD5-5|20|IG_D_gene|], had length less than the k-mer length of 31 (perhaps after poly-A clipping)
+## [2021-03-02 20:56:42.974] [jointLog] [warning] Entry with header [ENST00000414852.1|ENSG00000233655.1|OTTHUMG00000152355.2|OTTHUMT00000325961.2|IGHD4-4-201|IGHD4-4|16|IG_D_gene|], had length less than the k-mer length of 31 (perhaps after poly-A clipping)
+## [2021-03-02 20:56:42.974] [jointLog] [warning] Entry with header [ENST00000454908.1|ENSG00000236170.1|OTTHUMG00000152359.2|OTTHUMT00000325965.2|IGHD1-1-201|IGHD1-1|17|IG_D_gene|], had length less than the k-mer length of 31 (perhaps after poly-A clipping)
+## [2021-03-02 20:56:42.974] [jointLog] [warning] Entry with header [ENST00000518246.1|ENSG00000254045.1|OTTHUMG00000152060.1|OTTHUMT00000325154.1|IGHVIII-22-2-201|IGHVIII-22-2|28|IG_V_pseudogene|], had length less than the k-mer length of 31 (perhaps after poly-A clipping)
+## [2021-03-02 20:56:42.976] [jointLog] [warning] Entry with header [ENST00000604642.1|ENSG00000270961.1|OTTHUMG00000184622.2|OTTHUMT00000468982.2|IGHD5OR15-5A-201|IGHD5OR15-5A|23|IG_D_gene|], had length less than the k-mer length of 31 (perhaps after poly-A clipping)
+## [2021-03-02 20:56:42.976] [jointLog] [warning] Entry with header [ENST00000603326.1|ENSG00000271317.1|OTTHUMG00000184621.3|OTTHUMT00000468981.3|IGHD4OR15-4A-201|IGHD4OR15-4A|19|IG_D_gene|], had length less than the k-mer length of 31 (perhaps after poly-A clipping)
+## [2021-03-02 20:56:42.976] [jointLog] [warning] Entry with header [ENST00000605284.1|ENSG00000271336.1|OTTHUMG00000184580.2|OTTHUMT00000468908.2|IGHD1OR15-1A-201|IGHD1OR15-1A|17|IG_D_gene|], had length less than the k-mer length of 31 (perhaps after poly-A clipping)
+## [2021-03-02 20:56:42.979] [jointLog] [warning] Entry with header [ENST00000604446.1|ENSG00000270824.1|OTTHUMG00000184624.2|OTTHUMT00000468984.2|IGHD5OR15-5B-201|IGHD5OR15-5B|23|IG_D_gene|], had length less than the k-mer length of 31 (perhaps after poly-A clipping)
+## [2021-03-02 20:56:42.979] [jointLog] [warning] Entry with header [ENST00000603693.1|ENSG00000270451.1|OTTHUMG00000184611.3|OTTHUMT00000468945.3|IGHD4OR15-4B-201|IGHD4OR15-4B|19|IG_D_gene|], had length less than the k-mer length of 31 (perhaps after poly-A clipping)
+## [2021-03-02 20:56:42.979] [jointLog] [warning] Entry with header [ENST00000604838.1|ENSG00000270185.1|OTTHUMG00000184585.2|OTTHUMT00000468915.2|IGHD1OR15-1B-201|IGHD1OR15-1B|17|IG_D_gene|], had length less than the k-mer length of 31 (perhaps after poly-A clipping)
+## [2021-03-02 20:56:43.783] [jointLog] [warning] Entry with header [ENST00000579054.1|ENSG00000266416.1|OTTHUMG00000179204.1|OTTHUMT00000445280.1|AC130289.2-201|AC130289.2|28|processed_pseudogene|], had length less than the k-mer length of 31 (perhaps after poly-A clipping)
+## [2021-03-02 20:56:44.586] [jointLog] [warning] Entry with header [ENST00000634174.1|ENSG00000282732.1|OTTHUMG00000191398.1|OTTHUMT00000487783.1|AC073539.7-201|AC073539.7|28|unprocessed_pseudogene|], had length less than the k-mer length of 31 (perhaps after poly-A clipping)
+## [2021-03-02 20:56:45.521] [jointLog] [warning] Entry with header [ENST00000674361.1|ENSG00000241743.4|OTTHUMG00000022220.5|OTTHUMT00000530527.1|XACT-203|XACT|347561|lncRNA|] was longer than 200000 nucleotides.  Are you certain that we are indexing a transcriptome and not a genome?
+## Elapsed time: 8.74422s
+## 
+## [2021-03-02 20:56:45.631] [jointLog] [warning] Removed 833 transcripts that were sequence duplicates of indexed transcripts.
+## [2021-03-02 20:56:45.631] [jointLog] [warning] If you wish to retain duplicate transcripts, please use the `--keepDuplicates` flag
+## [2021-03-02 20:56:45.637] [jointLog] [info] Replaced 4 non-ATCG nucleotides
+## [2021-03-02 20:56:45.637] [jointLog] [info] Clipped poly-A tails from 1,833 transcripts
+## [2021-03-02 20:56:45.653] [jointLog] [info] Building rank-select dictionary and saving to disk
+## [2021-03-02 20:56:45.707] [jointLog] [info] done
+## Elapsed time: 0.0534402s
+## [2021-03-02 20:56:45.732] [jointLog] [info] Writing sequence data to file . . . 
+## [2021-03-02 20:56:46.488] [jointLog] [info] done
+## Elapsed time: 0.755595s
+## [2021-03-02 20:56:46.501] [jointLog] [info] Building 32-bit suffix array (length of generalized text is 383,533,884)
+## [2021-03-02 20:56:47.251] [jointLog] [info] Building suffix array . . . 
+## success
+## saving to disk . . . done
+## Elapsed time: 2.3328s
+## done
+## Elapsed time: 37.5027s
+## 
+
+processed 0 positions
+
+processed 1,000,000 positions
+
+processed 2,000,000 positions
+
+processed 3,000,000 positions
+
+processed 4,000,000 positions
+
+processed 5,000,000 positions
+
+processed 6,000,000 positions
+
+processed 7,000,000 positions
+
+processed 8,000,000 positions
+
+processed 9,000,000 positions
+
+processed 10,000,000 positions
+
+processed 11,000,000 positions
+
+processed 12,000,000 positions
+
+processed 13,000,000 positions
+
+processed 14,000,000 positions
+
+processed 15,000,000 positions
+
+processed 16,000,000 positions
+
+processed 17,000,000 positions
+
+processed 18,000,000 positions
+
+processed 19,000,000 positions
+
+processed 20,000,000 positions
+
+processed 21,000,000 positions
+
+processed 22,000,000 positions
+
+processed 23,000,000 positions
+
+processed 24,000,000 positions
+
+processed 25,000,000 positions
+
+processed 26,000,000 positions
+
+processed 27,000,000 positions
+
+processed 28,000,000 positions
+
+processed 29,000,000 positions
+
+processed 30,000,000 positions
+
+processed 31,000,000 positions
+
+processed 32,000,000 positions
+
+processed 33,000,000 positions
+
+processed 34,000,000 positions
+
+processed 35,000,000 positions
+
+processed 36,000,000 positions
+
+processed 37,000,000 positions
+
+processed 38,000,000 positions
+
+processed 39,000,000 positions
+
+processed 40,000,000 positions
+
+processed 41,000,000 positions
+
+processed 42,000,000 positions
+
+processed 43,000,000 positions
+
+processed 44,000,000 positions
+
+processed 45,000,000 positions
+
+processed 46,000,000 positions
+
+processed 47,000,000 positions
+
+processed 48,000,000 positions
+
+processed 49,000,000 positions
+
+processed 50,000,000 positions
+
+processed 51,000,000 positions
+
+processed 52,000,000 positions
+
+processed 53,000,000 positions
+
+processed 54,000,000 positions
+
+processed 55,000,000 positions
+
+processed 56,000,000 positions
+
+processed 57,000,000 positions
+
+processed 58,000,000 positions
+
+processed 59,000,000 positions
+
+processed 60,000,000 positions
+
+processed 61,000,000 positions
+
+processed 62,000,000 positions
+
+processed 63,000,000 positions
+
+processed 64,000,000 positions
+
+processed 65,000,000 positions
+
+processed 66,000,000 positions
+
+processed 67,000,000 positions
+
+processed 68,000,000 positions
+
+processed 69,000,000 positions
+
+processed 70,000,000 positions
+
+processed 71,000,000 positions
+
+processed 72,000,000 positions
+
+processed 73,000,000 positions
+
+processed 74,000,000 positions
+
+processed 75,000,000 positions
+
+processed 76,000,000 positions
+
+processed 77,000,000 positions
+
+processed 78,000,000 positions
+
+processed 79,000,000 positions
+
+processed 80,000,000 positions
+
+processed 81,000,000 positions
+
+processed 82,000,000 positions
+
+processed 83,000,000 positions
+
+processed 84,000,000 positions
+
+processed 85,000,000 positions
+
+processed 86,000,000 positions
+
+processed 87,000,000 positions
+
+processed 88,000,000 positions
+
+processed 89,000,000 positions
+
+processed 90,000,000 positions
+
+processed 91,000,000 positions
+
+processed 92,000,000 positions
+
+processed 93,000,000 positions
+
+processed 94,000,000 positions
+
+processed 95,000,000 positions
+
+processed 96,000,000 positions
+
+processed 97,000,000 positions
+
+processed 98,000,000 positions
+
+processed 99,000,000 positions
+
+processed 100,000,000 positions
+
+processed 101,000,000 positions
+
+processed 102,000,000 positions
+
+processed 103,000,000 positions
+
+processed 104,000,000 positions
+
+processed 105,000,000 positions
+
+processed 106,000,000 positions
+
+processed 107,000,000 positions
+
+processed 108,000,000 positions
+
+processed 109,000,000 positions
+
+processed 110,000,000 positions
+
+processed 111,000,000 positions
+
+processed 112,000,000 positions
+
+processed 113,000,000 positions
+
+processed 114,000,000 positions
+
+processed 115,000,000 positions
+
+processed 116,000,000 positions
+
+processed 117,000,000 positions
+
+processed 118,000,000 positions
+
+processed 119,000,000 positions
+
+processed 120,000,000 positions
+
+processed 121,000,000 positions
+
+processed 122,000,000 positions
+
+processed 123,000,000 positions
+
+processed 124,000,000 positions
+
+processed 125,000,000 positions
+
+processed 126,000,000 positions
+
+processed 127,000,000 positions
+
+processed 128,000,000 positions
+
+processed 129,000,000 positions
+
+processed 130,000,000 positions
+
+processed 131,000,000 positions
+
+processed 132,000,000 positions
+
+processed 133,000,000 positions
+
+processed 134,000,000 positions
+
+processed 135,000,000 positions
+
+processed 136,000,000 positions
+
+processed 137,000,000 positions
+
+processed 138,000,000 positions
+
+processed 139,000,000 positions
+
+processed 140,000,000 positions
+
+processed 141,000,000 positions
+
+processed 142,000,000 positions
+
+processed 143,000,000 positions
+
+processed 144,000,000 positions
+
+processed 145,000,000 positions
+
+processed 146,000,000 positions
+
+processed 147,000,000 positions
+
+processed 148,000,000 positions
+
+processed 149,000,000 positions
+
+processed 150,000,000 positions
+
+processed 151,000,000 positions
+
+processed 152,000,000 positions
+
+processed 153,000,000 positions
+
+processed 154,000,000 positions
+
+processed 155,000,000 positions
+
+processed 156,000,000 positions
+
+processed 157,000,000 positions
+
+processed 158,000,000 positions
+
+processed 159,000,000 positions
+
+processed 160,000,000 positions
+
+processed 161,000,000 positions
+
+processed 162,000,000 positions
+
+processed 163,000,000 positions
+
+processed 164,000,000 positions
+
+processed 165,000,000 positions
+
+processed 166,000,000 positions
+
+processed 167,000,000 positions
+
+processed 168,000,000 positions
+
+processed 169,000,000 positions
+
+processed 170,000,000 positions
+
+processed 171,000,000 positions
+
+processed 172,000,000 positions
+
+processed 173,000,000 positions
+
+processed 174,000,000 positions
+
+processed 175,000,000 positions
+
+processed 176,000,000 positions
+
+processed 177,000,000 positions
+
+processed 178,000,000 positions
+
+processed 179,000,000 positions
+
+processed 180,000,000 positions
+
+processed 181,000,000 positions
+
+processed 182,000,000 positions
+
+processed 183,000,000 positions
+
+processed 184,000,000 positions
+
+processed 185,000,000 positions
+
+processed 186,000,000 positions
+
+processed 187,000,000 positions
+
+processed 188,000,000 positions
+
+processed 189,000,000 positions
+
+processed 190,000,000 positions
+
+processed 191,000,000 positions
+
+processed 192,000,000 positions
+
+processed 193,000,000 positions
+
+processed 194,000,000 positions
+
+processed 195,000,000 positions
+
+processed 196,000,000 positions
+
+processed 197,000,000 positions
+
+processed 198,000,000 positions
+
+processed 199,000,000 positions
+
+processed 200,000,000 positions
+
+processed 201,000,000 positions
+
+processed 202,000,000 positions
+
+processed 203,000,000 positions
+
+processed 204,000,000 positions
+
+processed 205,000,000 positions
+
+processed 206,000,000 positions
+
+processed 207,000,000 positions
+
+processed 208,000,000 positions
+
+processed 209,000,000 positions
+
+processed 210,000,000 positions
+
+processed 211,000,000 positions
+
+processed 212,000,000 positions
+
+processed 213,000,000 positions
+
+processed 214,000,000 positions
+
+processed 215,000,000 positions
+
+processed 216,000,000 positions
+
+processed 217,000,000 positions
+
+processed 218,000,000 positions
+
+processed 219,000,000 positions
+
+processed 220,000,000 positions
+
+processed 221,000,000 positions
+
+processed 222,000,000 positions
+
+processed 223,000,000 positions
+
+processed 224,000,000 positions
+
+processed 225,000,000 positions
+
+processed 226,000,000 positions
+
+processed 227,000,000 positions
+
+processed 228,000,000 positions
+
+processed 229,000,000 positions
+
+processed 230,000,000 positions
+
+processed 231,000,000 positions
+
+processed 232,000,000 positions
+
+processed 233,000,000 positions
+
+processed 234,000,000 positions
+
+processed 235,000,000 positions
+
+processed 236,000,000 positions
+
+processed 237,000,000 positions
+
+processed 238,000,000 positions
+
+processed 239,000,000 positions
+
+processed 240,000,000 positions
+
+processed 241,000,000 positions
+
+processed 242,000,000 positions
+
+processed 243,000,000 positions
+
+processed 244,000,000 positions
+
+processed 245,000,000 positions
+
+processed 246,000,000 positions
+
+processed 247,000,000 positions
+
+processed 248,000,000 positions
+
+processed 249,000,000 positions
+
+processed 250,000,000 positions
+
+processed 251,000,000 positions
+
+processed 252,000,000 positions
+
+processed 253,000,000 positions
+
+processed 254,000,000 positions
+
+processed 255,000,000 positions
+
+processed 256,000,000 positions
+
+processed 257,000,000 positions
+
+processed 258,000,000 positions
+
+processed 259,000,000 positions
+
+processed 260,000,000 positions
+
+processed 261,000,000 positions
+
+processed 262,000,000 positions
+
+processed 263,000,000 positions
+
+processed 264,000,000 positions
+
+processed 265,000,000 positions
+
+processed 266,000,000 positions
+
+processed 267,000,000 positions
+
+processed 268,000,000 positions
+
+processed 269,000,000 positions
+
+processed 270,000,000 positions
+
+processed 271,000,000 positions
+
+processed 272,000,000 positions
+
+processed 273,000,000 positions
+
+processed 274,000,000 positions
+
+processed 275,000,000 positions
+
+processed 276,000,000 positions
+
+processed 277,000,000 positions
+
+processed 278,000,000 positions
+
+processed 279,000,000 positions
+
+processed 280,000,000 positions
+
+processed 281,000,000 positions
+
+processed 282,000,000 positions
+
+processed 283,000,000 positions
+
+processed 284,000,000 positions
+
+processed 285,000,000 positions
+
+processed 286,000,000 positions
+
+processed 287,000,000 positions
+
+processed 288,000,000 positions
+
+processed 289,000,000 positions
+
+processed 290,000,000 positions
+
+processed 291,000,000 positions
+
+processed 292,000,000 positions
+
+processed 293,000,000 positions
+
+processed 294,000,000 positions
+
+processed 295,000,000 positions
+
+processed 296,000,000 positions
+
+processed 297,000,000 positions
+
+processed 298,000,000 positions
+
+processed 299,000,000 positions
+
+processed 300,000,000 positions
+
+processed 301,000,000 positions
+
+processed 302,000,000 positions
+
+processed 303,000,000 positions
+
+processed 304,000,000 positions
+
+processed 305,000,000 positions
+
+processed 306,000,000 positions
+
+processed 307,000,000 positions
+
+processed 308,000,000 positions
+
+processed 309,000,000 positions
+
+processed 310,000,000 positions
+
+processed 311,000,000 positions
+
+processed 312,000,000 positions
+
+processed 313,000,000 positions
+
+processed 314,000,000 positions
+
+processed 315,000,000 positions
+
+processed 316,000,000 positions
+
+processed 317,000,000 positions
+
+processed 318,000,000 positions
+
+processed 319,000,000 positions
+
+processed 320,000,000 positions
+
+processed 321,000,000 positions
+
+processed 322,000,000 positions
+
+processed 323,000,000 positions
+
+processed 324,000,000 positions
+
+processed 325,000,000 positions
+
+processed 326,000,000 positions
+
+processed 327,000,000 positions
+
+processed 328,000,000 positions
+
+processed 329,000,000 positions
+
+processed 330,000,000 positions
+
+processed 331,000,000 positions
+
+processed 332,000,000 positions
+
+processed 333,000,000 positions
+
+processed 334,000,000 positions
+
+processed 335,000,000 positions
+
+processed 336,000,000 positions
+
+processed 337,000,000 positions
+
+processed 338,000,000 positions
+
+processed 339,000,000 positions
+
+processed 340,000,000 positions
+
+processed 341,000,000 positions
+
+processed 342,000,000 positions
+
+processed 343,000,000 positions
+
+processed 344,000,000 positions
+
+processed 345,000,000 positions
+
+processed 346,000,000 positions
+
+processed 347,000,000 positions
+
+processed 348,000,000 positions
+
+processed 349,000,000 positions
+
+processed 350,000,000 positions
+
+processed 351,000,000 positions
+
+processed 352,000,000 positions
+
+processed 353,000,000 positions
+
+processed 354,000,000 positions
+
+processed 355,000,000 positions
+
+processed 356,000,000 positions
+
+processed 357,000,000 positions
+
+processed 358,000,000 positions
+
+processed 359,000,000 positions
+
+processed 360,000,000 positions
+
+processed 361,000,000 positions
+
+processed 362,000,000 positions
+
+processed 363,000,000 positions
+
+processed 364,000,000 positions
+
+processed 365,000,000 positions
+
+processed 366,000,000 positions
+
+processed 367,000,000 positions
+
+processed 368,000,000 positions
+
+processed 369,000,000 positions
+
+processed 370,000,000 positions
+
+processed 371,000,000 positions
+
+processed 372,000,000 positions
+
+processed 373,000,000 positions
+
+processed 374,000,000 positions
+
+processed 375,000,000 positions
+
+processed 376,000,000 positions
+
+processed 377,000,000 positions
+
+processed 378,000,000 positions
+
+processed 379,000,000 positions
+
+processed 380,000,000 positions
+
+processed 381,000,000 positions
+
+processed 382,000,000 positions
+
+processed 383,000,000 positions[2021-03-02 20:59:45.164] [jointLog] [info] khash had 146,687,348 keys
+## [2021-03-02 20:59:45.181] [jointLog] [info] saving hash to disk . . . 
+## [2021-03-02 20:59:57.532] [jointLog] [info] done
+## Elapsed time: 12.3512s
+## [2021-03-02 21:00:01.872] [jLog] [info] done building index
+```
+
+---
+# Hands on
+## Cuantificar la abundancia de los transcritos
+
+Requerimientos:
+
+--
+
+- Archivos **Fastq** de las lecturas -&gt; Paired end R1 y R2
+
+Ubicados en el folder de `data`
+
+--
+
+- Índice generado en el paso anterior
+
+--
+
+- Código para producir cuantificar los transcritos
+
+```
+salmon quant -i path_to_index 
+             -l A -1 path_to_R1 -2 path_to_R2 
+             -o path_to_store_results
+```
+`-i`: Ubicación del índice
+
+`-l`: Tipo de librería
+
+`-1 y -2`: Ubicación a las lecturas R1 y R2
+
+`-o`: Ubicación para almacenar los resultados
+
+---
+
+
+```bash
+##Crear un directorio para almacenar los datos de los conteos
+mkdir -p ../salmon_quant
+##Llamar salmon para realizar el conteo
+salmon quant -i ../transcriptome/genecode.v37.salmon141 \
+             -l A \
+             -1 ../Data/s1_R1.fastq.gz -2 ../Data/s1_R2.fastq.gz \
+             -p 6 --validateMappings \
+             -o ../salmon_quant/s1_quant
+```
+
+```
+## Version Info: ### PLEASE UPGRADE SALMON ###
+## ### A newer version of salmon with bug fixes is available. ####
+## ###
+## The newest version, available at https://github.com/COMBINE-lab/salmon/releases
+## contains new features, improvements, and bug fixes; please upgrade at your
+## earliest convenience.
+## ###
+## Sign up for the salmon mailing list to hear about new versions, features and updates at:
+## https://oceangenomics.com/subscribe
+## ###
+## ### salmon (mapping-based) v0.14.1
+## ### [ program ] =&gt; salmon 
+## ### [ command ] =&gt; quant 
+## ### [ index ] =&gt; { ../transcriptome/genecode.v37.salmon141 }
+## ### [ libType ] =&gt; { A }
+## ### [ mates1 ] =&gt; { ../Data/s1_R1.fastq.gz }
+## ### [ mates2 ] =&gt; { ../Data/s1_R2.fastq.gz }
+## ### [ threads ] =&gt; { 6 }
+## ### [ validateMappings ] =&gt; { }
+## ### [ output ] =&gt; { ../salmon_quant/s1_quant }
+## Logs will be written to ../salmon_quant/s1_quant/logs
+## [2021-03-02 21:00:04.789] [jointLog] [info] Fragment incompatibility prior below threshold.  Incompatible fragments will be ignored.
+## [2021-03-02 21:00:04.789] [jointLog] [info] Usage of --validateMappings implies use of minScoreFraction. Since not explicitly specified, it is being set to 0.65
+## [2021-03-02 21:00:04.789] [jointLog] [info] Usage of --validateMappings, without --hardFilter implies use of range factorization. rangeFactorizationBins is being set to 4
+## [2021-03-02 21:00:04.789] [jointLog] [info] Usage of --validateMappings implies a default consensus slack of 0.2. Setting consensusSlack to 0.2.
+## [2021-03-02 21:00:04.789] [jointLog] [info] parsing read library format
+## [2021-03-02 21:00:04.789] [jointLog] [info] There is 1 library.
+## [2021-03-02 21:00:04.836] [stderrLog] [info] Loading Suffix Array 
+## [2021-03-02 21:00:04.836] [jointLog] [info] Loading Quasi index
+## [2021-03-02 21:00:04.836] [jointLog] [info] Loading 32-bit quasi index
+## [2021-03-02 21:00:06.891] [stderrLog] [info] Loading Transcript Info 
+## [2021-03-02 21:00:07.560] [stderrLog] [info] Loading Rank-Select Bit Array
+## [2021-03-02 21:00:07.680] [stderrLog] [info] There were 233,652 set bits in the bit array
+## [2021-03-02 21:00:07.700] [stderrLog] [info] Computing transcript lengths
+## [2021-03-02 21:00:07.701] [stderrLog] [info] Waiting to finish loading hash
+## 
+## 
+## 
+## 
+## [2021-03-02 21:00:11.693] [stderrLog] [info] Done loading index
+## [2021-03-02 21:00:11.693] [jointLog] [info] done
+## [2021-03-02 21:00:11.693] [jointLog] [info] Index contained 233,652 targets
+## [2021-03-02 21:00:13.092] [jointLog] [info] Automatically detected most likely library type as ISR
+## [A
+
+[32mprocessed[31m 500,000 [32mfragments[0m
+## hits: 2,592,319, hits per frag:  5.33689[A
+
+[32mprocessed[31m 1,000,000 [32mfragments[0m
+## hits: 5,182,273, hits per frag:  5.34289[A
+
+[32mprocessed[31m 1,500,000 [32mfragments[0m
+## hits: 7,773,096, hits per frag:  5.26574[A
+
+[32mprocessed[31m 2,000,000 [32mfragments[0m
+## hits: 10,362,750, hits per frag:  5.24749[2021-03-02 21:00:33.416] [jointLog] [info] Thread saw mini-batch with a maximum of 1.12% zero probability fragments
+## [2021-03-02 21:00:33.421] [jointLog] [info] Thread saw mini-batch with a maximum of 1.24% zero probability fragments
+## [2021-03-02 21:00:33.434] [jointLog] [info] Thread saw mini-batch with a maximum of 1.24% zero probability fragments
+## [2021-03-02 21:00:33.436] [jointLog] [info] Thread saw mini-batch with a maximum of 1.22% zero probability fragments
+## [2021-03-02 21:00:33.450] [jointLog] [info] Thread saw mini-batch with a maximum of 1.18% zero probability fragments
+## [2021-03-02 21:00:33.452] [jointLog] [info] Thread saw mini-batch with a maximum of 1.12% zero probability fragments
+## 
+## 
+## 
+## 
+## [2021-03-02 21:00:33.558] [jointLog] [info] Computed 184,663 rich equivalence classes for further processing
+## [2021-03-02 21:00:33.558] [jointLog] [info] Counted 1,775,211 total reads in the equivalence classes 
+## 
+## 
+## 
+## 
+## [2021-03-02 21:00:33.566] [jointLog] [info] Number of mappings discarded because of alignment score : 37,676
+## [2021-03-02 21:00:33.566] [jointLog] [info] Number of fragments entirely discarded because of alignment score : 9,488
+## [2021-03-02 21:00:33.566] [jointLog] [info] Number of fragments discarded because they are best-mapped to decoys : 0
+## [2021-03-02 21:00:33.566] [jointLog] [info] Number of fragments discarded because they have only dovetail (discordant) mappings : 769
+## [2021-03-02 21:00:33.577] [jointLog] [warning] Only 1775211 fragments were mapped, but the number of burn-in fragments was set to 5000000.
+## The effective lengths have been computed using the observed mappings.
+## 
+## [2021-03-02 21:00:33.577] [jointLog] [info] Mapping rate = 88.7606%
+## 
+## [2021-03-02 21:00:33.578] [jointLog] [info] finished quantifyLibrary()
+## [2021-03-02 21:00:33.578] [jointLog] [info] Starting optimizer
+## [2021-03-02 21:00:39.727] [jointLog] [info] Marked 0 weighted equivalence classes as degenerate
+## [2021-03-02 21:00:39.734] [jointLog] [info] iteration = 0 | max rel diff. = 728.691
+## [2021-03-02 21:00:40.403] [jointLog] [info] iteration = 100 | max rel diff. = 11.6818
+## [2021-03-02 21:00:41.063] [jointLog] [info] iteration = 200 | max rel diff. = 15.6421
+## [2021-03-02 21:00:41.719] [jointLog] [info] iteration = 300 | max rel diff. = 2.04812
+## [2021-03-02 21:00:42.374] [jointLog] [info] iteration = 400 | max rel diff. = 0.521395
+## [2021-03-02 21:00:43.030] [jointLog] [info] iteration = 500 | max rel diff. = 0.066056
+## [2021-03-02 21:00:43.688] [jointLog] [info] iteration = 600 | max rel diff. = 0.155442
+## [2021-03-02 21:00:44.345] [jointLog] [info] iteration = 700 | max rel diff. = 0.0243608
+## [2021-03-02 21:00:45.003] [jointLog] [info] iteration = 800 | max rel diff. = 0.199303
+## [2021-03-02 21:00:45.661] [jointLog] [info] iteration = 900 | max rel diff. = 0.0206473
+## [2021-03-02 21:00:46.323] [jointLog] [info] iteration = 1,000 | max rel diff. = 1.84161
+## [2021-03-02 21:00:46.982] [jointLog] [info] iteration = 1,100 | max rel diff. = 0.672299
+## [2021-03-02 21:00:47.635] [jointLog] [info] iteration = 1,200 | max rel diff. = 0.218789
+## [2021-03-02 21:00:48.295] [jointLog] [info] iteration = 1,300 | max rel diff. = 0.0703639
+## [2021-03-02 21:00:48.379] [jointLog] [info] iteration = 1,314 | max rel diff. = 0.00610306
+## [2021-03-02 21:00:48.383] [jointLog] [info] Finished optimizer
+## [2021-03-02 21:00:48.383] [jointLog] [info] writing output
+```
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

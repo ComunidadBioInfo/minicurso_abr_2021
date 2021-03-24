@@ -1,0 +1,38 @@
+---
+title: "Minicurso RNA-seq"
+author: "Ana Beatriz Villaseñor Altamirano, Rodolfo Luis Chávez Domínguez"
+date: "`r Sys.Date()`"
+output:
+  rmarkdown::html_document:
+    toc: true
+    toc_float: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Introducción al RNA-seq
+
+# Aplicaciones del RNA-seq
+
+# Consideraciones para el diseño experimental
+
+# Tipo de archivos
+
+# Flujo de trabajo para el análisis de datos de RNA-seq
+
+# Organización del proyecto
+
+# Limpieza de datos
+
+# Alineamiento
+
+# Importación de datos a R
+
+# Summarized experiment
+
+# Normalización de datos
+
+# Exploración de los datos
