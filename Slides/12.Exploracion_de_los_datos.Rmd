@@ -1,0 +1,320 @@
+---
+title: "Exploración de los datos"
+author: "Rodolfo Chavez"
+date: "`r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    css: xaringan-themer.css
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+```{css, echo = F}
+.remark-slide-content {
+  font-size: 28px;
+  padding: 20px 80px 20px 80px;
+}
+.remark-code, .remark-inline-code {
+  background: #f0f0f0;
+}
+.remark-code {
+  font-size: 24px;
+}
+.huge .remark-code { /*Change made here*/
+  font-size: 200% !important;
+}
+.tiny .remark-code { /*Change made here*/
+  font-size: 50% !important;
+}
+
+.center2 {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+```
+
+```{r xaringan-themer, include=F, warning=F, echo=F}
+library(xaringanthemer)
+style_xaringan(
+  text_font_family = "Droid Serif",
+  text_font_url = "https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic",
+  header_font_google = google_font("Yanone Kaffeesatz"), 
+  colors = c(red = "#f34213",
+  purple = "#3e2f5b",
+  orange = "#ff8811",
+  green = "#136f63",
+  white = "#FFFFFF"
+  )
+)
+
+```
+
+```{r, include = F, echo = F}
+source("../bin/4.DE_analysis.R")
+```
+
+
+.center2[
+```{r, out.width="700px", echo = F}
+knitr::include_graphics("../Images/PCAplot.png")
+```
+]
+
+---
+# Exploración de datos
+## ¿Por qué es importante explorar los datos?
+
+--
+
+- Paso previo al análisis de expresión diferencial
+
+--
+
+- Análisis de calidad de los datos
+
+--
+
+- Permite conocer la congurencian entre individuos o réplicas 
+
+--
+
+- Mediante gráficos, visualizar comportamiento de los datos -> Outliers
+
+---
+# Exploración de datos
+
+.pull-left[
+```{r, out.width="400px", echo = F}
+knitr::include_graphics("../Images/PCAplot2.png")
+```
+
+]
+--
+.pull-right[
+```{r, out.width="400px", echo = F}
+knitr::include_graphics("../Images/Heatmap.png")
+```
+
+]
+
+---
+# Exploración de datos
+
+.pull-left[
+```{r, out.width="400px", echo = F}
+knitr::include_graphics("../Images/PCAplot2.png")
+```
+**.red[PCA]**
+]
+
+.pull-right[
+```{r, out.width="400px", echo = F}
+knitr::include_graphics("../Images/Heatmap.png")
+```
+**.red[Heatmap]**
+]
+
+---
+# PCA
+
+--
+
+- Análisis de componentes principales
+
+--
+
+- Método algebraico para reducir la dimensionalidad de sets de datos complejos (múltiples variables)
+
+--
+
+- Reducción de dimensionalidad o variables permite un análisis exploratorio más intuitivo
+
+--
+
+- Reducción de variables implica  preservar y captar la mayor información sobre los datos
+
+---
+# PCA
+## Normalización de los datos
+--
+
+```{r, out.width="350px", fig.align='center', echo = F}
+knitr::include_graphics("../Images/zscore.png")
+```
+
+Escalación de los datos -> Normalización para hacerlos más comparables
+
+--
+
+```{r, out.width="350px", fig.align='center', echo = F}
+knitr::include_graphics("../Images/covariancematrix.png")
+```
+
+Busqueda de correlación entre las variables -> correlación positiva o negativa
+
+---
+# PCA
+## Proyección de los datos
+
+.center[
+![PCA](https://builtin.com/sites/default/files/inline-images/Principal%20Component%20Analysis%20second%20principal.gif)
+]
+
+--
+Los componentes principales son los nuevos ejes que maximizan la distancia de los datos al origen
+
+---
+# PCA
+## Componentes principales
+
+--
+
+- El .green[primer componente] es aquel en el que los datos presentan la mayor separación (variación)
+
+--
+
+- El .orange[segundo componente] es el que tiene la segunda mayor separación entre los datos y es perpendicular al primer componente
+
+--
+
+- ¿Cuantos componentes existen? -> tantas variables en el set de datos
+
+
+
+---
+# PCA
+## Componentes principales
+
+- Cada componente principal tiene asociado un eigenvector (vector unitario) y un eigenvalue (cantidad escalar)
+
+--
+
+- Los eigenvalues son la suma del cuadrado de las distancias de los puntos proyectados sobre dicho componente principal
+
+--
+
+- Los eigenvalues permiten seleccionar cuál es el componente principal que explica la mayor variación en los datos
+
+---
+# PCA
+
+```{r, out.width="450px", fig.align='center', echo = F}
+knitr::include_graphics("../Images/Screeplot.png")
+```
+Screeplot
+
+
+---
+# PCA
+
+- En sets de datos de RNAseq, el PCA permite visualizar la distancia o congruencia de los datos
+
+--
+
+- Generalmente son gráficas de puntos (muestras) en dos dimensiones (dos componentes) que resumen las principales fuentes de varianza
+
+--
+.center[
+```{r, out.width="400px", echo = F}
+knitr::include_graphics("../Images/PCARNAseq.png")
+```
+]
+
+---
+# PCA
+## ¿Cómo crear nuestro propio PCA?
+
+- Primero instalen las siguientes librerías:
+.tiny[
+```{r, eval = F}
+library(DESeq2)
+library(PCAtools)
+```
+]
+
+--
+
+- Usemos la siguiente normalización logarítmica de las cuentas (toma en cuenta el tamaño de la librería)
+.tiny[
+```{r, eval = F}
+## Transformación recomendada para sets de con menos de 30 muestras
+rld <- rlog(dds, blind = F)
+```
+]
+
+- Si tuvieramos un número mayor de muestras (n > 30) entonces conviene:
+.tiny[
+```{r, eval = F}
+vsd <- vst(dds, blind = T)
+```
+]
+---
+# PCA
+
+- Usemos la función interna de *DESeq2* para graficar nuestro PCA:
+.tiny[
+```{r, eval = FALSE}
+## El argumento intgroup permite especificar mediante cuál variable colorear los datos
+plotPCA(rld, intgroup = "condition")
+```
+]
+
+- Con la librería de *PCAtools*:
+.tiny[
+```{r, eval = F}
+## Crear un objeto que contenga los datos del PCA
+PCA <- pca(assay(rld), scale = T, metadata = coldata) 
+## Graficar en 2D los resultados
+biplot(PCA, colby = "condition")
+## Generar un screeplot para visualizar la varianza asociada a cada componente
+screeplot(PCA)
+```
+]
+
+---
+
+.center[![Image](../Images/hands_on.png)
+]
+
+---
+# PCA
+## ¿Cómo ven los resultados?
+```{r, echo = F, include = F}
+ggplot()+
+  theme_set(theme_bw())
+```
+
+--
+
+.pull-left[**DESeq2**
+```{r,echo = F, out.width= "350px", fig.align='center'}
+plotPCA(rld, intgroup = "condition")+
+  geom_label_repel(aes(label = colnames(assay(rld))), 
+                   segment.color = "grey50", 
+                   box.padding = 0.35, 
+                   point.padding = 0.5)
+```
+]
+--
+.pull-right[**PCA tools**
+```{r, echo = F, out.width="350px", fig.align='center'}
+biplot(PCA, lab = colnames(assay(rld)), colby = "condition", legendPosition = "right")
+```
+]
+
+---
+# PCA
+## ¿Cuánta varianza es explicada por cada componente?
+
+```{r, out.width="400px", fig.align='center', echo = F, warning=FALSE}
+screeplot(PCA)
+```
+
+
