@@ -102,7 +102,7 @@ info
 ```
 
 
-Ahora las cuentas generadas por `Salmon`, para ello 
+Ahora las cuentas generadas por `Salmon`
 
 ```{r echo=TRUE}
 # Ubicamos el dir de trabajo
