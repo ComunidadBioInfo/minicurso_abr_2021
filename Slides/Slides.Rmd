@@ -4,31 +4,25 @@ author: "Ana BVA, Rodolfo LCD"
 date: "`r Sys.Date()`"
 output:
   xaringan::moon_reader:
-    css: ["default", "default-fonts", "hygge"]
+    css: ["default", "default-fonts", "hygge", "xaringan-themer.css", "sydney-fonts.css"]
     lib_dir: libs
     nature:
       highlightStyle: github
       highlightLines: true
       countIncrementalSlides: false
       beforeInit: "macros.js"
+      navigation:
+        scroll: false
 editor_options: 
   chunk_output_type: console
 ---
-```{r, echo = F, include = F}
-source("../bin/4.DE_analysis.R")
-library(xaringanthemer)
-style_xaringan(
-  text_font_family = "Droid Serif",
-  text_font_url = "https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic",
-  header_font_google = google_font("Yanone Kaffeesatz"), 
-  colors = c(red = "#f34213",
-  purple = "#3e2f5b",
-  orange = "#ff8811",
-  green = "#136f63",
-  white = "#FFFFFF"
-  )
-)
+class: inverse, center, middle
 
+# 1: Introduccion a RNA-seq 
+
+```{r xaringan-themer, echo = F, include = F}
+library(xaringanthemer)
+style_mono_accent(base_color = "#23395b")
 ```
 
 ```{css, echo = F}
@@ -70,8 +64,86 @@ pre {
 }
 ```
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r, echo = F, include = F}
+source("../bin/4.DE_analysis.R")
+```
+
+
 ---
-# Aplicaciones
+## Agradecimientos
+
+Este material está basado en [Love, Michael I., et al. "RNA-Seq workflow: gene-level exploratory analysis and differential expression." F1000Research 4 (2015).](https://www.bioconductor.org/packages/devel/workflows/vignettes/rnaseqGene/inst/doc/rnaseqGene.html) de Bioconductor.
+
+```{r, out.width = "300px",fig.align='center'}
+knitr::include_graphics("https://images.squarespace-cdn.com/content/v1/5423875be4b03f0c482a58c4/1532953317705-W6TYTE70KG5E6KQEZU1K/ke17ZwdGBToddI8pDm48kNVP8RwsgCc7XlHc2zPQeqdZw-zPPgdn4jUwVcJE1ZvWQUxwkmyExglNqGp0IvTJZUJFbgE-7XRK3dMEBRBhUpxA5wn4368HhrDKfvXqORu9oTEmTJkjlQ2gdQcVngofpWQcE5w-MKnvigIPwIMqpXs/Bioconductor.png")
+```
+
+---
+## Agradecimientos
+
+También está basado en el curso de ["Next generation sequencing bioiformatics" (Santiago, Chile 2019)](https://coursesandconferences.wellcomegenomecampus.org/our-events/next-generation-sequencing-bioinformatics-chile-2019/).
+
+```{r, out.width = "600px",fig.align='center'}
+knitr::include_graphics("./Images/module7.png")
+```
+
+---
+
+## Transcriptómica
+
+Estudio de la expresión genética
+
+- ¿Cuánto RNA hay?
+
+```{r, out.width = "900px",fig.align='center'}
+knitr::include_graphics("./Images/transcriptomica.png")
+```
+
+
+
+---
+
+## Tecnologías
+
+```{r, out.width = "800px",fig.align='center'}
+knitr::include_graphics("./Images/book.png")
+```
+
+
+---
+## RNA-seq
+
+
+```{r, out.width = "660px",fig.align='center'}
+knitr::include_graphics("https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Summary_of_RNA-Seq.svg/800px-Summary_of_RNA-Seq.svg.png")
+```
+
+---
+
+## Aplicaciones
+
+```{r, out.width = "570px",fig.align='center'}
+knitr::include_graphics("./Images/book.png")
+```
+
+---
+
+## Bases de datos
+
+```{r, out.width = "450px",fig.align='center'}
+knitr::include_graphics("./Images/book.png")
+```
+
+---
+class: inverse, center, middle
+
+# 2: Aplicaciones más comúnes del RNA-seq
+---
+## Aplicaciones
 
 ```{r, out.width="400px", fig.align='center', echo = F}
 knitr::include_graphics("./Images/RNA_seq_apps.png")
@@ -79,19 +151,11 @@ knitr::include_graphics("./Images/RNA_seq_apps.png")
 
 ---
 
-# Expresión cuantitativa de loci (EQTL)
-
---
-
-- Relacionado con el estudio de rasgos y SNPs
+## Expresión cuantitativa de loci (EQTL)
 
 --
 
 - Asociación entre cambios en la expresión de genes a SNPs conocidos
-
---
-
-- Determinar el efecto en el fenotipo -> mecanismos en *cis-* o en *trans-*
 
 --
 
@@ -104,10 +168,10 @@ knitr::include_graphics("./Images/RNA_seq_apps.png")
 --
 
 ![eqtl](./Images/eqtl2.png)
-
+.font50[[Living in an adaptive world: Genomic dissection of the genus Homo and its immune response](https://rupress.org/jem/article/214/4/877/42247/Living-in-an-adaptive-world-Genomic-dissection-of)]
 ---
 
-# Detección de variantes
+## Detección de variantes
 
 --
 
@@ -119,17 +183,11 @@ knitr::include_graphics("./Images/RNA_seq_apps.png")
 
 --
 
-- Se han reportado resultados en donde se identificaron > 8000 SNPs en músculo de *Longissimus thoraci*
-
---
-
-- Enfocado en la porción transcrita del genoma
-
 ![variants](./Images/variants.png)
 
 ---
 
-# Redes de co-expresión
+## Redes de co-expresión
 
 --
 
@@ -149,29 +207,13 @@ knitr::include_graphics("./Images/RNA_seq_apps.png")
 
 ---
 
-# Fusión de genes
+## Fusión de genes
 
---
-
-- Asociado a eventos de rearreglos genómicos como amplificaciones, deleciones y translocaciones
-
---
-
-- Región 5' gen A -> Region 3' gen B
-
---
-
-- RNA-seq permite conocer fusiones génicas en el desarrollo de enfermedades como cáncer
-
---
-
-- Permite conocer las diferencias en la expresión de genes fusionados entre dos condiciones
-
-![fusion](./Images/Fusions.png)
-
+![fusion](./Images/Fusions.jpeg)
+.font50[[Frequent CTLA4-CD28 gene fusion in diverse types of T-cell lymphoma](https://www.haematologica.org/article/view/7742)]
 ---
 
-# Análisis de expresión diferencial
+## Análisis de expresión diferencial
 
 
 
@@ -196,18 +238,189 @@ knitr::include_graphics("./Images/RNA_seq_apps.png")
 ---
 class: inverse, center, middle
 
-# Tipos de archivos 
+# 3: Consideraciones para el diseño experimental
+---
+## ¿Cúal es la pregunta que se quiere contestar?
+
+
+```{r, out.width = "290px",fig.align='center'}
+knitr::include_graphics("./Images/experiment.png")
+```
+
+
 
 ---
-# Flujo de trabajo
 
-```{r, out.width="550px", fig.align='center', echo = F}
-knitr::include_graphics("./Images/RNAseq_workflow.png")
+## ¿Cúal es la pregunta que se quiere contestar?
+
+--
+
+Consideraciones importantes:
+
+.font70[
+.pull-left[
+- **Single vs paired-end** (análisis de isoformas)
+
+- **Stranded vs unstranded** (antisense y overlapping
+transcripts)
+]
+
+.pull-right[
+- **Profundidad de la secuenciación** (detección de transcritos con baja abundancia). 
+- **Número de replicas**:
+
+  - *Biológicas* = independientes, muestras biologicamente distintas.
+
+  - *Técnicas* = repetir la medición de la misma muestra.
+]
+
+.full-width[.content-box-red[Para el análisis de expresión diferencial es mejor **incrementar el número de replicas** que incrementar la profundidad de la secuenciación.]]
+]
+
+---
+
+# ¿Qué es single-end y paired-end?
+
+.small[
+**Single-end**:  Lectura de un único extremo de cada fragmento. 
+
+```{r, out.width = "900px",fig.align='center'}
+knitr::include_graphics("./Images/s-p-end.png")
+```
+
+**Paired-end**: La secuenciación pareada proporciona la secuencia de ambos extremos de cada fragmento, siempre separados por una distancia conocida.
+
+
+[Martínez, Javier María Rodríguez. "Secuenciación de genomas." Arbor 177.698 (2004): 285-310.](http://www.encuentros.uma.es/encuentros138_9/secuenciacion.pdf)
+]
+---
+
+# Profundidad de la secuenciación
+
+- Mayor profundidad permite deterctar transcritos con baja expresión (Entre más *reads* tengas, encontrarás mayor cantidad de genes)
+- Se requiere un incremento logarítmico en la profundidad de secuenciación para obtener un aumento lineal el la deteción de los genes
+
+```{r, out.width = "500px",fig.align='center'}
+knitr::include_graphics("./Images/depth.png")
+```
+
+
+---
+
+# Precios
+
+Es importante contemplar los costos dentro del diseño. La tabla muestra costos NO actualizados pero la tendencia es similar:
+
+- Single-end es más baráto que paired-end.
+
+--
+
+- Mayor profundidad de secuenciación es más costoso. 
+
+--
+
+- Mayor longitud de bp por read aumenta el precio.
+
+--
+```{r, out.width = "800px",fig.align='center'}
+knitr::include_graphics("./Images/cost.png")
 ```
 
 ---
 
-# FastQ
+# Precios del langebio
+.font70[
+Tomados de su página de internet [langebio](http://labsergen.langebio.cinvestav.mx/en/?services=sbssequencing)
+
+.pull-left[
+### Precios de librerias
+
+- 1 Library from DNA: $ 222.00
+
+- 16 Libraries from DNA: $ 89.00 c/u
+
+- 1 Library from total RNA or messenger RNA: $ 408.00
+
+- 16 Libraries from RNA: $ 153.00 c/u
+
+- 8 Small libraries RNA: $ 191.00 c/u
+
+]
+
+.pull-right[
+### Precios de secuenciación
+
+
+- Running on MiSeq 2x300: $ 2,687.00
+
+- Run on NextSeq 2x150, High Yield: $ 7,396.00
+
+- Running on a HiSeq 2x100 lane : $ 3,490.00
+
+]
+
+.small[
+*Note: The price of libraries may vary depending on the number of samples to process.
+]
+
+]
+
+---
+
+## ¿Cuáles son las posibles fuentes de variación? 
+
+.full-width[.content-box-blue[Conoce el fenómeno que quieres estudiar]]
+.font80[
+.pull-left[
+
+```{r, out.width = "200px",fig.align='center'}
+knitr::include_graphics("./Images/experiment.png")
+```
+]
+
+.pull-right[
+
+- **Variación biológica**: Sexo, edad, background genético, etnicidad, etc.
+
+- **Variación técnica**: Día de procesamiento de la muestra, lotes de reactivos, tiempo de recoleción de muestras, personal, etc.
+]
+]
+---
+
+## Diseño experimental 
+
+Es importante considerar la **variación biológica** al planear el experimento, porque puede generar variación no deseada que no puede ser eliminada.
+
+```{r, out.width = "900px",fig.align='center'}
+knitr::include_graphics("./Images/batch.jpeg")
+```
+
+
+.footnotesize[[doi.org/10.1101/025528](http://doi.org/10.1101/025528)]
+
+
+---
+
+## Diseño experimental balanceado
+.font80[
+Cuando las muestras se colectan en diferentes lotes es importante incluir diferentes grupos para detectar la **variación técnica**. Visualizar los datos usando algoritmos de redución de dimensiones ayuda a observar si las muestras tienen efectos por lote
+]
+
+```{r, out.width = "700px",fig.align='center'}
+knitr::include_graphics("./Images/balanced.jpeg")
+```
+
+
+.footnotesize[[doi.org/10.1101/025528](http://doi.org/10.1101/025528)]
+
+---
+class: inverse, center, middle
+
+# 4: Tipos de archivos 
+
+---
+
+## FastQ
 
 --
 
@@ -231,7 +444,7 @@ knitr::include_graphics("./Images/RNAseq_workflow.png")
   
 ---
 
-# FastQ  
+## FastQ  
 ## Identificador
 
 --
@@ -252,15 +465,12 @@ gzcat ../Data/s1_R1.fastq.gz | head -n 1
 
 ---
 
-# FastQ
+## FastQ
 ## Calidad
 
 La calidad de cada base secuenciada, en la escala **Phred**, se calcula de acuerdo la siguiente ecuación:
 
-.content-box-blue[
-$$Q = -10 * log10(p)$$
-]
-
+.full-width[.content-box-blue[$$Q = -10 * log10(p)$$]]
 --
 
 Q = Calidad 
@@ -273,16 +483,8 @@ p = Probabilidad de que el *base call* sea incorrecto
 
 Valores de **p** cercanos a cero -> Alta calidad
 
---
-
-¿Cuál es la calidad si el valor p del basecall es de 0.01?
-
---
-
-$$Q = -10 * log10(0.01) = -10 * -2 = 20$$
-
 ---
-# Fastq
+## FastQ
 ## Calidad
 
 ```{r, out.width="700px", fig.align='center', echo = F}
@@ -291,7 +493,7 @@ knitr::include_graphics("./Images/Fastqc.png")
 
 
 ---
-# FastQ
+## FastQ
 ## Calidad
 
 --
@@ -306,19 +508,26 @@ knitr::include_graphics("./Images/Fastqc.png")
 
 - Phred + 64 -> Plataformas de Illumina anteriores a 1.8
 
+---
+## FastQ
 
-```{r, out.width="400px", fig.align='center', echo = F}
+```{r, out.width="600px", fig.align='center', echo = F}
 knitr::include_graphics("./Images/ASCII0.png")
 ```
 
 
-```{r, out.width="400px", fig.align='center', echo = F}
+```{r, out.width="600px", fig.align='center', echo = F}
 knitr::include_graphics("./Images/ASCII33.png")
 ```
 
+```{r, out.width="600px", fig.align='center', echo = F}
+knitr::include_graphics("./Images/ASCII64.png")
+```
+
+.font50[[ASCII Code - The extended ASCII table](https://www.ascii-code.com/)]
 ---
 
-# FastQ
+## FastQ
 
 
 ```{r, out.width="700px", fig.align='center',echo = F}
@@ -327,7 +536,7 @@ knitr::include_graphics("./Images/Fastq.png")
 
 ---
 
-# SAM/BAM
+## SAM/BAM
 
 --
 
@@ -355,7 +564,7 @@ knitr::include_graphics("./Images/Fastq.png")
 
 ---
 
-# SAM/BAM
+## SAM/BAM
 
 - Los archivos en formato **SAM** se dividen en dos secciones:
 
@@ -373,145 +582,68 @@ knitr::include_graphics("./Images/SAM-BAM.png")
 ```
 
 ---
+class: inverse, center, middle
+
+# 5: Flujo de trabajo para el análisis de RNA-seq
+---
+## Flujo general de trabajo
 
 
-```{r, out.width="600px", fig.align='center', echo = F}
-knitr::include_graphics("./Images/Header.png")
+```{r, out.width = "550px",fig.align='center'}
+knitr::include_graphics("https://biocorecrg.github.io/RNAseq_course_2019/images/RNAseq_workflow.png")
 ```
 
---
-
-- La sección HEADER incuye unformación sobre cómo se generó el alineamiento y su almacenamiento
-
---
-
-- **Todas** las líneas del HEADER están separadas por tabuladores
-
---
-
-- La estructura general de las líneas es la siguiente:
-
-   @ TAG:VALUE
-
-* TAG: Código de dos letras -> Contenido
-* VALUE: Valores del TAG
+.tiny[Imagen tomada de [aquí](https://biocorecrg.github.io/RNAseq_course_2019/salmon.html)]
 
 ---
 
-# SAM/BAM
-##HEADER
+## Primeros pasos
 
-Ejemplos de diferentes **TAG**:
 
---
-
-- @HD -> Metadatos del alineamiento
-
---
-
-- @SQ -> Datos de la secuencia de referencia
-
---
-
-- @RG -> Grupo de lecturas 
-
---
-
-- @PG -> Información del alineador y el código del alineamiento
-
----
-
-```{r, out.width="600px", fig.align='center', echo = F}
-knitr::include_graphics("./Images/Alignment.png")
-```
-
---
-
-Esta sección procede al **HEADER** y contiene:
-
---
-
-- Cada línea corresponde a una lectura alineada
-
---
-
-- Para cada lectura se muestran los resultados de los siguientes campos obligatorios:
-
-```{r, out.width="400px", fig.align='center', echo = F}
-knitr::include_graphics("./Images/Alignment2.png")
+```{r, out.width = "540px",fig.align='center'}
+knitr::include_graphics("./Images/step1.png")
 ```
 
 
 ---
 
-# SAM/BAM
-## FLAG
+## Alineamiento y Quantificación
 
---
 
-- Los valores del FLAG contestan preguntas relacionadas con el alineamiento del read
+```{r, out.width = "950px",fig.align='center'}
+knitr::include_graphics("./Images/step2.png")
+```
 
---
-
-- Sí = 1, No = 0
-
---
-
-- Cada respuesta se encuentra codificada en valores **binarios, decimales y hexadecimales**
-
---
-
-- Información útil para lecturas pareadas -> ¿La lectura es pareada? 
-¿Ambos reads alinearon adecuadamente?
 
 ---
 
-# SAM/BAM
-## FLAG
+## Expresión Diferencial y análisis funcionales
 
-```{r, out.width="600px", fig.align='center', echo = F}
-knitr::include_graphics("./Images/flag.png")
+
+```{r, out.width = "750px",fig.align='center'}
+knitr::include_graphics("./Images/step3.png")
 ```
 
 ---
 
-# SAM/BAM
-## Concise Idiosyncratic Gapped Alignment Report (CIGAR)
+## Flujo general de trabajo
 
-- Almacena información relacionada con las operaciones necesarias para alinear el read
-- Se reporta con valores alfanuméricos:
 
---
-  * M -> Alineamiento correcto
-  * I -> Inserción comparado con la referencia
-  * D -> Deleción comparado con la referencia
-  * N -> Región con corrimiento (intrón)
-  * S -> Soft clipping
-  * H -> Hard clipping
-  * P -> Padding o mutación silenciosa
-
---
----
- 
-# SAM/BAM
-## CIGAR
-
-```{r, out.width="600px", fig.align='center', echo = F}
-knitr::include_graphics("./Images/cigar.png")
+```{r, out.width = "550px",fig.align='center'}
+knitr::include_graphics("https://biocorecrg.github.io/RNAseq_course_2019/images/RNAseq_workflow.png")
 ```
 
+.tiny[Imagen tomada de [aquí](https://biocorecrg.github.io/RNAseq_course_2019/salmon.html)]
 ---
 class: inverse, center, middle
 
-# Organización de un proyecto bioinformático
+# 6: Organización de un proyecto bioinformático
 
 ---
 
-# Crisis de reproducibilidad en la ciencia
+## Crisis de reproducibilidad en la ciencia
 
-La reproducibilidad en la ciencia implica que dos o más personas (o grupos de trabajo) realicen el mismo experimento bajo condiciones experimentales similares y obtengan resultados similares.
-
-Para ello se requiere los siguientes elementos:
+Para que dos o más personas realicen el mismo experimento bajo condiciones experimentales similares y obtengan resultados similares se requiere:
 
 --
 
@@ -535,221 +667,94 @@ Para ello se requiere los siguientes elementos:
 
 ---
 
-# Crisis de reproducibilidad en la ciencia
+## Crisis de reproducibilidad en la ciencia
 
-Actuamente, existe una **crisis de reproducibilidad** en la ciencia -> Perseguir explicaciones incorrectas -> Diseñar tratamientos incorrectos para ciertas enfermedades
+**Crisis de reproducibilidad** en la ciencia -> Perseguir explicaciones incorrectas -> Diseñar tratamientos incorrectos para ciertas enfermedades
 
 Para combatir este problema:
 
---
 
+--
 - Transparencia de datos en publicaciones científicas
 
 --
-
 - Apertura de la información (Open science)
 
 --
-
 - Código abierto para el análisis de datos
 
 --
-
 - Repositiorios o bases de datos públicas donde se almacene la información
 
 --
-
 - Software depositado en repositorios o servidores a largo plazo
 
 ---
 
-# Crisis de la reproducibilidad en la ciencia
+## Crisis de la reproducibilidad en la ciencia
 
 ```{r, out.width="400px", fig.align='center', echo=F}
 knitr::include_graphics("./Images/Repo.png")
 ```
 
 
-Proyecto organizado en directorios y subdirectorios para reproducir el análisis de datos
+Almacenar el proyecto en .blue[GitHub] `r icons::icon_style(icons::fontawesome("github"), fill = "blue")` para el control de versiones 
 
 ---
 
-# Organización del proyecto  
-## README
+## Organización del proyecto  
 
-Un **README** es un archivo en texto plano (formado .md) que permite documentar el proyecto
+- La función del **README** es explicar la organización del proyecto y que otros entiendan su contenido
 
---
+- Los datos deben de almacenarse en un directorio especial (considerar espacio en disco):
 
-- El contenido de un proyecto (repositorio)
+- Considerar almacenar los datos en un repositorio como respaldo [OSF](https://osf.io/) `r icons::academicons("osf")`
 
---
-
-- Las funciones de los scripts contenidos en el proyecto
-
---
-
-- El orden en el cual deben ser ejecutados los scripts para realizar los análisis
-
---
-
-- Software necesario para los análisis
-
---
-
-- Información suplementaria sobre los datos/scripts/software
-
---
-
-La función del **README** es explicar la organización del proyecto y que otros entiendan su contenido
+- **El código es una de las partes más importantes del proyecto**
 
 ---
 
-# Organización del proyecto  
-## README
-
-Tips:
-
---
-
-- Importante actualizar el README durante el desarrollo del proyecto
-
---
-
-- Editarlo en formato plano (Nano, TextWrangler, MacDown, ...)
-
---
-
-- Información clara y concisa
-
-```{r, out.width="600px", fig.align='center', echo=F}
-knitr::include_graphics("./Images/README2.png")
-```
-
-
----
-
-# Organización del proyecto  
-## Datos
-
-Los datos deben de almacenarse en un directorio especial (considerar espacio en disco):
-
---
-
-- Datos crudos
-
---
-
-- Datos semi-crudos
-
---
-
-- Datos procesados
-
---
-
-Considerar almacenar los datos en un repositorio como respaldo [OSF](https://osf.io/)
-
----
-
-# Organización del proyecto  
-## Datos
-
-Es recomendable llevar una tabla de metadatos durante el desarrollo del proyecto:
-
---
-
-- Almacenar información de cada muestra
-
---
-
-- Información de la corrida -> Lotes
-
---
-
-- Comentarios respecto a la corrida
-
---
-
-- Fechas de creación/modificación de los datos
-
----
-
-# Organización del proyecto
+## Organización del proyecto
 ## Código
-
-**El código es una de las partes más importantes del proyecto**
-
---
-
-- Instrucciones que recibe el equipo para el análisis de datos
-
---
-
-- Diseñado  a partir del pipeline o estrategia para abordar el análisis de datos
-
---
-
-- Elemento dinámico dentro del proyecto
-
---
-
-```{r, out.width="400px", fig.align='center', echo=F}
-knitr::include_graphics("./Images/Script.png")
-```
-
----
-
-# Organización del proyecto
-## Código
-
---
 
 - Enumerar los scripts de acuerdo al orden en que serán ejecutados
-
+.tiny[
 ```
 +-- 1.QualityControl.sh
 +-- 2.Trimming.sh
 +-- 3.ReadAlignment.sh
 +-- 4.DifferentialExpression.R
 ```
-
---
+]
 
 - Utilizar rutas relativas hacia los archivos *input*
-
+.tiny[
 ```
 fastqc ../Data/*.fastqc -o ../Results/
 ```
---
-
+]
 - Comentar el script -> facilita que sea entendido por humanos
-
+.tiny[
 ```
 #Change the location of bam files
 mv ../Data/*.bam ../Results/
 ```
---
-
+]
 - ¡Mejorar el código! -> *Less is more*
-
 ---
 
 .center[![cat](./Images/cat.png)]
 
 ---
 
-# Organización del proyecto
+## Organización del proyecto
 ## Código
+.font80[
 .pull-left[
 - **[DRY](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself)** Don't Repeat Yourself
-
 - **[KISS](https://en.wikipedia.org/wiki/KISS_principle)** Keep It Simple Soldier
-
 - **[YAGNI](https://en.wikipedia.org/wiki/You_aren%27t_gonna_need_it)** You Aren't Gonna Need It
-
 - **[POLA](https://en.wikipedia.org/wiki/Principle_of_least_astonishment)** Principle of Least Astonishment
-
 - **[POLP](https://digitalguardian.com/blog/what-principle-least-privilege-polp-best-practice-information-security-and-compliance)** Principle of Least Privilege
 ]
 .pull-right[
@@ -757,9 +762,10 @@ mv ../Data/*.bam ../Results/
 knitr::include_graphics("./Images/Development.png")
 ```
 ]
+]
 
 ---
-# Organización del proyecto
+## Organización del proyecto
 ## Resultados
 
 ```{r, out.width="700px", fig.align='center', echo=F}
@@ -767,68 +773,237 @@ knitr::include_graphics("./Images/Results.png")
 ```
 
 ---
-# Organización del proyecto
+## Organización del proyecto
 ```{r, out.width="450px", fig.align='center', echo = F}
 knitr::include_graphics("./Images/Proyecto.png")
 ```
 
 ---
-# Experimento
+## Experimento
 
 Número de acceso GEO: GSE152699
+
+```{r, out.width="800px", fig.align='center', echo=F}
+knitr::include_graphics("./Images/Experiment_ver.png")
+```
+
 
 ---
 class: inverse, center, middle
 
-# Alineamiento
+# 7: Control de calidad de los datos
+---
+## ¿Porqué es importante revisar los datos crudos?
+--
+
+.full-width[.content-box-blue[Para verificar la calidad de los datos (*QC: quality control*)]]
+
+--
+
+- Los datos influencian los análisis posteriores
+
+--
+
+.pull-left[
+```{r, out.width = "150px",fig.align='center'}
+knitr::include_graphics("https://miro.medium.com/max/470/1*DVLpt3zCNaqeZOGNpgME7Q.png")
+knitr::include_graphics("https://i.pinimg.com/originals/30/66/ac/3066ac69ae68ac200ace0ca8fe3882c3.jpg")
+```
+]
+
+.pull-right[
+
+```{r, out.width = "200px",fig.align='center'}
+knitr::include_graphics("https://memegenerator.net/img/instances/68955295.jpg")
+```
+
+]
+
+
+---
+
+## FastQC
+
+Usaremos el programa de [fastQC](https://www.bioinformatics.babraham.ac.uk/projects/download.html#fastqc) para checar la calidad de los datos.
+
+--
+
+Podemos usar la interfaz gráfica o la línea de comandos, en este caso usaremos la línea de comandos.
+
+```{r, out.width = "400px",fig.align='center'}
+knitr::include_graphics("https://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc.png")
+```
+
+---
+.center2[![Handson](./Images/hands_on.png)]
+---
+
+### Pasos para installar FastQC:
+.scroll-output[
+1- Descargar el programa de su página web [fastQC](https://www.bioinformatics.babraham.ac.uk/projects/download.html#fastqc)
+
+2- Hacer el archivo ejecutable
+
+```{bash echo=TRUE, eval = F}
+# chmod 755 /Applications/FastQC.app/Contents/MacOS/fastqc
+ls -l /Applications/FastQC.app/Contents/MacOS/fastqc
+```
+
+3- Crear una liga simbolica para ejecutar `fastqc` desde cualquier ubicación
+
+```{bash echo=TRUE, eval=FALSE}
+ln -s /Applications/FastQC.app/Contents/MacOS/fastqc /usr/local/bin/fastqc
+```
+
+4- Correr `fastqc`
+
+```{bash, echo=TRUE, eval = F}
+##Imprimir el manual del programa usando el flag help
+fastqc --help
+```
+]
+
+---
+
+### Pasos para correr FastQC:
+
+.scroll-output[
+
+1- Checar los datos fastq
+```{bash echo=TRUE, eval = F}
+pwd
+ls ../data/Archivos_fastq
+```
+
+2- Crear un directorio para guardar el output
+
+```{bash echo=TRUE, eval=FALSE}
+mkdir ../output/QC
+```
+
+3- Correr `FastQC`
+
+```{bash echo=TRUE, eval=FALSE}
+# la opción -o es para elegir el directorio de salida
+fastqc ../data/Archivos_fastq/*.fastq.gz -o ../output/QC/
+```
+
+4- Checar los archivos generados
+
+```{bash echo=TRUE, eval = F}
+#Buscar los archivos generados por fastqc en el directorio de resultados
+ls ../output/QC
+```
+]
+
+
+
+---
+
+## Buena calidad
+
+El eje x = longitud de la read, y =  calidad (phred score)
+
+Los datos a continuación muestran reads de buena calidad (Verde = buena, amarilla = aceptable, roja = baja). 
+
+```{r, out.width = "400px",fig.align='center'}
+knitr::include_graphics("https://gwu-omics2019.readthedocs.io/en/latest/_images/fastqc_good.png")
+```
+
+
+---
+
+## Mala calidad
+
+¿Hasta donde los datos son de buena calidad? ¿Estos datos los usarías?
+
+```{r, out.width = "550px",fig.align='center'}
+knitr::include_graphics("https://gwu-omics2019.readthedocs.io/en/latest/_images/fastqc_bad.png")
+```
+
+
+---
+
+## Ejercicio
+
+¿Cómo se ven nuestros datos? 
+
+
+---
+## MultiQC
+.scroll-output[
+[MultiQC](https://multiqc.info/) te permite juntar los output en un solo archivo y poder visualizarlos mejor.
+
+*Esta parte es opcional, pero si trabajas con RNA-seq te puede intersar.
+
+
+
+1. La instalación se hace con conda, así que primero activamos un ambiente conda
+
+```{bash echo=TRUE, eval=FALSE}
+conda activate base
+pip install multiqc
+```
+
+
+2. Correr MultiQC
+
+```{bash multiqc, echo=TRUE, eval=FALSE}
+cd ../output/.
+multiQC .
+```
+
+3. Checar el [output.html](file:///Users/user/Documents/Doctorado/Courses/Taught/minicurso_abr_2021/output/QC/multiqc_report.html#fastqc_per_base_sequence_content)
+
+
+]
+---
+class: inverse, center, middle
+
+# 8: Alineamiento
 ---
 
 ```{r, out.width="600px", fig.align='center', echo = F}
 knitr::include_graphics("./Images/RNAseq_workflow2.png")
 ```
-Imagen tomada de [aquí](https://biocorecrg.github.io/RNAseq_course_2019/salmon.html)
+
 ---
 
-# Alineamiento
+## Alineamiento
 ```{r, out.width="600px", fig.align='center', echo = F}
 knitr::include_graphics("./Images/ReadAlignment.jpg")
 ```
-
 Buscar la región del genoma/transcriptoma a partir de la cual se originaron los reads
 
 ---
 
-# Alineamiento
+## Alineamiento
 
 - Indexar genoma/transcriptoma (FASTA, GTF3/GFF3)
-
 ```{r, out.width="500px", fig.align='center', echo = F}
 knitr::include_graphics("./Images/GenomeIndexing.png")
 ```
 
 --
-
 - Alinear los reads (Fastq) al genoma/transcriptoma indexado
-
 ```{r, out.width="500px", fig.align='center', echo = F}
 knitr::include_graphics("./Images/ReadAlignment1.png")
 ```
-
 Imágenes tomadas de [aquí](https://almob.biomedcentral.com/articles/10.1186/s13015-016-0069-5/figures/1) y [aquí](https://figshare.com/articles/figure/_Comparison_of_stranded_and_unstranded_RNA_seq_library_methods_and_their_influence_on_interpretation_and_analysis_/1504417/1)
 ---
 
-# Alineamiento
+## Alineamiento
 ## Spliced reads 
 
 ```{r, out.width="600px", fig.align='center', echo = F}
 knitr::include_graphics("./Images/SplicedReads2.png")
 ```
 
+.font50[[HISAT: a fast spliced aligner with low memory requirements](https://www.nature.com/articles/nmeth.3317)]
+
 ---
 
-# Alineamiento
-
-Alineadores tipo splice aware -> Alineamiento de secuencias exon spanning -> Segmentan las secuencias en las regiones de dos exones
+## Splice aware
 
 - TopHat 2
 ```{r, out.width="600px", fig.align='center',echo = F}
@@ -836,22 +1011,21 @@ knitr::include_graphics("./Images/SpliceAware.png")
 ```
 
 --
-
 - HISAT
 ```{r, out.width="600px", fig.align='center', echo = F}
 knitr::include_graphics("./Images/HISAT.png")
 ```
 
 --
-
 - STAR
 ```{r, out.width="400px", fig.align='center', echo = F}
 knitr::include_graphics("./Images/STAR.png")
 ```
-Imágenes tomadas de [aquí]()
+
+.font50[[Imágenes tomadas de aqui](https://training.galaxyproject.org/training-material/topics/transcriptomics/tutorials/rb-rnaseq/tutorial.html)]
 ---
 
-# Alineamiento
+## Alineamiento
 ## Pseudo-alineadores
 
 Pseudo-alineadores (quasi-alineadores):
@@ -862,19 +1036,24 @@ Pseudo-alineadores (quasi-alineadores):
 
 - **Salmon**
 
+```{r}
+knitr::include_graphics("https://combine-lab.github.io/salmon/images/SalmonLogo.png")
+```
+
 ---
 
-# Alineamiento
+## Alineamiento
 ## Pseudo-alineadores
 
 ```{r, out.width="600px", fig.align='center', echo = F}
 knitr::include_graphics("./Images/Pseudoalignment.png")
 ```
 
+.font50[[RapMap: a rapid, sensitive and accurate tool for mapping RNA-seq reads to transcriptomes](https://academic.oup.com/bioinformatics/article/32/12/i192/2288985)]
 
 ---
 
-# Alineamiento
+## Alineamiento
 ## Pseudo-alineadores
 
 ```{r, out.width="500px", fig.align='center', echo = F}
@@ -882,35 +1061,28 @@ knitr::include_graphics("./Images/PseudoAlignment1.png")
 ```
 
 --
-
 ```{r, out.width="500px", fig.align='center', echo = F}
 knitr::include_graphics("./Images/PseudoAlignment2.png")
 ```
 
 ---
 
-# Alineamiento
+## Alineamiento
 ## Pseudo-alineadores
 
 ```{r, out.width="600px", fig.align='center', echo = F}
 knitr::include_graphics("./Images/PseudoAlignment3.png")
 ```
 
----
-background-size: cover
-class: center, bottom, inverse
-background-image: 
-```{r, echo = F}
-knitr::include_graphics("./Images/hands_on.png")
-```
+.font50[[Near-optimal probabilistic RNA-seq quantification](https://www.nature.com/articles/nbt.3519?WT.feed_name=subjects_genome-informatics)]
 
 ---
-# Hands on
+.center2[![Handson](./Images/hands_on.png)]
+
+---
 ## Generar índice del transcriptoma
-
+.scroll-output[
 Para ello vamos a requerir:
-
---
 
 - Archivo **Fasta** del transcriptoma de referencia del humano.
 
@@ -918,7 +1090,6 @@ Descargado del sitio de [GeneCode](https://www.gencodegenes.org/human/)
 
 Lo pueden encontrar en el folder de `Transcriptome/`
 
---
 
 - Código para genear el índice
 
@@ -932,23 +1103,17 @@ salmon index -t --genecode path_to_transcriptome.fa.gz -i path_to_save_index
 
 `--genecode`: El Fasta del transcriptoma de referencia está en formato de GENECODE
 
+]
 ---
-# Hands on
 ## Cuantificar la abundancia de los transcritos
-
+.scroll-output[
 Requerimientos:
-
---
 
 - Archivos **Fastq** de las lecturas -> Paired end R1 y R2
 
 Ubicados en el folder de `data`
 
---
-
 - Índice generado en el paso anterior
-
---
 
 - Código para producir cuantificar los transcritos
 
@@ -965,9 +1130,8 @@ salmon quant -i path_to_index
 
 `-o`: Ubicación para almacenar los resultados
 
----
 
-```{bash engine.opts = '-l', eval = F}
+```{bash engine.opts = '-l', eval = F, echo = T}
 ##Crear un directorio para almacenar los datos de los conteos
 mkdir -p ../salmon_quant
 ##Llamar salmon para realizar el conteo
@@ -977,10 +1141,109 @@ salmon quant -i ../transcriptome/genecode.v37.salmon141 \
              -p 6 --validateMappings \
              -o ../salmon_quant/s1_quant
 ```
+
+]
+---
+
+class: inverse, center, middle
+
+# 9: Tximeta y Tximport
+---
+## Recordatorio
+
+¿Dónde estamos?
+
+```{r, out.width = "450px",fig.align='center'}
+knitr::include_graphics("https://biocorecrg.github.io/RNAseq_course_2019/images/RNAseq_workflow.png")
+```
+
+.tiny[Imagen tomada de [aquí](https://biocorecrg.github.io/RNAseq_course_2019/salmon.html)]
+
+
+---
+
+## Recordatorio
+
+¿Dónde estamos?
+
+```{r, out.width = "450px",fig.align='center'}
+knitr::include_graphics("images/worflowTximeta.png")
+```
+ 
+.tiny[Imagen tomada de [aquí](https://biocorecrg.github.io/RNAseq_course_2019/salmon.html)]
+
+---
+
+## Tximeta
+
+Paquetería que conserva 
+
+```{r, out.width = "650px",fig.align='center'}
+knitr::include_graphics("https://journals.plos.org/ploscompbiol/article/figure/image?size=large&id=10.1371/journal.pcbi.1007664.g001")
+```
+ 
+
+.tiny[[Love, Michael I., et al. "Tximeta: Reference sequence checksums for provenance identification in RNA-seq." PLoS computational biology 16.2 (2020): e1007664.](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1007664)]
+
+
+---
+
+## Importar datos
+
+
+Utilizamos `tximeta` para importar los datos. 
+
+.content-box-red[
+
+Nota: `tximeta` espera dos columnas:
+
+  - `files`: con la rut a `quant.sf`
+  
+  - `names`: con los nombres de las muestras
+]
+
+---
+
+.center2[![Handson](./Images/hands_on.png)]
+---
+
+## Importar datos
+
+.scroll-output[
+Importamos la información de cada muestra
+
+```{r, echo=TRUE, eval = T}
+##Leemos los datos
+coldata <- read.delim(here::here("output/salmon_quants/metadata.txt"))
+##Generamos la columna "names"
+coldata <- coldata %>% rename(names = unique_id)
+coldata
+##Ahora las cuentas generadas por `Salmon`, para ello 
+##Ubicamos el dir de trabajo
+dir <- file.path(here::here("output/salmon_quants"))
+##Verificar que estén los directorios  
+list.files(dir) 
+##¿¿Que hacemos aqui?? Verificar que el path se generó correctamente
+#file.path(dir,paste0(info$Sample,"_quant"),"quant.sf")
+coldata$files <- file.path(dir,paste0(coldata$Sample,"_quant"),"quant.sf")
+##Corroboramos que los archivos existan
+data.frame(coldata$Sample, file.exists(coldata$files))
+```
+
+Importar los datos usando `tximeta` 
+
+```{r echo=TRUE, eval = F}
+#BiocManager::install("tximeta")
+library("tximeta")
+se <- tximeta(coldata)
+```
+
+]
+
 ---
 class: inverse, center, middle
 
-# Objeto Summarized Experiment
+# 10: Objeto Summarized Experiment
 ---
 
 .center2[
@@ -990,14 +1253,14 @@ knitr::include_graphics("./Images/Slots.png")
 ]
 ---
 
-# Summarized Experiment
+## Summarized Experiment
 
 ```{r, out.width="400px", fig.align='center',echo = FALSE}
 knitr::include_graphics("./Images/Summarized_experiment.png")
 ```
 
 ---
-# Summarized Experiment
+## Summarized Experiment
 
 ```{r, out.width="400px", fig.align='center', echo = F}
 knitr::include_graphics("./Images/ColData.png")
@@ -1005,134 +1268,359 @@ knitr::include_graphics("./Images/ColData.png")
 
 ---
 
-# Summarized Experiment
+## Summarized Experiment
 ## ColData
 
---
+.scroll-output[
+- El cajón o slot correspondiente a `ColData` contiene la tabla de metadatos `coldata` creada para importar las cuentas con tximeta
 
-- El cajón o slot correspondiente a `ColData` contiene la tabla de metadatos creada para importar las cuentas con tximeta
-
---
 
 - Para acceder a **.red[ColData]** usar el siguiente comando:
-.tiny[
-```{r}
+
+```{r, echo = TRUE}
 colData(se)
 ```
 ]
+
 ---
 
-# Summarized Experiment
+## Summarized Experiment
 ## ColData
 
 - El slot **ColData** es un objeto con clase de *DataFrame*
-.tiny[
-```{r}
+.code70[
+```{r, echo = T}
 class(colData(se))
 ```
 ]
 --
 
 - *Rownames* de **ColData** corresponden a los *Colnames* en el slot **Assay**- **.red[Importante para análisis con DESeq2]**
-.tiny[
-```{r}
+.code70[
+```{r, echo = T}
 rownames(colData(se))
 ```
 ]
+
 ---
 
-# Summarized experiment
+## Summarized experiment
 
 ```{r, out.width="400px", fig.align='center', echo = F}
 knitr::include_graphics("./Images/RowRanges.png")
 ```
 
 ---
-# Summarized experiment
+## Summarized experiment
 ## rowRanges
+
+.scroll-output[
 - El cajón de `rowRanges` hace referencia a las coordenadas de cada transcrito
 
---
 
 - Para acceder al **.red[rowRanges]** usar:
-.tiny[
-```{r}
+
+```{r, echo = T}
 rowRanges(se)
 ```
+
 ]
 ---
 
-# Summarized experiment
+## Summarized experiment
 
 ```{r, out.width="400px", fig.align='center', echo = F}
 knitr::include_graphics("./Images/Assay.png")
 ```
 
 ---
-# Summarized experiment
---
+## Summarized experiment
+## Assay
 
+.scroll-output[
 - El slot `assay` almacena la información de las cuentas para cada transcrito dividida en tres niveles:
 
---
-
-.tiny[
-```{r}
+```{r, echo = T}
 assayNames(se)
 ```
-]
---
 
 - Para acceder a la matriz de cuentas estimadas por *Salmon*, correr:
 
-.tiny[
-```{r}
+```{r, echo = T}
 head(assay(se), 5)
 ```
-]
 
+]
 ---
-# Summarized experiment
+## Summarized experiment
 ## Assay
 - Las matriz de abundancia *(TPM)* puede obtenerse:
 
-.tiny[
-```{r}
+.code70[
+```{r, echo = T}
 ## Obtener matriz de TPM
 head(se@assays@data$abundance, 5)
 ```
 ]
 
 ---
-# Summarized experiment
+## Summarized experiment
 
+.scroll-output[
 ¿Recuerdan a qué tiene que ser igual *Rownames* del slot colData?
 
---
-.tiny[
-```{r}
+
+.code90[
+```{r, echo = T}
 rownames(colData(se))
 ```
-
-
---
 
 ```{r, echo=T}
 colnames(assay(se))
 ```
 
-
---
-
-```{r}
+```{r, echo = T}
 ## Comprobar que rownames de colData es igual a colnames de assay
 row.names(colData(se)) == colnames(assay(se))
 ```
+
+]
 ]
 ---
 class: inverse, center, middle
 
-# Exploración de los datos
+# 11: Normalización de los datos
+---
+## Normalización 
+
+
+Es el primer paso del análisis de expresión diferencial y es necesario para hacer comparaciones acertadas entre muestras. 
+
+--
+
+Las cuentas crudas están conformadas por un componente "interesante" (la expresión de RNA) y componentes "no interesantes" (como los batch effects, ruido de la plataforma, etc.).
+
+--
+
+La normalzación escala las cuentas para tratar de reducir los componentes "no interesantes" y poder comparar las muestras entre si. 
+
+---
+
+## Criteríos para normalizar
+
+Se puede normalizar considerando:
+
+- La profundidad (tamaño de librería)
+
+```{r, out.width = "450px",fig.align='center'}
+knitr::include_graphics("https://hbctraining.github.io/DGE_workshop/img/normalization_methods_depth.png")
+```
+
+---
+
+## Criteríos para normalizar
+
+Se puede normalizar considerando:
+
+- El tamaño del gen
+
+```{r, out.width = "450px",fig.align='center'}
+knitr::include_graphics("https://hbctraining.github.io/DGE_workshop/img/normalization_methods_length.png")
+```
+
+
+---
+
+## Criteríos para normalizar
+
+Se puede normalizar considerando:
+
+- Composición de RNA
+
+```{r, out.width = "350px",fig.align='center'}
+knitr::include_graphics("https://hbctraining.github.io/DGE_workshop/img/normalization_methods_composition.png")
+```
+
+
+
+.tiny[Imagen tomada de [aquí](https://biocorecrg.github.io/RNAseq_course_2019/salmon.html)]
+
+
+---
+## Métodos comunes
+
+.scroll-output[
+
+| Método de normalización | Descripción | Factores de evaluación | Recomendaciones de uso |
+|:-----------------------------------------------------------------------------------:|:----------------------------------------------------------------------------------------------------------------------------:|:--------------------------------------------------:|:-------------------------------------------------------------------------------------------------------------------:|
+| CPM (cuentas por millón): cuentas escalados por el número total de lecturas | profundidad de secuenciación | comparaciones de cuentas de genes entre réplicas del mismo grupo de muestras| NO para comparaciones dentro de la muestra o análisis de DE.| 
+| TPM (transcritos por kilobase por millón de lecturas): cuentas por longitud de transcripción (kb) por millón de lecturas mapeadas | profundidad de secuenciación y longitud de genes| comparaciones de cuentas de genes dentro de una muestra o entre muestras del mismo grupo de muestras| NO para análisis de DE. |
+| RPKM/FPKM (lecturas/fragmentos por kilobase de exón por millón de lecturas/fragmentos mapeados| similar a TPM, profundidad de secuenciación y longitud del gen | comparaciones de cuentas entre genes dentro de una muestra | NO para comparaciones entre muestras o análisis de DE.|
+| Mediana de ratios de DESeq2 | cuentas divididas por factores de tamaño específicos de la muestra determinados por la mediana del ratio de cuentas de genes en relación con la media geométrica por gen | profundidad de secuenciación y composición del RNA | comparaciones de cuentas de genes entre muestras y para el análisis de DE; NO para comparaciones dentro de la muestra |
+| La media cortada de los valores M de EdgeR (TMM) | utiliza una media recortada ponderada de los ratios de expresión logarítmica entre las muestras | profundidad de secuenciación | composición de RNA y longitud de los genes. |
+
+.tiny[
+
+[Tabla tomada de Intro to DGE](https://hbctraining.github.io/DGE_workshop/lessons/02_DGE_count_normalization.html#:~:text=Normalization%20is%20the%20process%20of,between%20and%2For%20within%20samples.)
+]
+
+]
+
+---
+## DESeq2
+
+- Normalización para análisis de expresión diferencial:
+
+  - Factor de normalización de `DESeq2`
+
+- Normalización para visualización u otras aplicaciones:
+
+  - Variance stabilizing transformation (VST)
+  
+  - Regularized-logarithm transformation (rlog)
+
+---
+## DESeq2
+
+.scroll-output[
+
+`DESeq2`ajusta a un modelo lineal generalizado (GLM) de la familia binomial negativa (NB).
+
+```{r include=FALSE}
+library(tidyverse)
+```
+
+
+```{r}
+df <- tibble(gene = c("gene1", "gene2"),
+                 muestraA = c(1749, 35),
+                 muestraB = c(943, 29)
+                 )
+df
+```
+
+1. Crea una pseudo-referencia por muestra (promedio geometrico por fila) `sqrt(muestraA * muestra B)`
+```{r}
+df <- df %>%
+  rowwise() %>% 
+  mutate(prom_geom = sqrt(muestraA * muestraB))
+df
+```
+
+2. Se calcula la fración `muestra/pseudo-referencia`
+```{r}
+df <- df %>% 
+  rowwise() %>% 
+  mutate(muestraA_pseudo_ref = muestraA / prom_geom) %>% 
+  mutate(muestraB_pseudo_ref = muestraB / prom_geom)
+df
+```
+
+3. Se calcula un factor de normalización (size factor) utilizando la `mediana` por columnas.
+```{r}
+norm_factor_muestraA <- median(df$muestraA_pseudo_ref)
+norm_factor_muestraA
+norm_factor_muestraB <- median(df$muestraB_pseudo_ref)
+norm_factor_muestraB
+```
+
+4. Se dividen las `cuentas crudas/size factor` para calcular las cuentas normalizadas.
+```{r}
+df %>% 
+  select(gene, muestraA, muestraB)
+df$norm_muestraA <- df$muestraA/norm_factor_muestraA
+df$norm_muestraB <- df$muestraB/norm_factor_muestraB
+df %>%  
+  select(norm_muestraA, norm_muestraB)
+```
+
+
+]
+---
+
+.center2[![Image](./Images/hands_on.png)]
+---
+
+## Ejercicio 
+
+.scroll-output[
+
+Se pueden ocupar otras transformaciones en la paquetería de `DESeq2` pero no son las mas recomendadas para DE. 
+
+```{r include=FALSE, eval=F}
+#Cambio
+#info <- read.delim(here::here("output/salmon_quants/metadata.txt"))
+#info$names <- info$Unique_id
+#dir <- file.path(here::here("output/salmon_quants"))
+#info$files <- file.path(dir,paste0(info$Sample,"_quant"),"quant.sf")
+#library("tximeta")
+#gse <- tximeta(info)
+```
+
+Para normalizar, primero construimos el objeto `DESeqDataSet`, para ello necesitamos definir el modelo de DE (Quienes son Controles y quienes tratamiento). 
+
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+library("DESeq2")
+library("dplyr")
+library("ggplot2")
+library("vsn")
+```
+
+```{r echo=TRUE, eval = F}
+se$Condition <- factor(se$Treatment)
+table(se$Condition)
+dds <- DESeqDataSet(se, design = ~ Condition)
+keep <- rowSums(counts(dds) >= 3) >= 6
+dds <- dds[keep, ]
+dds <- DESeq(dds)
+```
+
+]
+
+
+---
+
+## Otras transformaciones
+
+.scroll-output[
+
+Puedes realizar otras transformaciones en `DESeq2` para estabilizar la varianza a través de los differentes valores promedio de expresión.  
+
+```{r, dpi=300}
+meanSdPlot(counts(dds), ranks = F)
+meanSdPlot(log2(counts(dds) +1), ranks = F)
+```
+
+
+```{r echo=TRUE, dpi=300}
+# variance stabilizing transformation (VST), (Anders and Huber 2010)
+vsd <- vst(dds, blind = FALSE)
+head(assay(vsd), 3)
+# regularized-logarithm transformation (rlog), (Love, Huber, and Anders 2014)
+rld <- rlog(dds, blind = FALSE)
+head(assay(rld), 3)
+dds <- estimateSizeFactors(dds)
+df <- bind_rows(
+  as_data_frame(log2(counts(dds, normalized=TRUE)[, 1:2]+1)) %>%
+         mutate(transformation = "log2(x + 1)"),
+  as_data_frame(assay(vsd)[, 1:2]) %>% mutate(transformation = "vst"),
+  as_data_frame(assay(rld)[, 1:2]) %>% mutate(transformation = "rlog"))
+  
+colnames(df)[1:2] <- c("x", "y")  
+lvls <- c("log2(x + 1)", "vst", "rlog")
+df$transformation <- factor(df$transformation, levels=lvls)
+ggplot(df, aes(x = x, y = y)) + geom_hex(bins = 80) +
+  coord_fixed() + facet_grid( . ~ transformation)  
+```
+
+
+]
+
+---
+class: inverse, center, middle
+
+# 12: Exploración de los datos
 ---
 
 
@@ -1143,7 +1631,7 @@ knitr::include_graphics("./Images/PCAplot.png")
 ]
 
 ---
-# Exploración de datos
+## Exploración de datos
 ## ¿Por qué es importante explorar los datos?
 
 --
@@ -1163,7 +1651,7 @@ knitr::include_graphics("./Images/PCAplot.png")
 - Mediante gráficos, visualizar comportamiento de los datos -> Outliers
 
 ---
-# Exploración de datos
+## Exploración de datos
 
 .pull-left[
 ```{r, out.width="400px", echo = F}
@@ -1180,7 +1668,7 @@ knitr::include_graphics("./Images/Heatmap.png")
 ]
 
 ---
-# Exploración de datos
+## Exploración de datos
 
 .pull-left[
 ```{r, out.width="400px", echo = F}
@@ -1197,7 +1685,7 @@ knitr::include_graphics("./Images/Heatmap.png")
 ]
 
 ---
-# PCA
+## PCA
 
 --
 
@@ -1213,10 +1701,11 @@ knitr::include_graphics("./Images/Heatmap.png")
 
 --
 
-- Reducción de variables implica  preservar y captar la mayor información sobre los datos
+.content-box-red[Reducción de variables implica  preservar y captar la mayor información sobre los datos
+]
 
 ---
-# PCA
+## PCA
 ## Normalización de los datos
 --
 
@@ -1235,8 +1724,7 @@ knitr::include_graphics("./Images/covariancematrix.png")
 Busqueda de correlación entre las variables -> correlación positiva o negativa
 
 ---
-# PCA
-## Proyección de los datos
+## PCA
 
 .center[
 ![PCA](https://builtin.com/sites/default/files/inline-images/Principal%20Component%20Analysis%20second%20principal.gif)
@@ -1247,7 +1735,7 @@ Busqueda de correlación entre las variables -> correlación positiva o negativa
 ]
 
 ---
-# PCA
+## PCA
 ## Componentes principales
 
 --
@@ -1265,7 +1753,7 @@ Busqueda de correlación entre las variables -> correlación positiva o negativa
 
 
 ---
-# PCA
+## PCA
 ## Componentes principales
 
 - Cada componente principal tiene asociado un eigenvector (vector unitario) y un eigenvalue (cantidad escalar)
@@ -1279,7 +1767,7 @@ Busqueda de correlación entre las variables -> correlación positiva o negativa
 - Los eigenvalues permiten seleccionar cuál es el componente principal que explica la mayor variación en los datos
 
 ---
-# PCA
+## PCA
 
 ```{r, out.width="450px", fig.align='center', echo = F}
 knitr::include_graphics("./Images/Screeplot.png")
@@ -1288,7 +1776,7 @@ Screeplot
 
 
 ---
-# PCA
+## PCA
 
 - En sets de datos de RNAseq, el PCA permite visualizar la distancia o congruencia de los datos
 
@@ -1304,67 +1792,63 @@ knitr::include_graphics("./Images/PCARNAseq.png")
 ]
 
 ---
-# PCA
+## PCA
 ## ¿Cómo crear nuestro propio PCA?
 
-- Primero instalen las siguientes librerías:
-.tiny[
-```{r, eval = F}
+.scroll-output[
+Primero instalen las siguientes librerías:
+
+```{r, eval = F, echo = T}
 library(DESeq2)
 library(PCAtools)
 ```
-]
 
---
+Usemos la siguiente normalización logarítmica de las cuentas (toma en cuenta el tamaño de la librería)
 
-- Usemos la siguiente normalización logarítmica de las cuentas (toma en cuenta el tamaño de la librería)
-.tiny[
-```{r, eval = F}
+```{r, eval = F, echo = T}
 ## Transformación recomendada para sets de con menos de 30 muestras
 rld <- rlog(dds, blind = F)
 ```
-]
 
-- Si tuvieramos un número mayor de muestras (n > 30) entonces conviene:
-.tiny[
-```{r, eval = F}
+Si tuvieramos un número mayor de muestras (n > 30) entonces conviene
+
+```{r, eval = F, echo = T}
 vsd <- vst(dds, blind = T)
 ```
 ]
+
 ---
-# PCA
-
+## PCA
+.scroll-output[
 - Usemos la función interna de *DESeq2* para graficar nuestro PCA:
-.tiny[
-```{r, eval = FALSE}
+
+```{r, eval = FALSE, echo = T}
 ## El argumento intgroup permite especificar mediante cuál variable colorear los datos
-plotPCA(rld, intgroup = "condition")
+plotPCA(rld, intgroup = "Condition")
 ```
-]
 
-.content-box-red[*DESeq2* por medio de `plotPCA` evalua la varianza de los 500 genes con mayor varianza del set de datos
-]
 
+**DESeq2 evalúa los 500 genes con mayor varianza del set de datos**
 
 - Con la librería de *PCAtools*:
-.tiny[
-```{r, eval = F}
+
+```{r, eval = F, echo = T}
 ## Crear un objeto que contenga los datos del PCA
 PCA <- pca(assay(rld), scale = T, metadata = coldata) 
 ## Graficar en 2D los resultados
-biplot(PCA, colby = "condition")
+biplot(PCA, colby = "Treatment")
 ## Generar un screeplot para visualizar la varianza asociada a cada componente
 screeplot(PCA)
 ```
+
+]
+---
+
+.center2[![Image](./Images/hands_on.png)
 ]
 
 ---
-
-.center[![Image](./Images/hands_on.png)
-]
-
----
-# PCA
+## PCA
 ## ¿Cómo ven los resultados?
 ```{r, echo = F, include = F}
 ggplot()+
@@ -1375,7 +1859,7 @@ ggplot()+
 
 .pull-left[**DESeq2**
 ```{r,echo = F,dpi=300, out.width= "350px", fig.align='center'}
-plotPCA(rld, intgroup = "condition")+
+plotPCA(rld, intgroup = "Condition")+
   geom_label_repel(aes(label = colnames(assay(rld))), 
                    segment.color = "grey50", 
                    box.padding = 0.35, 
@@ -1385,12 +1869,12 @@ plotPCA(rld, intgroup = "condition")+
 --
 .pull-right[**PCA tools**
 ```{r, echo = F, dpi=300, out.width="350px", fig.align='center'}
-biplot(PCA, lab = colnames(assay(rld)), colby = "condition", legendPosition = "right")
+biplot(PCA, lab = colnames(assay(rld)), colby = "Treatment", legendPosition = "right")
 ```
 ]
 
 ---
-# PCA
+## PCA
 ## ¿Cuánta varianza es explicada por cada componente?
 
 ```{r, dpi=300,out.width="400px", fig.align='center', echo = F, warning=FALSE}
@@ -1398,18 +1882,131 @@ screeplot(PCA)
 ```
 
 ---
-# PCA y MDS
+## PCA y MDS
 .scroll-output[
 Generemos un MDS plot interactivo con los datos. Para ello usemos la librería de *Glimma* y la función de `GlimmaMDS`
 
-```{r}
+```{r, eval = F, echo = T}
 glimmaMDS(dds)
 ```
 ]
+
 ---
 class: inverse, center, middle
 
-# Visualización de los resultados
+# 13: Análisis de expresión diferencial
+---
+## Análisis de expresión diferencial (DE)
+
+Paso para obtener cuáles son los genes que varían entre las condiciones
+
+```{r, out.width = "750px",fig.align='center'}
+knitr::include_graphics("https://raw.githubusercontent.com/hbctraining/DGE_workshop/master/img/de_theory.png")
+```
+
+---
+
+## Pasos en el DE
+
+```{r, out.width = "350px",fig.align='center'}
+knitr::include_graphics("https://github.com/hbctraining/DGE_workshop/raw/master/img/deseq2_workflow_separate.png")
+```
+
+---
+## Dispersión
+
+La dispersión es una medida de la variabilidad de los datos como (varianza, sd, etc.). En `DESeq2` se utiliza `α`:
+
+$$ \alpha \propto 1/mean $$ 
+$$ \alpha \propto variance $$ 
+
+Así que **La dispersión es mayor para cuentas más bajas y menor para cuenas más altas**. 
+
+Y la **dispersión refleja la varianza**.
+
+.full-width[.content-box-red[
+`DESeq2` asume que los genes con similar expresión tienen similar dispersión
+]]
+
+---
+
+## Ajustando la dispersión
+
+
+```{r, out.width = "450px",fig.align='center'}
+knitr::include_graphics("https://github.com/hbctraining/DGE_workshop/raw/master/img/deseq_dispersion1.png")
+```
+
+
+---
+
+## Reduciendo la dispersión
+
+```{r, out.width = "750px",fig.align='center'}
+knitr::include_graphics("https://github.com/hbctraining/DGE_workshop/raw/master/img/deseq_dispersion2.png")
+```
+
+
+---
+
+.center2[![Image](./Images/hands_on.png)]
+---
+
+## Ejercicio
+
+.scroll-output[
+
+La librería de `DESeq2` normaliza y realiza el análisis de expresión diferencial en una sola función. Así que ya realizamos el análisis, vamos a verlo:
+
+```{r include=FALSE, eval = F}
+#Cambio
+#info <- read.delim(here::here("output/salmon_quants/metadata.txt"))
+#info$names <- info$Unique_id
+#dir <- file.path(here::here("output/salmon_quants"))
+#info$files <- file.path(dir,paste0(info$Sample,"_quant"),"quant.sf")
+#library("tximeta")
+#gse <- tximeta(info)
+```
+
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+library("DESeq2")
+library("dplyr")
+library("ggplot2")
+```
+
+```{r echo=TRUE, eval = F, include=F}
+#
+se$Condition <- factor(se$Condition)
+table(se$Condition)
+dds <- DESeqDataSet(se, design = ~ Condition)
+dds <- DESeq(dds)
+```
+
+Para ver los resultados podemos usar la función `results`
+
+```{r, eval = T, echo = T}
+res <- results(dds)
+res
+summary(res)
+```
+
+Para ver que hay en cada columna:
+```{r, eval = T, echo=T}
+mcols(res, use.names = TRUE)
+```
+
+Podemos hacer cortes:
+```{r, eval = T, echo = T}
+resLFC1 <- results(dds, lfcThreshold=1)
+table(resLFC1$padj < 0.1)
+```
+]
+
+---
+class: inverse, center, middle
+
+# 14: Visualización de los resultados
 ---
 
 .center[
@@ -1449,21 +2046,25 @@ knitr::include_graphics("./Images/Volcanoplot.png")
 
 ---
 # MAplot
+.scroll-output[
+Gráfico que representa la distribución de los genes o transcritos en las comparaciones de interés
 
-- Gráfico que representa la distribución de los genes o transcritos en las comparaciones de interés
+**M** eje y de *minus*:
 
-- **M** eje y de *minus* -> $$logTx - logCT = logTx/CT$$
+.content-box-blue[$$logTx - logCT = logTx/CT$$
+]
 
-- **A** eje x de *average* -> Promedio de las cuentas normalizadas para cada gen en todas las muestras
+**A** eje x de *average* -> Promedio de las cuentas normalizadas para cada gen en todas las muestras
 
-- Para generar el **MAplot** usemos el siguiente comando:
+Para generar el **MAplot** usemos el siguiente comando:
 
-.tiny[
-```{r, eval = F}
+.code90[
+```{r, eval = F, echo = T}
 ##Es importante que recuerden que la hipótesis nula que se probó fue
 ##"El lfc del gen n es igual a 0" por lo tanto los genes coloreados son...
 plotMA(res)
 ```
+]
 ]
 ---
 # MAplot
@@ -1483,33 +2084,41 @@ Para tener una mejor estimación del LFC de genes que:
 
 Usemos la función `lfcShrink` de la librería *.red[apeglm]*
 
-.tiny[
-```{r, eval = F}
+
+```{r, eval = F, echo = T}
 ##En el argumento coef indicar el contraste entre los grupos experimentales
-res <- lfcShrink(dds, coef = "condition_Verafinib_vs_Control",  type = "apeglm")
+res_lfc <- lfcShrink(dds, coef = "Condition_Verafinib_vs_Control",  type = "apeglm")
 ##Si desconocemos el nombre del contraste, usar:
 resultsNames(dds)
 ```
-]
+
 
 ---
 # MAplot
+
 .pull-left[
+Sin `lfcshrink` 
+
 ```{r, echo = F, dpi=200, out.width="450px", fig.align='center'}
 plotMA(res)
 ```
 ]
 
 .pull-right[
+Con `lfcshrink` 
+
 ```{r, echo = F, dpi=200, out.width="450px", fig.align='center'}
-plotMA(res2)
+plotMA(res_lfc)
 ```
 ]
 ---
 # MAplot
 .scroll-output[
 También pueden generar un MAplot interactivo con la librería de *Glimma*
-```{r}
+```{r, eval = F, echo = T}
+##Para los objetos creados con DESeq2 es importante que incluyas un nivel llamado group
+group <- info$Treatment
+dds$group <- group
 glimmaMA(dds)
 ```
 ]
@@ -1522,8 +2131,8 @@ De manera similar al MAplot con el volcano plot visualizamos los genes que muest
 
 - En el eje x se grafica el lfc o *log2foldchange*
 
-.tiny[
-```{r, eval = F}
+.code80[
+```{r, eval = F, echo = T}
 ##Para crear un volcano plot necesitas convertir los resultados de DESeq a un data frame
 DEG <- as.data.frame(res)
 ##En el script de funciones encontrarás la función de volcanoplotR para generar tu gráfico
@@ -1557,15 +2166,17 @@ Usaremos la librería de *.red[pheatmap]*
 ---
 # Heatmap
 
-.tiny[
-```{r, eval = F}
+.code90[
+```{r, eval = F, echo=T}
 ##Guardar la lista de transcritos que mostraron expresión diferencial significativa
-significant <- res_df %>% filter(log2FoldChange > 0 & padj < 0.1 |
+significant <- DEG %>% filter(log2FoldChange > 0 & padj < 0.1 |
                                    log2FoldChange < 0 & padj < 0.1)
+##Generar la matriz de cuentas normalizadas
+norm_counts <- counts(dds, normalized = T)
 ##Cortar la matriz de cuentas normalizadas con los id de los transcritos diferencialmente expresados
-norm_counts <- norm_counts[rownames(significant)]
+norm_counts <- norm_counts[rownames(significant), ]
 ##Generar una tabla de anotaciones preservando el tratamiento y el tipo de células
-annotation_col <- coldata[, c(3, 4)]
+annotation_col <- coldata[, c(2, 3)]
 ##Generar el heatmap empleando clustering jerarquico
 pheatmap(norm_counts, 
          border_color = NA, 
@@ -1583,7 +2194,7 @@ pheatmap(norm_counts,
 # Heatmap
 
 ```{r, echo = F, dpi=200, out.width="450px", fig.align='center'}
-pheatmap(norm_counts, 
+pheatmap(norm_counts[rownames(significant), ], 
          border_color = NA, 
          scale = "row",
          clustering_distance_rows = "euclidean", 
