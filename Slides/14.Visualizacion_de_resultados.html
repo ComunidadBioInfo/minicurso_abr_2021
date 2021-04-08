@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Visualización de los resultados</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Rodolfo Chavez" />
+    <meta name="date" content="2021-03-16" />
+    <script src="libs/header-attrs-2.7/header-attrs.js"></script>
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Visualización de los resultados
+### Rodolfo Chavez
+### 2021-03-16
+
+---
+
+&lt;style type="text/css"&gt;
+.remark-slide-content {
+  font-size: 28px;
+  padding: 20px 80px 20px 80px;
+}
+.remark-code, .remark-inline-code {
+  background: #f0f0f0;
+}
+.remark-code {
+  font-size: 24px;
+}
+.huge .remark-code { /*Change made here*/
+  font-size: 200% !important;
+}
+.tiny .remark-code { /*Change made here*/
+  font-size: 50% !important;
+}
+
+.center2 {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+.pre {
+  height: 10pc;
+  overflow-y: scroll;
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+.center[
+### ¿Cuántos tipos de gráficos conoces para visualizar resultados del análisis DE?
+]
+
+.pull-left[
+&lt;img src="../Images/MAplot.png" width="350px" /&gt;
+]
+
+.pull-right[
+&lt;img src="../Images/Volcanoplot.png" width="350px" /&gt;
+]
+
+---
+.center[
+### ¿Cuántos tipos de gráficos conoces para visualizar resultados del análisis DE?
+]
+
+.pull-left[
+&lt;img src="../Images/MAplot.png" width="350px" /&gt;
+**.green[MAplot]**
+]
+
+.pull-right[
+&lt;img src="../Images/Volcanoplot.png" width="350px" /&gt;
+**.green[Volcano plot]**
+]
+
+---
+# MAplot
+
+- Gráfico que representa la distribución de los genes o transcritos en las comparaciones de interés
+
+- **M** eje y de *minus* -&gt; `$$logTx - logCT = logTx/CT$$`
+
+- **A** eje x de *average* -&gt; Promedio de las cuentas normalizadas para cada gen en todas las muestras
+
+- Para generar el **MAplot** usemos el siguiente comando:
+
+.tiny[
+
+```r
+##Es importante que recuerden que la hipótesis nula que se probó fue
+##"El lfc del gen n es igual a 0" por lo tanto los genes coloreados son...
+plotMA(res)
+```
+]
+---
+# MAplot
+
+&lt;img src="14.Visualizacion_de_resultados_files/figure-html/unnamed-chunk-8-1.png" width="450px" style="display: block; margin: auto;" /&gt;
+
+---
+# MAplot
+
+Para tener una mejor estimación del LFC de genes que:
+
+- Son poco abundantes
+
+- Tienen alta dispersión
+
+Usemos la función `lfcShrink` de la librería *.red[apeglm]*
+
+.tiny[
+
+```r
+##En el argumento coef indicar el contraste entre los grupos experimentales
+res &lt;- lfcShrink(dds, coef = "condition_Verafinib_vs_Control",  type = "apeglm")
+##Si desconocemos el nombre del contraste, usar:
+resultsNames(dds)
+```
+]
+
+---
+# MAplot
+
+&lt;img src="14.Visualizacion_de_resultados_files/figure-html/unnamed-chunk-10-1.png" width="450px" style="display: block; margin: auto;" /&gt;
+
+---
+# Volcano plot
+
+De manera similar al MAplot con el volcano plot visualizamos los genes que muestran expresión diferencial en nuestra condición de interés
+
+- En el eje y se grafica el -log10 de padj
+
+- En el eje x se grafica el lfc o *log2foldchange*
+
+.tiny[
+
+```r
+##Para crear un volcano plot necesitas convertir los resultados de DESeq a un data frame
+DEG &lt;- as.data.frame(res)
+##En el script de funciones encontrarás la función de volcanoplotR para generar tu gráfico
+#los valores de los argumentos logfc y p.adj deben ser iguales al threshold utilizado para generar los resultados
+#en type debes indicar que los resultados provienen de DESeq
+volcanoplotR(DEG, logfc = 0, p.adj = 0.1, type = "DESeq")
+```
+]
+
+---
+# Volcano plot
+
+&lt;img src="14.Visualizacion_de_resultados_files/figure-html/unnamed-chunk-12-1.png" width="450px" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Heatmap
+
+El *heatmap* nos permite visualizar la expresión de los genes diferencialmente expresados en terminos de las cuentas normalizadas
+
+Consideraciones:
+
+- Usar los valores de las cuentas normalizadas para una mejor comparación entre muestras
+
+- Escalar los valores de las cuentas (renglones) para visualizar las diferencias en la expresión
+
+Usaremos la librería de *.red[pheatmap]*
+
+---
+# Heatmap
+
+.tiny[
+
+```r
+##Guardar la lista de transcritos que mostraron expresión diferencial significativa
+significant &lt;- res_df %&gt;% filter(log2FoldChange &gt; 0 &amp; padj &lt; 0.1 |
+                                   log2FoldChange &lt; 0 &amp; padj &lt; 0.1)
+##Cortar la matriz de cuentas normalizadas con los id de los transcritos diferencialmente expresados
+norm_counts &lt;- norm_counts[rownames(significant)]
+##Generar una tabla de anotaciones preservando el tratamiento y el tipo de células
+annotation_col &lt;- coldata[, c(3, 4)]
+##Generar el heatmap empleando clustering jerarquico
+pheatmap(norm_counts, 
+         border_color = NA, 
+         scale = "row",
+         clustering_distance_rows = "euclidean", 
+         clustering_distance_cols = "euclidean", 
+         clustering_method = "average", 
+         show_colnames = F, 
+         show_rownames = F, 
+         annotation_col = annotation_col)
+```
+]
+
+---
+# Heatmap
+
+&lt;img src="14.Visualizacion_de_resultados_files/figure-html/unnamed-chunk-14-1.png" width="450px" style="display: block; margin: auto;" /&gt;
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
