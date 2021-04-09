@@ -11,8 +11,103 @@ editor_options:
   chunk_output_type: console
 ---
 
+```{r}
+## Checar el tiempo de cada chunk
+knitr::knit_hooks$set(time_it = local({
+  now <- NULL
+  function(before, options) {
+    if (before) {
+      # record the current time before each chunk
+      now <<- Sys.time()
+    } else {
+      # calculate the time difference after a chunk
+      res <- difftime(Sys.time(), now)
+      # return a character string to show the time
+      paste("Tiempo: ", round(res, digits = 2))
+    }
+  }
+}))
+
+knitr::opts_chunk$set(time_it = TRUE, eval = F)
+```
+
+# Descripción general
+
 Este documento encontrarás el código que se ocupará en el mini curso de RNA-seq, 
-el código usado para generar las [slides]() las puedes encontrar en [Github]().
+el código usado para generar las [slides]() las puedes encontrar en [Github](https://github.com/ComunidadBioInfo/minicurso_abr_2021).
+
+|    | Tema                                                        | Práctica | Tiempo (min) | Encargado |
+|----|-------------------------------------------------------------|--------|--------------|-----------|
+| 1  | Introducción a RNA-seq                                      | NA     | 5            | AnaB      |
+| 2  | ¿Cuáles son las aplicaciones más comunes?                   | NA     | 5            | Rodolfo   |
+| 3  | Consideraciones para el diseño experimental  (batch effect) | NA     | 5            | AnaB      |
+| 4  | ¿Qué tipo de archivos se necesitan?                         | NA     | 15           | Rodolfo   |
+| 5  | Flujo de trabajo para el análisis de RNA-seq                | NA     | 10           | AnaB      |
+| 6  | Organización del proyecto (folder de datos, fig, scripts)   | NA     | 10           | Rodolfo   |
+| 7  | Limpieza de datos (Trimming y filtrado)                     | Si     | 15           | AnaB      |
+| 8  | Alineadores (Salmon)                                        | Si     | 15           | Rodolfo   |
+| 9  | tximeta, tximport                                           | Si     | 10           | AnaB      |
+| 10 | Objeto SummarizedExperiment en R                            | Si     | 10           | Rodolfo   |
+| 11 | Normalización de los datos (RPKM, TPM)                      | Si     | 10           | AnaB      |
+| 12 | PCA (outliers)                                              | Si     | 10           | Rodolfo   |
+| 13 | DE (analysis)                                               | Si     | 10           | AnaB      |
+| 14 | DE (visualization/resultados)                               | Si     | 10           | Rodolfo   |
+
+## Requisitos 
+
+Está práctica está basada en Mike love vignette y ocuparemos los siguientes 
+programas para analizar los datos del GSExxx.
+
+- [Descargar los datos que ocuparemos en está práctica]()
+
+- FastQC
+
+- MultiQC (opcional)
+
+- Salmon (opcional)
+
+- R > 4.0 
+
+- Rstudio
+
+- Bioconductor >= 3.12
+
+- Paquetería de R:
+
+
+Analizar archivos curdos de RNAseq requiere poder de computo, si quieres hacer 
+el análisis completo desde cero, necesitas una computadora con al menos RAM 8 GB
+y espacio para almacenar los archivos crudos (`.fastq`), aún así todo el proceso
+puede tomar más tiempo del que tendremos en la práctica. Normalmente estos 
+análisis se realizan en un cluster o servidor que suelen tener mayor capacidad 
+que una laptop. Por lo que se verán los comando para hacer el alineamiento en 
+`Salmon`  pero **NO** correremos este paso. 
+
+## Instalación
+
+### Pasos para installar FastQC:
+
+1- Descargar el programa de su página web [fastQC](https://www.bioinformatics.babraham.ac.uk/projects/download.html#fastqc)
+
+2- Hacer el archivo ejecutable
+
+```{bash, eval= F, echo=TRUE}
+chmod 755 /Applications/FastQC.app/Contents/MacOS/fastqc
+ls -l /Applications/FastQC.app/Contents/MacOS/fastqc
+```
+
+3- Crear una liga simbolica para ejecutar `fastqc` desde cualquier ubicación
+
+```{bash echo=TRUE, eval=FALSE}
+ln -s /Applications/FastQC.app/Contents/MacOS/fastqc /usr/local/bin/fastqc
+```
+
+4- Correr `fastqc`
+
+```{bash echo=TRUE, eval=FALSE}
+fastqc --help
+```
+
 
 # 6-Flujo general de trabajo
 
@@ -30,32 +125,6 @@ Imagen tomada de [BiCore RNAseq course 2019](https://biocorecrg.github.io/RNAseq
 
 # 7-QC
 
-<div class="alert alert-warning">
-
-## Pasos para installar FastQC:
-
-1- Descargar el programa de su página web [fastQC](https://www.bioinformatics.babraham.ac.uk/projects/download.html#fastqc)
-
-2- Hacer el archivo ejecutable
-
-```{bash echo=TRUE}
-# chmod 755 /Applications/FastQC.app/Contents/MacOS/fastqc
-ls -l /Applications/FastQC.app/Contents/MacOS/fastqc
-```
-
-3- Crear una liga simbolica para ejecutar `fastqc` desde cualquier ubicación
-
-```{bash echo=TRUE, eval=FALSE}
-ln -s /Applications/FastQC.app/Contents/MacOS/fastqc /usr/local/bin/fastqc
-```
-
-4- Correr `fastqc`
-
-```{bash echo=TRUE}
-fastqc --help
-```
-
-</div>
 
 ## Pasos para correr FastQC:
 
@@ -255,7 +324,7 @@ se <- tximeta(samples)
 
 Image
 
-```{r echo=TRUE}
+```{r  include=FALSE}
 library(SummarizedExperiment)
 se
 ```
@@ -264,7 +333,7 @@ se
 
 El cajón o slot correspondiente a `ColData` contiene la tabla de metadatos creada para importar las cuentas con tximeta. 
 
-Para acceder a **.red[ColData]** usar el siguiente comando:
+Para acceder a **ColData** usar el siguiente comando:
 
 ```{r}
 colData(se)
@@ -276,7 +345,7 @@ El slot **ColData** es un objeto con clase de *DataFrame*
 class(colData(se))
 ```
 
-*Rownames* de **ColData** corresponden a los *Colnames* en el slot **Assay**- **.red[Importante para análisis con DESeq2]**
+*Rownames* de **ColData** corresponden a los *Colnames* en el slot **Assay**- **Importante para análisis con DESeq2**
 
 ```{r}
 rownames(colData(se))
@@ -286,7 +355,7 @@ rownames(colData(se))
 
 El cajón de `rowRanges` hace referencia a las coordenadas de cada transcrito
 
-Para acceder al **.red[rowRanges]** usar:
+Para acceder al **rowRanges** usar:
 
 ```{r}
 rowRanges(se)
@@ -608,3 +677,93 @@ Podemos hacer cortes:
 resLFC1 <- results(dds, lfcThreshold=1)
 table(resLFC1$padj < 0.1)
 ```
+
+# 14- Visualización de DE
+
+## MAplot
+
+ Gráfico que representa la distribución de los genes o transcritos en las comparaciones de interés
+
+```{r, eval = F}
+##Es importante que recuerden que la hipótesis nula que se probó fue
+##"El lfc del gen n es igual a 0" por lo tanto los genes coloreados son...
+plotMA(res)
+```
+
+También pueden generar un MAplot interactivo con la librería de *Glimma*
+```{r, eval=FALSE}
+library(Glimma)
+glimmaMA(dds)
+```
+
+## Volcano plot
+
+De manera similar al MAplot con el volcano plot visualizamos los genes que muestran expresión diferencial en nuestra condición de interés
+
+- En el eje y se grafica el -log10 de padj
+
+- En el eje x se grafica el lfc o *log2foldchange*
+
+
+```{r, eval=FALSE}
+##Para crear un volcano plot necesitas convertir los resultados de DESeq a un data frame
+DEG <- as.data.frame(res)
+##En el script de funciones encontrarás la función de volcanoplotR para generar tu gráfico
+#los valores de los argumentos logfc y p.adj deben ser iguales al threshold utilizado para generar los resultados
+#en type debes indicar que los resultados provienen de DESeq
+volcanoplotR(DEG, logfc = 0, p.adj = 0.1, type = "DESeq")
+```
+
+
+## Heatmap
+
+El *heatmap* nos permite visualizar la expresión de los genes diferencialmente expresados en terminos de las cuentas normalizadas
+
+Consideraciones:
+
+- Usar los valores de las cuentas normalizadas para una mejor comparación entre muestras
+
+- Escalar los valores de las cuentas (renglones) para visualizar las diferencias en la expresión
+
+Usaremos la librería de *pheatmap*
+
+```{r, eval = F}
+##Guardar la lista de transcritos que mostraron expresión diferencial significativa
+significant <- res_df %>% filter(log2FoldChange > 0 & padj < 0.1 |
+                                   log2FoldChange < 0 & padj < 0.1)
+##Cortar la matriz de cuentas normalizadas con los id de los transcritos diferencialmente expresados
+norm_counts <- norm_counts[rownames(significant)]
+##Generar una tabla de anotaciones preservando el tratamiento y el tipo de células
+annotation_col <- coldata[, c(3, 4)]
+##Generar el heatmap empleando clustering jerarquico
+pheatmap(norm_counts, 
+         border_color = NA, 
+         scale = "row",
+         clustering_distance_rows = "euclidean", 
+         clustering_distance_cols = "euclidean", 
+         clustering_method = "average", 
+         show_colnames = F, 
+         show_rownames = F, 
+         annotation_col = annotation_col)
+```
+
+```{r, eval = F}
+pheatmap(norm_counts, 
+         border_color = NA, 
+         scale = "row",
+         clustering_distance_rows = "euclidean", 
+         clustering_distance_cols = "euclidean", 
+         clustering_method = "average", 
+         show_colnames = F, 
+         show_rownames = F, 
+         annotation_col = annotation_col)
+```
+
+# Paquetería
+
+```{r}
+sessionInfo()
+```
+
+
+
