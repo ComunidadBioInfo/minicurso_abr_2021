@@ -6,13 +6,191 @@ output:
   html_document:
     toc: true
     toc_float: true
-    code_folding: hide
+    code_folding: show
 editor_options: 
   chunk_output_type: console
 ---
 
+```{r}
+## Checar el tiempo de cada chunk
+knitr::knit_hooks$set(time_it = local({
+  now <- NULL
+  function(before, options) {
+    if (before) {
+      # record the current time before each chunk
+      now <<- Sys.time()
+    } else {
+      # calculate the time difference after a chunk
+      res <- difftime(Sys.time(), now)
+      # return a character string to show the time
+      paste("Tiempo: ", round(res, digits = 2))
+    }
+  }
+}))
+
+knitr::opts_chunk$set(time_it = TRUE)
+```
+
+# Descripción general
+
 Este documento encontrarás el código que se ocupará en el mini curso de RNA-seq, 
-el código usado para generar las [slides]() las puedes encontrar en [Github]().
+el código usado para generar las [slides]() las puedes encontrar en [Github](https://github.com/ComunidadBioInfo/minicurso_abr_2021).
+
+|    | Tema                                                        | Práctica | Tiempo (min) | Encargado |
+|----|-------------------------------------------------------------|--------|--------------|-----------|
+| 1  | Introducción a RNA-seq                                      | NA     | 5            | AnaB      |
+| 2  | ¿Cuáles son las aplicaciones más comunes?                   | NA     | 5            | Rodolfo   |
+| 3  | Consideraciones para el diseño experimental  (batch effect) | NA     | 5            | AnaB      |
+| 4  | ¿Qué tipo de archivos se necesitan?                         | NA     | 15           | Rodolfo   |
+| 5  | Flujo de trabajo para el análisis de RNA-seq                | NA     | 10           | AnaB      |
+| 6  | Organización del proyecto (folder de datos, fig, scripts)   | NA     | 10           | Rodolfo   |
+| 7  | Limpieza de datos (Trimming y filtrado)                     | Si     | 15           | AnaB      |
+| 8  | Alineadores (Salmon)                                        | Si     | 15           | Rodolfo   |
+| 9  | tximeta, tximport                                           | Si     | 10           | AnaB      |
+| 10 | Objeto SummarizedExperiment en R                            | Si     | 10           | Rodolfo   |
+| 11 | Normalización de los datos (RPKM, TPM)                      | Si     | 10           | AnaB      |
+| 12 | PCA (outliers)                                              | Si     | 10           | Rodolfo   |
+| 13 | DE (analysis)                                               | Si     | 10           | AnaB      |
+| 14 | DE (visualization/resultados)                               | Si     | 10           | Rodolfo   |
+
+## Requisitos 
+
+Está práctica está basada en Mike love vignette y ocuparemos los siguientes 
+programas para analizar los datos del GSExxx.
+
+- [Descargar los datos que ocuparemos en está práctica]()
+
+- FastQC
+
+- MultiQC (opcional)
+
+- Salmon (opcional)
+
+- R > 4.0 
+
+- Rstudio
+
+- Bioconductor >= 3.12
+
+- Paquetería de R:
+
+
+Analizar archivos curdos de RNAseq requiere poder de computo, si quieres hacer 
+el análisis completo desde cero, necesitas una computadora con al menos RAM 8 GB
+y espacio para almacenar los archivos crudos (`.fastq`), aún así todo el proceso
+puede tomar más tiempo del que tendremos en la práctica. Normalmente estos 
+análisis se realizan en un cluster o servidor que suelen tener mayor capacidad 
+que una laptop. Por lo que se verán los comando para hacer el alineamiento en 
+`Salmon`  pero **NO** correremos este paso. 
+
+## Instalación
+
+<div class="alert alert-warning">
+### Instalación de FastQC
+
+1- Descargar el programa de su página web [fastQC](https://www.bioinformatics.babraham.ac.uk/projects/download.html#fastqc)
+
+2- Hacer el archivo ejecutable
+
+```{bash, eval= F, echo=TRUE}
+chmod 755 /Applications/FastQC.app/Contents/MacOS/fastqc
+ls -l /Applications/FastQC.app/Contents/MacOS/fastqc
+```
+
+3- Crear una liga simbolica para ejecutar `fastqc` desde cualquier ubicación
+
+```{bash echo=TRUE, eval=FALSE}
+ln -s /Applications/FastQC.app/Contents/MacOS/fastqc /usr/local/bin/fastqc
+```
+
+4- Correr `fastqc`
+
+```{bash echo=TRUE, eval=FALSE}
+fastqc --help
+```
+</div>
+
+---
+
+<div class="alert alert-warning">
+### Instalación de MultiQC
+
+Esta parte es opcional, pero si trabajas con RNA-seq te puede intersar.
+
+1. La instalación se hace con conda, así que primero activamos un ambiente conda
+
+```{bash echo=TRUE, eval=FALSE}
+conda activate base
+pip install multiqc
+```
+</div>
+
+---
+
+<div class="alert alert-warning">
+### Instalación de Salmon
+
+Seguir los pasos de la página de [Salmon]()
+</div>
+
+---
+
+<div class="alert alert-warning">
+### Instalación de R y Rstudio
+
+Puedes instalar [R]() a través de [Rstudio](), asegurate de tener una versión de
+R > 4.0. Puedes checar la versión de `R` que tienes si ejecutas `version` 
+en tu consola de R:
+
+```{r}
+version
+```
+</div>
+
+---
+
+<div class="alert alert-warning">
+### Instalación de Bioconductor
+
+Durante esta práctica se usarán paqueterías que se enuentran en el repositorio 
+de [Bioconductor](), usaremos `BiocManager` para instalar los diferentes paquetes
+pero asegurate de tener la versión más actual de 
+
+
+```{r eval=FALSE, include=TRUE}
+# Instalar BiocManager
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+# Checar la versión
+BiocManager::version()
+
+# Si se requiere, se puede instalar la versión 3.12 manualmente
+# BiocManager::install(version = "3.12")
+```
+</div>
+
+---
+
+<div class="alert alert-warning">
+### Instalación de la paquetería de R
+
+- Instalar la paquetería utilizando `BiocManager`
+
+```{r eval=FALSE}
+paquetes = c("DESeq2", "tximeta", "PCAtools", "SummarizedExperiment")
+BiocManager::install()
+```
+
+- Adicionalmente, ocuparemos algunas funciones de `tidyverse` como la paquetería
+de `ggplot2`. La instalaremos utilizando el repositorio de CRAN
+
+```{r eval=FALSE}
+install.packages('tidyverse')
+```
+
+</div>
+
 
 # 6-Flujo general de trabajo
 
@@ -30,32 +208,6 @@ Imagen tomada de [BiCore RNAseq course 2019](https://biocorecrg.github.io/RNAseq
 
 # 7-QC
 
-<div class="alert alert-warning">
-
-## Pasos para installar FastQC:
-
-1- Descargar el programa de su página web [fastQC](https://www.bioinformatics.babraham.ac.uk/projects/download.html#fastqc)
-
-2- Hacer el archivo ejecutable
-
-```{bash echo=TRUE}
-# chmod 755 /Applications/FastQC.app/Contents/MacOS/fastqc
-ls -l /Applications/FastQC.app/Contents/MacOS/fastqc
-```
-
-3- Crear una liga simbolica para ejecutar `fastqc` desde cualquier ubicación
-
-```{bash echo=TRUE, eval=FALSE}
-ln -s /Applications/FastQC.app/Contents/MacOS/fastqc /usr/local/bin/fastqc
-```
-
-4- Correr `fastqc`
-
-```{bash echo=TRUE}
-fastqc --help
-```
-
-</div>
 
 ## Pasos para correr FastQC:
 
@@ -92,13 +244,7 @@ ls output/QC
 
 *Esta parte es opcional, pero si trabajas con RNA-seq te puede intersar.
 
-1. La instalación se hace con conda, así que primero activamos un ambiente conda
-
-```{bash echo=TRUE, eval=FALSE}
-conda activate base
-pip install multiqc
-```
-
+1. Instalar `MultiQC`
 
 2. Correr MultiQC
 
@@ -175,7 +321,6 @@ salmon quant -i ../transcriptome/genecode.v37.salmon141 \
 
 # 9-Tximeta
 
-Paquetería que conserva 
 
 ```{r, out.width = "650px",fig.align='center'}
 knitr::include_graphics("https://journals.plos.org/ploscompbiol/article/figure/image?size=large&id=10.1371/journal.pcbi.1007664.g001")
@@ -194,6 +339,7 @@ Instalar `tximeta` desde R usando `BiocManager`
 if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 
+# Puedes instalar la paqueteria de tximeta usando BiocManager::install() 
 BiocManager::install("tximeta")
 ```
 </div>
@@ -217,11 +363,12 @@ Importamos la información de cada muestra
 
 ```{r echo=TRUE}
 # Leemos los datos
-samples <- read.delim(here::here("output/salmon_quants/metadata.txt"))
+info <- read.delim(here::here("output/salmon_quants/metadata.txt"))
 
 # Generamos la columna "names"
-samples$names <- samples$Unique_id
-samples
+# info$names <- info$Unique_id # Puedes agregar una columna nueva
+info <- dplyr::rename(info,names = Unique_id) # Renombrar la columna 
+info
 ```
 
 Ahora las cuentas generadas por `Salmon`
@@ -234,19 +381,23 @@ list.files(dir)
 
 # Que hacemos aqui??  Checar
 # file.path(dir,paste0(info$Sample,"_quant"),"quant.sf")
-samples$files <- file.path(dir,paste0(samples$Sample,"_quant"),"quant.sf")
+info$files <- file.path(dir,paste0(info$Sample,"_quant"),"quant.sf")
 
 #Checamos que los archivos existan
-data.frame(samples$Sample, file.exists(samples$files))
+data.frame(info$Sample, file.exists(info$files))
 ```
 
 Importar los datos usando `tximeta` 
 
 ```{r echo=TRUE}
-#BiocManager::install("tximeta")
+# Importamos la paqueteria 
 library(tximeta)
-samples
-se <- tximeta(samples)
+
+# Checamos que el df tenga la columna "names" y "files"
+info
+
+# Generamos el objeto usando tximeta()
+se <- tximeta(info)
 ```
 
 ---
@@ -255,7 +406,7 @@ se <- tximeta(samples)
 
 Image
 
-```{r echo=TRUE}
+```{r  include=FALSE}
 library(SummarizedExperiment)
 se
 ```
@@ -264,7 +415,7 @@ se
 
 El cajón o slot correspondiente a `ColData` contiene la tabla de metadatos creada para importar las cuentas con tximeta. 
 
-Para acceder a **.red[ColData]** usar el siguiente comando:
+Para acceder a **ColData** usar el siguiente comando:
 
 ```{r}
 colData(se)
@@ -276,7 +427,7 @@ El slot **ColData** es un objeto con clase de *DataFrame*
 class(colData(se))
 ```
 
-*Rownames* de **ColData** corresponden a los *Colnames* en el slot **Assay**- **.red[Importante para análisis con DESeq2]**
+*Rownames* de **ColData** corresponden a los *Colnames* en el slot **Assay**- **Importante para análisis con DESeq2**
 
 ```{r}
 rownames(colData(se))
@@ -286,7 +437,7 @@ rownames(colData(se))
 
 El cajón de `rowRanges` hace referencia a las coordenadas de cada transcrito
 
-Para acceder al **.red[rowRanges]** usar:
+Para acceder al **rowRanges** usar:
 
 ```{r}
 rowRanges(se)
@@ -352,11 +503,11 @@ row.names(colData(se)) == colnames(assay(se))
 
 | Método de normalización | Descripción | Factores de evaluación | Recomendaciones de uso |
 |:-----------------------------------------------------------------------------------:|:----------------------------------------------------------------------------------------------------------------------------:|:--------------------------------------------------:|:-------------------------------------------------------------------------------------------------------------------:|
-| CPM (cuentas por millón): cuentas escalados por el número total de lecturas | profundidad de secuenciación | comparaciones de cuentas de genes entre réplicas del mismo grupo de muestras| NO para comparaciones dentro de la muestra o análisis de DE.| 
-| TPM (transcritos por kilobase por millón de lecturas): cuentas por longitud de transcripción (kb) por millón de lecturas mapeadas | profundidad de secuenciación y longitud de genes| comparaciones de cuentas de genes dentro de una muestra o entre muestras del mismo grupo de muestras| NO para análisis de DE. |
-| RPKM/FPKM (lecturas/fragmentos por kilobase de exón por millón de lecturas/fragmentos mapeados| similar a TPM, profundidad de secuenciación y longitud del gen | comparaciones de cuentas entre genes dentro de una muestra | NO para comparaciones entre muestras o análisis de DE.|
-| Factor de normalización de DESeq2 | cuentas divididas por factores de tamaño específicos de la muestra determinados por la mediana del ratio de cuentas de genes en relación con la media geométrica por gen | profundidad de secuenciación y composición del RNA | comparaciones de cuentas de genes entre muestras y para el análisis de DE; NO para comparaciones dentro de la muestra |
-| La media cortada de los valores M de EdgeR (TMM) | utiliza una media recortada ponderada de los ratios de expresión logarítmica entre las muestras | profundidad de secuenciación | composición de RNA y longitud de los genes. |
+| CPM (cuentas por millón): cuentas escalados por el número total de lecturas | Profundidad de secuenciación | Comparaciones de cuentas de genes entre réplicas del mismo grupo de muestras| NO para comparaciones dentro de la muestra o análisis de DE.| 
+| TPM (transcritos por millón de lecturas): cuentas escalados por el número total de lecturas  | Profundidad de secuenciación | Comparaciones de cuentas de genes entre réplicas del mismo grupo de muestras | NO para análisis de DE. |
+| RPKM/FPKM (lecturas/fragmentos por kilobase de exón por millón de lecturas/fragmentos mapeados| Similar a TPM, profundidad de secuenciación y longitud del gen | Comparaciones de cuentas entre genes dentro de una muestra | NO para comparaciones entre muestras o análisis de DE.|
+| Factor de normalización de DESeq2 | Cuentas divididas por factores de tamaño específicos de la muestra determinados por la mediana del ratio de cuentas de genes en relación con la media geométrica por gen | Profundidad de secuenciación y composición del RNA | Comparaciones de cuentas de genes entre muestras y para el análisis de DE; NO para comparaciones dentro de la muestra |
+| La media cortada de los valores M de EdgeR (TMM) | Utiliza una media recortada ponderada de los ratios de expresión logarítmica entre las muestras | Profundidad de secuenciación | Composición de RNA y longitud de los genes. |
 
 
 [Tabla tomada de Intro to DGE](https://hbctraining.github.io/DGE_workshop/lessons/02_DGE_count_normalization.html)
@@ -384,9 +535,12 @@ library(tidyverse)
 
 ## Factor de normalización en DESeq2
 
-Ejemplo de como se calcula el factor de normalización en DESeq2
+Ejemplo de como se calcula el factor de normalización en DESeq2.
+
+Primero generamos una tabla con cuentas simuladas
 
 ```{r}
+# tabla con cuentas 
 df <- tibble(gene = c("gene1", "gene2"),
                  muestraA = c(1749, 35),
                  muestraB = c(943, 29)
@@ -397,6 +551,7 @@ df
 1. Crea una pseudo-referencia por muestra (promedio geometrico por fila) `sqrt(muestraA * mueestra B)`
 
 ```{r}
+# Calcular el promedio geometrico
 df <- df %>%
   rowwise() %>% 
   mutate(prom_geom = sqrt(muestraA * muestraB))
@@ -406,6 +561,7 @@ df
 2. Se calcula la fración `muestra/pseudo-referencia`
 
 ```{r}
+# Dividir las cuentas entre el promedio geometrico
 df <- df %>% 
   rowwise() %>% 
   mutate(muestraA_pseudo_ref = muestraA / prom_geom) %>% 
@@ -417,9 +573,11 @@ df
 3. Se calcula un factor de normalización (size factor) utilizando la `median` por columnas.
 
 ```{r}
+# Se calcula el factor de normalizacion usando la mediana para cada muestra
 norm_factor_muestraA <- median(df$muestraA_pseudo_ref)
 norm_factor_muestraA
 
+# Repetimos el proceso para la muestra B
 norm_factor_muestraB <- median(df$muestraB_pseudo_ref)
 norm_factor_muestraB
 
@@ -428,12 +586,15 @@ norm_factor_muestraB
 4. Se dividen las `cuentas crudas/size factor` para calcular las cuentas normalizadas.
 
 ```{r}
+# Columnas con las cuentas crudas
 df %>% 
   select(gene, muestraA, muestraB)
 
+# Dividir las cuentras entre el factor de normalización
 df$norm_muestraA <- df$muestraA/norm_factor_muestraA
 df$norm_muestraB <- df$muestraB/norm_factor_muestraB
 
+# Columnas con las cuentas normalizadas
 df %>%  
   select(norm_muestraA, norm_muestraB)
 ```
@@ -446,6 +607,7 @@ Para normalizar, primero construimos el objeto `DESeqDataSet`, para ello necesit
 
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Importamos las librerías que necesitemos
 library("DESeq2")
 library("dplyr")
 library("ggplot2")
@@ -453,10 +615,16 @@ library("vsn")
 ```
 
 ```{r echo=TRUE}
+# Definir los grupos que se desean comparar
 se$Condition <- factor(se$Condition)
+
+# Checar cantidad de muestras
 table(se$Condition)
 
+# Generar el objeto de DESeq 
 dds <- DESeqDataSet(se, design = ~ Condition)
+
+# Funcion que normaliza los datos y realiza el analisis de expresión differencial
 dds <- DESeq(dds)
 ```
 
@@ -466,7 +634,10 @@ dds <- DESeq(dds)
 Puedes realizar otras transformaciones en `DESeq2` para estabilizar la varianza a través de los differentes valores promedio de expresión.  
 
 ```{r}
+# Grafica de cuentas crudas
 meanSdPlot(counts(dds), ranks = F)
+
+# Gráfica de cuentas en escala log2
 meanSdPlot(log2(counts(dds) +1), ranks = F)
 ```
 
@@ -480,19 +651,26 @@ head(assay(vsd), 3)
 rld <- rlog(dds, blind = FALSE)
 head(assay(rld), 3)
 
+# Normalización con el factor de normalizacion 
 dds <- estimateSizeFactors(dds)
 
+# Juntar los datos de las tres normalizaciones
 df <- bind_rows(
   as_data_frame(log2(counts(dds, normalized=TRUE)[, 1:2]+1)) %>%
          mutate(transformation = "log2(x + 1)"),
   as_data_frame(assay(vsd)[, 1:2]) %>% mutate(transformation = "vst"),
   as_data_frame(assay(rld)[, 1:2]) %>% mutate(transformation = "rlog"))
   
+# Renombrar columnas
 colnames(df)[1:2] <- c("x", "y")  
 
+# Nombre de las graficas
 lvls <- c("log2(x + 1)", "vst", "rlog")
+
+# Agrupar los tres tipos de normalizacion
 df$transformation <- factor(df$transformation, levels=lvls)
 
+# Plotear los datos
 ggplot(df, aes(x = x, y = y)) + geom_hex(bins = 80) +
   coord_fixed() + facet_grid( . ~ transformation)  
 
@@ -583,16 +761,14 @@ knitr::include_graphics("https://raw.githubusercontent.com/hbctraining/DGE_works
 
 
 ```{r echo=TRUE}
-se$Condition <- factor(se$Condition)
-table(se$Condition)
-
-dds <- DESeqDataSet(se, design = ~ Condition)
-dds <- DESeq(dds)
+# Checar objeto generado 
+dds
 ```
 
 Para ver los resultados podemos usar la función `results`
 
 ```{r}
+# Obtener los resultados del DE
 res <- results(dds)
 res
 summary(res)
@@ -608,3 +784,93 @@ Podemos hacer cortes:
 resLFC1 <- results(dds, lfcThreshold=1)
 table(resLFC1$padj < 0.1)
 ```
+
+# 14- Visualización de DE
+
+## MAplot
+
+ Gráfico que representa la distribución de los genes o transcritos en las comparaciones de interés
+
+```{r, eval = F}
+##Es importante que recuerden que la hipótesis nula que se probó fue
+##"El lfc del gen n es igual a 0" por lo tanto los genes coloreados son...
+plotMA(res)
+```
+
+También pueden generar un MAplot interactivo con la librería de *Glimma*
+```{r, eval=FALSE}
+library(Glimma)
+glimmaMA(dds)
+```
+
+## Volcano plot
+
+De manera similar al MAplot con el volcano plot visualizamos los genes que muestran expresión diferencial en nuestra condición de interés
+
+- En el eje y se grafica el -log10 de padj
+
+- En el eje x se grafica el lfc o *log2foldchange*
+
+
+```{r, eval=FALSE}
+##Para crear un volcano plot necesitas convertir los resultados de DESeq a un data frame
+DEG <- as.data.frame(res)
+##En el script de funciones encontrarás la función de volcanoplotR para generar tu gráfico
+#los valores de los argumentos logfc y p.adj deben ser iguales al threshold utilizado para generar los resultados
+#en type debes indicar que los resultados provienen de DESeq
+volcanoplotR(DEG, logfc = 0, p.adj = 0.1, type = "DESeq")
+```
+
+
+## Heatmap
+
+El *heatmap* nos permite visualizar la expresión de los genes diferencialmente expresados en terminos de las cuentas normalizadas
+
+Consideraciones:
+
+- Usar los valores de las cuentas normalizadas para una mejor comparación entre muestras
+
+- Escalar los valores de las cuentas (renglones) para visualizar las diferencias en la expresión
+
+Usaremos la librería de *pheatmap*
+
+```{r, eval = F}
+##Guardar la lista de transcritos que mostraron expresión diferencial significativa
+significant <- res_df %>% filter(log2FoldChange > 0 & padj < 0.1 |
+                                   log2FoldChange < 0 & padj < 0.1)
+##Cortar la matriz de cuentas normalizadas con los id de los transcritos diferencialmente expresados
+norm_counts <- norm_counts[rownames(significant)]
+##Generar una tabla de anotaciones preservando el tratamiento y el tipo de células
+annotation_col <- coldata[, c(3, 4)]
+##Generar el heatmap empleando clustering jerarquico
+pheatmap(norm_counts, 
+         border_color = NA, 
+         scale = "row",
+         clustering_distance_rows = "euclidean", 
+         clustering_distance_cols = "euclidean", 
+         clustering_method = "average", 
+         show_colnames = F, 
+         show_rownames = F, 
+         annotation_col = annotation_col)
+```
+
+```{r, eval = F}
+pheatmap(norm_counts, 
+         border_color = NA, 
+         scale = "row",
+         clustering_distance_rows = "euclidean", 
+         clustering_distance_cols = "euclidean", 
+         clustering_method = "average", 
+         show_colnames = F, 
+         show_rownames = F, 
+         annotation_col = annotation_col)
+```
+
+# Paquetería
+
+```{r}
+sessionInfo()
+```
+
+
+
