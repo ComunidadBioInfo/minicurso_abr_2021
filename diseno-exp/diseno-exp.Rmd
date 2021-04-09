@@ -1,0 +1,80 @@
+---
+title: "Quiz de diseño experimental"
+output: learnr::tutorial
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## RNA-seq
+
+### Secuenciación de Ilumina
+
+Videos que explican la secuenciación por síntesis (Illumina) 
+
+![](https://youtu.be/BimurK8vlYc){width="80%"}
+![](https://youtu.be/fCd6B5HRaZ8){width="80%"}
+
+
+### Preguntas
+
+*Hablamos sobre el diseño experimental y algunos de los puntos importantes para tener en cuenta cuando se planea un experimento de RNA-seq. *
+
+Tomando en cuenta el siguiente diseño experimental, discute con tus compañeros las siguientes preguntas:
+
+```{r, out.width = "90%",fig.align='center'}
+knitr::include_graphics(here::here("diseno-exp/images/treatment1.png"))
+```
+
+
+
+```{r quiz}
+
+question_is_correct.always_correct <- function(question_text, value, ...) {
+  return(learnr::mark_as(TRUE, message = NULL))
+}
+
+quiz(
+  question_radio(
+  "Es un buen diseño experimental?",
+  answer("No", correct = TRUE),
+  answer("Si", message = '¿Seguro?'),
+  allow_retry = TRUE
+  ),
+  
+  question(
+  "¿Porqué?",
+  answer("answer", correct = TRUE),
+  answer("also marked as correct", correct = FALSE),
+  type = c("always_correct", "learnr_text")
+  ),
+  
+  question(
+  "¿Cómo puedes mejorarlo?",
+  answer("answer", correct = TRUE),
+  answer("also marked as correct", correct = FALSE),
+  type = c("always_correct", "learnr_text")
+  ),
+  
+  question("Qué son los efectos de lote?",
+    answer("Experimentos mal diseñados"),
+    answer("Variación biológica interesante (ejemplo: exo, edad, tratamiento)"),
+    answer("Variación NO-biológica provocada por el experimento (ejemplo: día de secuenciación, diferentes reactivos)", correct = TRUE),
+    answer("Efectos que no son importantes para el deseño experimental de RNA-seq"),
+    allow_retry = TRUE
+  ),
+  
+  question("¿Cuáles consideraciones son relevantes para decidir el tipo de secuenciación?",
+    answer("Identificación de isoformas raras", correct = TRUE),
+    answer("Muestras de tejido o líneas celulares"),
+    answer("Muestras pareadas"),
+    answer("Costos", correct = TRUE),
+    answer("Identificación de lnRNA", correct = TRUE),
+    allow_retry = TRUE
+  )
+)
+```
+
