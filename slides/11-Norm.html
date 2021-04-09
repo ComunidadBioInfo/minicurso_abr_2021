@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>11: Normalización</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Ana BVA" />
+    <script src="libs/header-attrs-2.7/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/default-fonts.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/hygge.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# 11: Normalización
+### Ana BVA
+### 10/3/2021
+
+---
+
+
+
+
+
+&lt;style type="text/css"&gt;
+/* From https://github.com/yihui/xaringan/issues/147  */
+.scroll-output {
+  height: 80%;
+  overflow-y: scroll;
+}
+/* https://stackoverflow.com/questions/50919104/horizontally-scrollable-output-on-xaringan-slides */
+pre {
+  max-width: 100%;
+  overflow-x: scroll;
+}
+
+&lt;/style&gt;
+
+
+## Normalización 
+
+
+Es el primer paso del análisis de expresión diferencial y es necesario para hacer comparaciones acertadas entre muestras. 
+
+--
+
+Las cuentas crudas están conformadas por un componente "interesante" (la expresión de RNA) y componentes "no interesantes" (como los batch effects, ruido de la plataforma, etc.).
+
+--
+
+La normalzación escala las cuentas para tratar de reducir los componentes "no interesantes" y poder comparar las muestras entre si. 
+
+---
+
+## Criteríos para normalizar
+
+Se puede normalizar considerando:
+
+- La profundidad (tamaño de librería)
+
+&lt;img src="https://hbctraining.github.io/DGE_workshop/img/normalization_methods_depth.png" width="450px" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Criteríos para normalizar
+
+Se puede normalizar considerando:
+
+- El tamaño del gen
+
+&lt;img src="https://hbctraining.github.io/DGE_workshop/img/normalization_methods_length.png" width="450px" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+## Criteríos para normalizar
+
+Se puede normalizar considerando:
+
+- Composición de RNA
+
+&lt;img src="https://hbctraining.github.io/DGE_workshop/img/normalization_methods_composition.png" width="350px" style="display: block; margin: auto;" /&gt;
+
+
+
+.tiny[Imagen tomada de [aquí](https://biocorecrg.github.io/RNAseq_course_2019/salmon.html)]
+
+
+---
+## Métodos comunes
+
+.scroll-output[
+
+| Método de normalización | Descripción | Factores de evaluación | Recomendaciones de uso |
+|:-----------------------------------------------------------------------------------:|:----------------------------------------------------------------------------------------------------------------------------:|:--------------------------------------------------:|:-------------------------------------------------------------------------------------------------------------------:|
+| CPM (cuentas por millón): cuentas escalados por el número total de lecturas | profundidad de secuenciación | comparaciones de cuentas de genes entre réplicas del mismo grupo de muestras| NO para comparaciones dentro de la muestra o análisis de DE.| 
+| TPM (transcritos por kilobase por millón de lecturas): cuentas por longitud de transcripción (kb) por millón de lecturas mapeadas | profundidad de secuenciación y longitud de genes| comparaciones de cuentas de genes dentro de una muestra o entre muestras del mismo grupo de muestras| NO para análisis de DE. |
+| RPKM/FPKM (lecturas/fragmentos por kilobase de exón por millón de lecturas/fragmentos mapeados| similar a TPM, profundidad de secuenciación y longitud del gen | comparaciones de cuentas entre genes dentro de una muestra | NO para comparaciones entre muestras o análisis de DE.|
+| Mdiana de ratios de DESeq2 | cuentas divididas por factores de tamaño específicos de la muestra determinados por la mediana del ratio de cuentas de genes en relación con la media geométrica por gen | profundidad de secuenciación y composición del RNA | comparaciones de cuentas de genes entre muestras y para el análisis de DE; NO para comparaciones dentro de la muestra |
+| La media cortada de los valores M de EdgeR (TMM) | utiliza una media recortada ponderada de los ratios de expresión logarítmica entre las muestras | profundidad de secuenciación | composición de RNA y longitud de los genes. |
+
+.tiny[
+
+[Tabla tomada de Intro to DGE](https://hbctraining.github.io/DGE_workshop/lessons/02_DGE_count_normalization.html#:~:text=Normalization%20is%20the%20process%20of,between%20and%2For%20within%20samples.)
+]
+
+]
+
+---
+## DESeq2
+
+- Normalización para análisis de expresión diferencial:
+
+  - Factor de normalización de `DESeq2`
+
+- Normalización para visualización u otras aplicaciones:
+
+  - Variance stabilizing transformation (VST)
+  
+  - Regularized-logarithm transformation (rlog)
+
+---
+## DESeq2
+
+.scroll-output[
+
+`DESeq2`ajusta a un modelo lineal generalizado (GLM) de la familia binomial negativa (NB).
+
+
+
+
+
+```
+## # A tibble: 2 x 3
+##   gene  muestraA muestraB
+##   &lt;chr&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+## 1 gene1     1749      943
+## 2 gene2       35       29
+```
+
+1. Crea una pseudo-referencia por muestra (promedio geometrico por fila) `sqrt(muestraA * mueestra B)`
+
+```
+## # A tibble: 2 x 4
+## # Rowwise: 
+##   gene  muestraA muestraB prom_geom
+##   &lt;chr&gt;    &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+## 1 gene1     1749      943    1284. 
+## 2 gene2       35       29      31.9
+```
+
+2. Se calcula la fración `muestra/pseudo-referencia`
+
+```
+## # A tibble: 2 x 6
+## # Rowwise: 
+##   gene  muestraA muestraB prom_geom muestraA_pseudo_ref muestraB_pseudo_ref
+##   &lt;chr&gt;    &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;               &lt;dbl&gt;               &lt;dbl&gt;
+## 1 gene1     1749      943    1284.                 1.36               0.734
+## 2 gene2       35       29      31.9                1.10               0.910
+```
+
+3. Se calcula un factor de normalización (size factor) utilizando la `median` por columnas.
+
+```
+## [1] 1.230235
+```
+
+```
+## [1] 0.8222689
+```
+
+4. Se dividen las `cuentas crudas/size factor` para calcular las cuentas normalizadas.
+
+```
+## # A tibble: 2 x 3
+## # Rowwise: 
+##   gene  muestraA muestraB
+##   &lt;chr&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+## 1 gene1     1749      943
+## 2 gene2       35       29
+```
+
+```
+## # A tibble: 2 x 2
+## # Rowwise: 
+##   norm_muestraA norm_muestraB
+##           &lt;dbl&gt;         &lt;dbl&gt;
+## 1        1422.         1147. 
+## 2          28.4          35.3
+```
+
+
+]
+
+---
+
+## Ejercicio 
+
+.scroll-output[
+
+Se pueden ocupar otras transformaciones en la paquetería de `DESeq2`pero no son las mas recomendadas para DE. 
+
+
+
+Para normalizar, primero construimos el objeto `DESeqDataSet`, para ello necesitamos definir el modelo de DE (Quienes son Controles y quienes tratamiento). 
+
+
+
+```r
+library("DESeq2")
+library("dplyr")
+library("ggplot2")
+library("vsn")
+```
+
+
+```r
+gse$Condition &lt;- factor(gse$Condition)
+table(gse$Condition)
+```
+
+```
+## 
+##    CT Veraf 
+##     3     3
+```
+
+```r
+dds &lt;- DESeqDataSet(gse, design = ~ Condition)
+```
+
+```
+## using counts and average transcript lengths from tximeta
+```
+
+```r
+dds &lt;- DESeq(dds)
+```
+
+```
+## estimating size factors
+```
+
+```
+## using 'avgTxLength' from assays(dds), correcting for library size
+```
+
+```
+## estimating dispersions
+```
+
+```
+## gene-wise dispersion estimates
+```
+
+```
+## mean-dispersion relationship
+```
+
+```
+## final dispersion estimates
+```
+
+```
+## fitting model and testing
+```
+
+]
+
+
+---
+
+## Otras transformaciones
+
+.scroll-output[
+
+Puedes realizar otras transformaciones en `DESeq2` para estabilizar la varianza a través de los differentes valores promedio de expresión.  
+
+![](11-Norm_files/figure-html/unnamed-chunk-14-1.png)&lt;!-- --&gt;![](11-Norm_files/figure-html/unnamed-chunk-14-2.png)&lt;!-- --&gt;
+
+
+
+```r
+# variance stabilizing transformation (VST), (Anders and Huber 2010)
+vsd &lt;- vst(dds, blind = FALSE)
+head(assay(vsd), 3)
+```
+
+```
+##                     A_CT_1   A_CT_2   A_CT_3 A_Veraf_1 A_Veraf_2 A_Veraf_3
+## ENST00000456328.2 4.819827 4.819827 4.819827  5.087907  4.819827  4.819827
+## ENST00000450305.2 4.819827 4.819827 4.819827  4.819827  4.819827  4.819827
+## ENST00000488147.1 4.819827 4.819827 4.819827  5.288910  5.466548  5.277363
+```
+
+```r
+# regularized-logarithm transformation (rlog), (Love, Huber, and Anders 2014)
+rld &lt;- rlog(dds, blind = FALSE)
+head(assay(rld), 3)
+```
+
+```
+##                       A_CT_1    A_CT_2     A_CT_3  A_Veraf_1 A_Veraf_2
+## ENST00000456328.2 -1.9901456 -1.995442 -1.9960595 -1.7899302 -1.998401
+## ENST00000450305.2  0.0000000  0.000000  0.0000000  0.0000000  0.000000
+## ENST00000488147.1 -0.2316015 -0.229809 -0.2415125  0.8316449  1.290550
+##                    A_Veraf_3
+## ENST00000456328.2 -2.0006433
+## ENST00000450305.2  0.0000000
+## ENST00000488147.1  0.8007199
+```
+
+```r
+dds &lt;- estimateSizeFactors(dds)
+```
+
+```
+## using 'avgTxLength' from assays(dds), correcting for library size
+```
+
+```r
+df &lt;- bind_rows(
+  as_data_frame(log2(counts(dds, normalized=TRUE)[, 1:2]+1)) %&gt;%
+         mutate(transformation = "log2(x + 1)"),
+  as_data_frame(assay(vsd)[, 1:2]) %&gt;% mutate(transformation = "vst"),
+  as_data_frame(assay(rld)[, 1:2]) %&gt;% mutate(transformation = "rlog"))
+```
+
+```
+## Warning: `as_data_frame()` was deprecated in tibble 2.0.0.
+## Please use `as_tibble()` instead.
+## The signature and semantics have changed, see `?as_tibble`.
+```
+
+```r
+colnames(df)[1:2] &lt;- c("x", "y")  
+
+lvls &lt;- c("log2(x + 1)", "vst", "rlog")
+df$transformation &lt;- factor(df$transformation, levels=lvls)
+
+ggplot(df, aes(x = x, y = y)) + geom_hex(bins = 80) +
+  coord_fixed() + facet_grid( . ~ transformation)  
+```
+
+![](11-Norm_files/figure-html/unnamed-chunk-15-1.png)&lt;!-- --&gt;
+
+
+]
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
