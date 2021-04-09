@@ -6,7 +6,7 @@ output:
   html_document:
     toc: true
     toc_float: true
-    code_folding: hide
+    code_folding: show
 editor_options: 
   chunk_output_type: console
 ---
@@ -28,7 +28,7 @@ knitr::knit_hooks$set(time_it = local({
   }
 }))
 
-knitr::opts_chunk$set(time_it = TRUE, eval = F)
+knitr::opts_chunk$set(time_it = TRUE)
 ```
 
 # Descripción general
@@ -85,7 +85,8 @@ que una laptop. Por lo que se verán los comando para hacer el alineamiento en
 
 ## Instalación
 
-### Pasos para installar FastQC:
+<div class="alert alert-warning">
+### Instalación de FastQC
 
 1- Descargar el programa de su página web [fastQC](https://www.bioinformatics.babraham.ac.uk/projects/download.html#fastqc)
 
@@ -107,6 +108,88 @@ ln -s /Applications/FastQC.app/Contents/MacOS/fastqc /usr/local/bin/fastqc
 ```{bash echo=TRUE, eval=FALSE}
 fastqc --help
 ```
+</div>
+
+---
+
+<div class="alert alert-warning">
+### Instalación de MultiQC
+
+Esta parte es opcional, pero si trabajas con RNA-seq te puede intersar.
+
+1. La instalación se hace con conda, así que primero activamos un ambiente conda
+
+```{bash echo=TRUE, eval=FALSE}
+conda activate base
+pip install multiqc
+```
+</div>
+
+---
+
+<div class="alert alert-warning">
+### Instalación de Salmon
+
+Seguir los pasos de la página de [Salmon]()
+</div>
+
+---
+
+<div class="alert alert-warning">
+### Instalación de R y Rstudio
+
+Puedes instalar [R]() a través de [Rstudio](), asegurate de tener una versión de
+R > 4.0. Puedes checar la versión de `R` que tienes si ejecutas `version` 
+en tu consola de R:
+
+```{r}
+version
+```
+</div>
+
+---
+
+<div class="alert alert-warning">
+### Instalación de Bioconductor
+
+Durante esta práctica se usarán paqueterías que se enuentran en el repositorio 
+de [Bioconductor](), usaremos `BiocManager` para instalar los diferentes paquetes
+pero asegurate de tener la versión más actual de 
+
+
+```{r eval=FALSE, include=TRUE}
+# Instalar BiocManager
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+# Checar la versión
+BiocManager::version()
+
+# Si se requiere, se puede instalar la versión 3.12 manualmente
+# BiocManager::install(version = "3.12")
+```
+</div>
+
+---
+
+<div class="alert alert-warning">
+### Instalación de la paquetería de R
+
+- Instalar la paquetería utilizando `BiocManager`
+
+```{r eval=FALSE}
+paquetes = c("DESeq2", "tximeta", "PCAtools", "SummarizedExperiment")
+BiocManager::install()
+```
+
+- Adicionalmente, ocuparemos algunas funciones de `tidyverse` como la paquetería
+de `ggplot2`. La instalaremos utilizando el repositorio de CRAN
+
+```{r eval=FALSE}
+install.packages('tidyverse')
+```
+
+</div>
 
 
 # 6-Flujo general de trabajo
@@ -161,13 +244,7 @@ ls output/QC
 
 *Esta parte es opcional, pero si trabajas con RNA-seq te puede intersar.
 
-1. La instalación se hace con conda, así que primero activamos un ambiente conda
-
-```{bash echo=TRUE, eval=FALSE}
-conda activate base
-pip install multiqc
-```
-
+1. Instalar `MultiQC`
 
 2. Correr MultiQC
 
@@ -244,7 +321,6 @@ salmon quant -i ../transcriptome/genecode.v37.salmon141 \
 
 # 9-Tximeta
 
-Paquetería que conserva 
 
 ```{r, out.width = "650px",fig.align='center'}
 knitr::include_graphics("https://journals.plos.org/ploscompbiol/article/figure/image?size=large&id=10.1371/journal.pcbi.1007664.g001")
@@ -263,6 +339,7 @@ Instalar `tximeta` desde R usando `BiocManager`
 if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 
+# Puedes instalar la paqueteria de tximeta usando BiocManager::install() 
 BiocManager::install("tximeta")
 ```
 </div>
@@ -286,11 +363,12 @@ Importamos la información de cada muestra
 
 ```{r echo=TRUE}
 # Leemos los datos
-samples <- read.delim(here::here("output/salmon_quants/metadata.txt"))
+info <- read.delim(here::here("output/salmon_quants/metadata.txt"))
 
 # Generamos la columna "names"
-samples$names <- samples$Unique_id
-samples
+# info$names <- info$Unique_id # Puedes agregar una columna nueva
+info <- dplyr::rename(info,names = Unique_id) # Renombrar la columna 
+info
 ```
 
 Ahora las cuentas generadas por `Salmon`
@@ -303,19 +381,23 @@ list.files(dir)
 
 # Que hacemos aqui??  Checar
 # file.path(dir,paste0(info$Sample,"_quant"),"quant.sf")
-samples$files <- file.path(dir,paste0(samples$Sample,"_quant"),"quant.sf")
+info$files <- file.path(dir,paste0(info$Sample,"_quant"),"quant.sf")
 
 #Checamos que los archivos existan
-data.frame(samples$Sample, file.exists(samples$files))
+data.frame(info$Sample, file.exists(info$files))
 ```
 
 Importar los datos usando `tximeta` 
 
 ```{r echo=TRUE}
-#BiocManager::install("tximeta")
+# Importamos la paqueteria 
 library(tximeta)
-samples
-se <- tximeta(samples)
+
+# Checamos que el df tenga la columna "names" y "files"
+info
+
+# Generamos el objeto usando tximeta()
+se <- tximeta(info)
 ```
 
 ---
@@ -421,11 +503,11 @@ row.names(colData(se)) == colnames(assay(se))
 
 | Método de normalización | Descripción | Factores de evaluación | Recomendaciones de uso |
 |:-----------------------------------------------------------------------------------:|:----------------------------------------------------------------------------------------------------------------------------:|:--------------------------------------------------:|:-------------------------------------------------------------------------------------------------------------------:|
-| CPM (cuentas por millón): cuentas escalados por el número total de lecturas | profundidad de secuenciación | comparaciones de cuentas de genes entre réplicas del mismo grupo de muestras| NO para comparaciones dentro de la muestra o análisis de DE.| 
-| TPM (transcritos por kilobase por millón de lecturas): cuentas por longitud de transcripción (kb) por millón de lecturas mapeadas | profundidad de secuenciación y longitud de genes| comparaciones de cuentas de genes dentro de una muestra o entre muestras del mismo grupo de muestras| NO para análisis de DE. |
-| RPKM/FPKM (lecturas/fragmentos por kilobase de exón por millón de lecturas/fragmentos mapeados| similar a TPM, profundidad de secuenciación y longitud del gen | comparaciones de cuentas entre genes dentro de una muestra | NO para comparaciones entre muestras o análisis de DE.|
-| Factor de normalización de DESeq2 | cuentas divididas por factores de tamaño específicos de la muestra determinados por la mediana del ratio de cuentas de genes en relación con la media geométrica por gen | profundidad de secuenciación y composición del RNA | comparaciones de cuentas de genes entre muestras y para el análisis de DE; NO para comparaciones dentro de la muestra |
-| La media cortada de los valores M de EdgeR (TMM) | utiliza una media recortada ponderada de los ratios de expresión logarítmica entre las muestras | profundidad de secuenciación | composición de RNA y longitud de los genes. |
+| CPM (cuentas por millón): cuentas escalados por el número total de lecturas | Profundidad de secuenciación | Comparaciones de cuentas de genes entre réplicas del mismo grupo de muestras| NO para comparaciones dentro de la muestra o análisis de DE.| 
+| TPM (transcritos por millón de lecturas): cuentas escalados por el número total de lecturas  | Profundidad de secuenciación | Comparaciones de cuentas de genes entre réplicas del mismo grupo de muestras | NO para análisis de DE. |
+| RPKM/FPKM (lecturas/fragmentos por kilobase de exón por millón de lecturas/fragmentos mapeados| Similar a TPM, profundidad de secuenciación y longitud del gen | Comparaciones de cuentas entre genes dentro de una muestra | NO para comparaciones entre muestras o análisis de DE.|
+| Factor de normalización de DESeq2 | Cuentas divididas por factores de tamaño específicos de la muestra determinados por la mediana del ratio de cuentas de genes en relación con la media geométrica por gen | Profundidad de secuenciación y composición del RNA | Comparaciones de cuentas de genes entre muestras y para el análisis de DE; NO para comparaciones dentro de la muestra |
+| La media cortada de los valores M de EdgeR (TMM) | Utiliza una media recortada ponderada de los ratios de expresión logarítmica entre las muestras | Profundidad de secuenciación | Composición de RNA y longitud de los genes. |
 
 
 [Tabla tomada de Intro to DGE](https://hbctraining.github.io/DGE_workshop/lessons/02_DGE_count_normalization.html)
@@ -453,9 +535,12 @@ library(tidyverse)
 
 ## Factor de normalización en DESeq2
 
-Ejemplo de como se calcula el factor de normalización en DESeq2
+Ejemplo de como se calcula el factor de normalización en DESeq2.
+
+Primero generamos una tabla con cuentas simuladas
 
 ```{r}
+# tabla con cuentas 
 df <- tibble(gene = c("gene1", "gene2"),
                  muestraA = c(1749, 35),
                  muestraB = c(943, 29)
@@ -466,6 +551,7 @@ df
 1. Crea una pseudo-referencia por muestra (promedio geometrico por fila) `sqrt(muestraA * mueestra B)`
 
 ```{r}
+# Calcular el promedio geometrico
 df <- df %>%
   rowwise() %>% 
   mutate(prom_geom = sqrt(muestraA * muestraB))
@@ -475,6 +561,7 @@ df
 2. Se calcula la fración `muestra/pseudo-referencia`
 
 ```{r}
+# Dividir las cuentas entre el promedio geometrico
 df <- df %>% 
   rowwise() %>% 
   mutate(muestraA_pseudo_ref = muestraA / prom_geom) %>% 
@@ -486,9 +573,11 @@ df
 3. Se calcula un factor de normalización (size factor) utilizando la `median` por columnas.
 
 ```{r}
+# Se calcula el factor de normalizacion usando la mediana para cada muestra
 norm_factor_muestraA <- median(df$muestraA_pseudo_ref)
 norm_factor_muestraA
 
+# Repetimos el proceso para la muestra B
 norm_factor_muestraB <- median(df$muestraB_pseudo_ref)
 norm_factor_muestraB
 
@@ -497,12 +586,15 @@ norm_factor_muestraB
 4. Se dividen las `cuentas crudas/size factor` para calcular las cuentas normalizadas.
 
 ```{r}
+# Columnas con las cuentas crudas
 df %>% 
   select(gene, muestraA, muestraB)
 
+# Dividir las cuentras entre el factor de normalización
 df$norm_muestraA <- df$muestraA/norm_factor_muestraA
 df$norm_muestraB <- df$muestraB/norm_factor_muestraB
 
+# Columnas con las cuentas normalizadas
 df %>%  
   select(norm_muestraA, norm_muestraB)
 ```
@@ -515,6 +607,7 @@ Para normalizar, primero construimos el objeto `DESeqDataSet`, para ello necesit
 
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Importamos las librerías que necesitemos
 library("DESeq2")
 library("dplyr")
 library("ggplot2")
@@ -522,10 +615,16 @@ library("vsn")
 ```
 
 ```{r echo=TRUE}
+# Definir los grupos que se desean comparar
 se$Condition <- factor(se$Condition)
+
+# Checar cantidad de muestras
 table(se$Condition)
 
+# Generar el objeto de DESeq 
 dds <- DESeqDataSet(se, design = ~ Condition)
+
+# Funcion que normaliza los datos y realiza el analisis de expresión differencial
 dds <- DESeq(dds)
 ```
 
@@ -535,7 +634,10 @@ dds <- DESeq(dds)
 Puedes realizar otras transformaciones en `DESeq2` para estabilizar la varianza a través de los differentes valores promedio de expresión.  
 
 ```{r}
+# Grafica de cuentas crudas
 meanSdPlot(counts(dds), ranks = F)
+
+# Gráfica de cuentas en escala log2
 meanSdPlot(log2(counts(dds) +1), ranks = F)
 ```
 
@@ -549,19 +651,26 @@ head(assay(vsd), 3)
 rld <- rlog(dds, blind = FALSE)
 head(assay(rld), 3)
 
+# Normalización con el factor de normalizacion 
 dds <- estimateSizeFactors(dds)
 
+# Juntar los datos de las tres normalizaciones
 df <- bind_rows(
   as_data_frame(log2(counts(dds, normalized=TRUE)[, 1:2]+1)) %>%
          mutate(transformation = "log2(x + 1)"),
   as_data_frame(assay(vsd)[, 1:2]) %>% mutate(transformation = "vst"),
   as_data_frame(assay(rld)[, 1:2]) %>% mutate(transformation = "rlog"))
   
+# Renombrar columnas
 colnames(df)[1:2] <- c("x", "y")  
 
+# Nombre de las graficas
 lvls <- c("log2(x + 1)", "vst", "rlog")
+
+# Agrupar los tres tipos de normalizacion
 df$transformation <- factor(df$transformation, levels=lvls)
 
+# Plotear los datos
 ggplot(df, aes(x = x, y = y)) + geom_hex(bins = 80) +
   coord_fixed() + facet_grid( . ~ transformation)  
 
@@ -652,16 +761,14 @@ knitr::include_graphics("https://raw.githubusercontent.com/hbctraining/DGE_works
 
 
 ```{r echo=TRUE}
-se$Condition <- factor(se$Condition)
-table(se$Condition)
-
-dds <- DESeqDataSet(se, design = ~ Condition)
-dds <- DESeq(dds)
+# Checar objeto generado 
+dds
 ```
 
 Para ver los resultados podemos usar la función `results`
 
 ```{r}
+# Obtener los resultados del DE
 res <- results(dds)
 res
 summary(res)
