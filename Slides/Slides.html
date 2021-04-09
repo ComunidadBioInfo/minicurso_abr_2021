@@ -1,0 +1,2495 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Minicurso</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Ana BVA, Rodolfo LCD" />
+    <meta name="date" content="2021-04-08" />
+    <script src="libs/header-attrs-2.7/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/default-fonts.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/hygge.css" rel="stylesheet" />
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+    <link rel="stylesheet" href="sydney-fonts.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Minicurso
+### Ana BVA, Rodolfo LCD
+### 2021-04-08
+
+---
+
+class: inverse, center, middle
+
+# 1: Introduccion a RNA-seq 
+
+
+
+&lt;style type="text/css"&gt;
+/* From https://github.com/yihui/xaringan/issues/147  */
+.scroll-output {
+  height: 80%;
+  overflow-y: scroll;
+}
+/* https://stackoverflow.com/questions/50919104/horizontally-scrollable-output-on-xaringan-slides */
+pre {
+  max-width: 100%;
+  overflow-x: scroll;
+}
+
+.remark-slide-content {
+  font-size: 28px;
+  padding: 20px 80px 20px 80px;
+}
+.remark-code, .remark-inline-code {
+  background: #f0f0f0;
+}
+.remark-code {
+  font-size: 24px;
+}
+.huge .remark-code { /*Change made here*/
+  font-size: 200% !important;
+}
+.tiny .remark-code { /*Change made here*/
+  font-size: 80% !important;
+}
+
+.center2 {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+&lt;/style&gt;
+
+
+
+
+
+
+---
+## Agradecimientos
+
+Este material está basado en [Love, Michael I., et al. "RNA-Seq workflow: gene-level exploratory analysis and differential expression." F1000Research 4 (2015).](https://www.bioconductor.org/packages/devel/workflows/vignettes/rnaseqGene/inst/doc/rnaseqGene.html) de Bioconductor.
+
+&lt;img src="https://images.squarespace-cdn.com/content/v1/5423875be4b03f0c482a58c4/1532953317705-W6TYTE70KG5E6KQEZU1K/ke17ZwdGBToddI8pDm48kNVP8RwsgCc7XlHc2zPQeqdZw-zPPgdn4jUwVcJE1ZvWQUxwkmyExglNqGp0IvTJZUJFbgE-7XRK3dMEBRBhUpxA5wn4368HhrDKfvXqORu9oTEmTJkjlQ2gdQcVngofpWQcE5w-MKnvigIPwIMqpXs/Bioconductor.png" width="300px" style="display: block; margin: auto;" /&gt;
+
+---
+## Agradecimientos
+
+También está basado en el curso de ["Next generation sequencing bioiformatics" (Santiago, Chile 2019)](https://coursesandconferences.wellcomegenomecampus.org/our-events/next-generation-sequencing-bioinformatics-chile-2019/).
+
+&lt;img src="./Images/module7.png" width="600px" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Transcriptómica
+
+Estudio de la expresión genética
+
+- ¿Cuánto RNA hay?
+
+&lt;img src="./Images/transcriptomica.png" width="900px" style="display: block; margin: auto;" /&gt;
+
+
+
+---
+
+## Tecnologías
+
+&lt;img src="./Images/book.png" width="800px" style="display: block; margin: auto;" /&gt;
+
+
+---
+## RNA-seq
+
+
+&lt;img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Summary_of_RNA-Seq.svg/800px-Summary_of_RNA-Seq.svg.png" width="660px" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Aplicaciones
+
+&lt;img src="./Images/book.png" width="570px" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Bases de datos
+
+&lt;img src="./Images/book.png" width="450px" style="display: block; margin: auto;" /&gt;
+
+---
+class: inverse, center, middle
+
+# 2: Aplicaciones más comúnes del RNA-seq
+---
+## Aplicaciones
+
+&lt;img src="./Images/RNA_seq_apps.png" width="400px" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Expresión cuantitativa de loci (EQTL)
+
+--
+
+- Asociación entre cambios en la expresión de genes a SNPs conocidos
+
+--
+
+- WGS y (variantes) y epigenómica (silencialmiento) para complementar los datos
+
+--
+
+- Útil para la investigación de enfermedades o agronomía
+
+--
+
+![eqtl](./Images/eqtl2.png)
+.font50[[Living in an adaptive world: Genomic dissection of the genus Homo and its immune response](https://rupress.org/jem/article/214/4/877/42247/Living-in-an-adaptive-world-Genomic-dissection-of)]
+---
+
+## Detección de variantes
+
+--
+
+- Alternativa al estudio clásico de variantes (WGS o WES)
+
+--
+
+- Presenta limitaciones relacionadas con la cobertura y la profundidad (cobertura mayor a 10X)
+
+--
+
+![variants](./Images/variants.png)
+
+---
+
+## Redes de co-expresión
+
+--
+
+- Asociación entre dos o más genes por medio de expresión coordinada
+
+--
+
+- Genes co-expresados -&gt; funciones relacionadas, mecanismos de regulación similar 
+
+--
+
+- RNA-seq permite obtener redes de co-expresión más completas que los microarreglos
+
+--
+
+- Requiere amplio número de muestras (al menos 20) 
+
+---
+
+## Fusión de genes
+
+![fusion](./Images/Fusions.jpeg)
+.font50[[Frequent CTLA4-CD28 gene fusion in diverse types of T-cell lymphoma](https://www.haematologica.org/article/view/7742)]
+---
+
+## Análisis de expresión diferencial
+
+
+
+- Aplicación más común del RNA-seq
+
+--
+
+- Permite identificar y cuantificar la expresión de transcritos entre dos grupos distintos
+
+--
+
+- Etapas del desarrollo, tejidos distintos, efecto de estímulos o tratamientos
+
+--
+
+- Requiere del uso de modelos estadísticos que evaluen la expresión diferencial 
+
+--
+
+- Normalización de los datos (tamaño de la librería, longitud de los genes, composición de la librería...)
+
+---
+class: inverse, center, middle
+
+# 3: Consideraciones para el diseño experimental
+---
+## ¿Cúal es la pregunta que se quiere contestar?
+
+
+&lt;img src="./Images/experiment.png" width="290px" style="display: block; margin: auto;" /&gt;
+
+
+
+---
+
+## ¿Cúal es la pregunta que se quiere contestar?
+
+--
+
+Consideraciones importantes:
+
+.font70[
+.pull-left[
+- **Single vs paired-end** (análisis de isoformas)
+
+- **Stranded vs unstranded** (antisense y overlapping
+transcripts)
+]
+
+.pull-right[
+- **Profundidad de la secuenciación** (detección de transcritos con baja abundancia). 
+- **Número de replicas**:
+
+  - *Biológicas* = independientes, muestras biologicamente distintas.
+
+  - *Técnicas* = repetir la medición de la misma muestra.
+]
+
+.full-width[.content-box-red[Para el análisis de expresión diferencial es mejor **incrementar el número de replicas** que incrementar la profundidad de la secuenciación.]]
+]
+
+---
+
+# ¿Qué es single-end y paired-end?
+
+.small[
+**Single-end**:  Lectura de un único extremo de cada fragmento. 
+
+&lt;img src="./Images/s-p-end.png" width="900px" style="display: block; margin: auto;" /&gt;
+
+**Paired-end**: La secuenciación pareada proporciona la secuencia de ambos extremos de cada fragmento, siempre separados por una distancia conocida.
+
+
+[Martínez, Javier María Rodríguez. "Secuenciación de genomas." Arbor 177.698 (2004): 285-310.](http://www.encuentros.uma.es/encuentros138_9/secuenciacion.pdf)
+]
+---
+
+# Profundidad de la secuenciación
+
+- Mayor profundidad permite deterctar transcritos con baja expresión (Entre más *reads* tengas, encontrarás mayor cantidad de genes)
+- Se requiere un incremento logarítmico en la profundidad de secuenciación para obtener un aumento lineal el la deteción de los genes
+
+&lt;img src="./Images/depth.png" width="500px" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+# Precios
+
+Es importante contemplar los costos dentro del diseño. La tabla muestra costos NO actualizados pero la tendencia es similar:
+
+- Single-end es más baráto que paired-end.
+
+--
+
+- Mayor profundidad de secuenciación es más costoso. 
+
+--
+
+- Mayor longitud de bp por read aumenta el precio.
+
+--
+&lt;img src="./Images/cost.png" width="800px" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Precios del langebio
+.font70[
+Tomados de su página de internet [langebio](http://labsergen.langebio.cinvestav.mx/en/?services=sbssequencing)
+
+.pull-left[
+### Precios de librerias
+
+- 1 Library from DNA: $ 222.00
+
+- 16 Libraries from DNA: $ 89.00 c/u
+
+- 1 Library from total RNA or messenger RNA: $ 408.00
+
+- 16 Libraries from RNA: $ 153.00 c/u
+
+- 8 Small libraries RNA: $ 191.00 c/u
+
+]
+
+.pull-right[
+### Precios de secuenciación
+
+
+- Running on MiSeq 2x300: $ 2,687.00
+
+- Run on NextSeq 2x150, High Yield: $ 7,396.00
+
+- Running on a HiSeq 2x100 lane : $ 3,490.00
+
+]
+
+.small[
+*Note: The price of libraries may vary depending on the number of samples to process.
+]
+
+]
+
+---
+
+## ¿Cuáles son las posibles fuentes de variación? 
+
+.full-width[.content-box-blue[Conoce el fenómeno que quieres estudiar]]
+.font80[
+.pull-left[
+
+&lt;img src="./Images/experiment.png" width="200px" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+
+- **Variación biológica**: Sexo, edad, background genético, etnicidad, etc.
+
+- **Variación técnica**: Día de procesamiento de la muestra, lotes de reactivos, tiempo de recoleción de muestras, personal, etc.
+]
+]
+---
+
+## Diseño experimental 
+
+Es importante considerar la **variación biológica** al planear el experimento, porque puede generar variación no deseada que no puede ser eliminada.
+
+&lt;img src="./Images/batch.jpeg" width="900px" style="display: block; margin: auto;" /&gt;
+
+
+.footnotesize[[doi.org/10.1101/025528](http://doi.org/10.1101/025528)]
+
+
+---
+
+## Diseño experimental balanceado
+.font80[
+Cuando las muestras se colectan en diferentes lotes es importante incluir diferentes grupos para detectar la **variación técnica**. Visualizar los datos usando algoritmos de redución de dimensiones ayuda a observar si las muestras tienen efectos por lote
+]
+
+&lt;img src="./Images/balanced.jpeg" width="700px" style="display: block; margin: auto;" /&gt;
+
+
+.footnotesize[[doi.org/10.1101/025528](http://doi.org/10.1101/025528)]
+
+---
+class: inverse, center, middle
+
+# 4: Tipos de archivos 
+
+---
+
+## FastQ
+
+--
+
+- Derivado del formato FASTA
+
+--
+
+- Id secuencia + **Calidad**
+
+--
+
+- Generalmente no está comprimido (.fastq) &gt; comprimir (.fastq.gz)
+
+--
+
+- Comprende 4 líneas por secuencia:
+  * @ ID del read + información de la corrida
+  * Secuencia 
+  * Símbolo "+"
+  * Calidad (Escala **Phred** y código **ASCII**)
+  
+---
+
+## FastQ  
+## Identificador
+
+--
+
+- El identificador de la secuencia es la primera línea del archivo .fastq
+
+--
+
+- Plataformas de Illumina superiores a 1.8 contienen la siguiente información:
+
+--
+
+**@machneID:run number:flowCell ID:lane:tile:read:control number:index**
+
+
+```
+## @SRR12038075.1 D00635:426:CD19YANXX:5:2301:1410:2130/1
+```
+
+---
+
+## FastQ
+## Calidad
+
+La calidad de cada base secuenciada, en la escala **Phred**, se calcula de acuerdo la siguiente ecuación:
+
+.full-width[.content-box-blue[$$Q = -10 * log10(p)$$]]
+--
+
+Q = Calidad 
+
+--
+
+p = Probabilidad de que el *base call* sea incorrecto
+
+--
+
+Valores de **p** cercanos a cero -&gt; Alta calidad
+
+---
+## FastQ
+## Calidad
+
+&lt;img src="./Images/Fastqc.png" width="700px" style="display: block; margin: auto;" /&gt;
+
+
+---
+## FastQ
+## Calidad
+
+--
+
+- Para evitar colocar los valores numéricos de la calidad en el archivo .fastq y saturarlo de información -&gt; **[ASCII](https://www.ascii-code.com/)**
+
+--
+
+- Phred + 33 -&gt; Plataformas de Illumina a partir de 1.8 (símbolos especiales + alfanuméricos)
+
+--
+
+- Phred + 64 -&gt; Plataformas de Illumina anteriores a 1.8
+
+---
+## FastQ
+
+&lt;img src="./Images/ASCII0.png" width="600px" style="display: block; margin: auto;" /&gt;
+
+
+&lt;img src="./Images/ASCII33.png" width="600px" style="display: block; margin: auto;" /&gt;
+
+&lt;img src="./Images/ASCII64.png" width="600px" style="display: block; margin: auto;" /&gt;
+
+.font50[[ASCII Code - The extended ASCII table](https://www.ascii-code.com/)]
+---
+
+## FastQ
+
+
+&lt;img src="./Images/Fastq.png" width="700px" style="display: block; margin: auto;" /&gt;
+
+---
+
+## SAM/BAM
+
+--
+
+- De manera posterior al alineamiento se generan archivos **"Sequence Alignment Map"** -&gt; **SAM**
+
+--
+
+- Archivos delimitados por tabuladores (TAB)
+
+--
+
+- Convertidos a valores binarios como **"Binary Alignment Map"** -&gt; **BAM**
+
+--
+
+- **BAM** -&gt; Mayor espacio en disco -&gt; Acceso aleatorio más eficiente
+
+--
+
+- Las secuencias en formato BAM se pueden ordenar por coordenadas
+
+--
+
+- Conversion entre formatos [SamTools!](https://github.com/samtools/samtools)
+
+---
+
+## SAM/BAM
+
+- Los archivos en formato **SAM** se dividen en dos secciones:
+
+--
+
+- **HEADER**: Información general del archivo
+
+--
+
+- **ALIGNMENT**: Información relacionada con el alineamiento de los reads
+
+--
+&lt;img src="./Images/SAM-BAM.png" width="550px" style="display: block; margin: auto;" /&gt;
+
+---
+class: inverse, center, middle
+
+# 5: Flujo de trabajo para el análisis de RNA-seq
+---
+## Flujo general de trabajo
+
+
+&lt;img src="https://biocorecrg.github.io/RNAseq_course_2019/images/RNAseq_workflow.png" width="550px" style="display: block; margin: auto;" /&gt;
+
+.tiny[Imagen tomada de [aquí](https://biocorecrg.github.io/RNAseq_course_2019/salmon.html)]
+
+---
+
+## Primeros pasos
+
+
+&lt;img src="./Images/step1.png" width="540px" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+## Alineamiento y Quantificación
+
+
+&lt;img src="./Images/step2.png" width="950px" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+## Expresión Diferencial y análisis funcionales
+
+
+&lt;img src="./Images/step3.png" width="750px" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Flujo general de trabajo
+
+
+&lt;img src="https://biocorecrg.github.io/RNAseq_course_2019/images/RNAseq_workflow.png" width="550px" style="display: block; margin: auto;" /&gt;
+
+.tiny[Imagen tomada de [aquí](https://biocorecrg.github.io/RNAseq_course_2019/salmon.html)]
+---
+class: inverse, center, middle
+
+# 6: Organización de un proyecto bioinformático
+
+---
+
+## Crisis de reproducibilidad en la ciencia
+
+Para que dos o más personas realicen el mismo experimento bajo condiciones experimentales similares y obtengan resultados similares se requiere:
+
+--
+
+- Descripción de materiales y métodos
+
+--
+
+- Datos crudos o semi-crudos
+
+--
+
+- Código de cómputo utilizado
+
+--
+
+- Versión del software utilizado
+
+--
+
+- Información suplementaria para realizar el análisis de los datos
+
+---
+
+## Crisis de reproducibilidad en la ciencia
+
+**Crisis de reproducibilidad** en la ciencia -&gt; Perseguir explicaciones incorrectas -&gt; Diseñar tratamientos incorrectos para ciertas enfermedades
+
+Para combatir este problema:
+
+
+--
+- Transparencia de datos en publicaciones científicas
+
+--
+- Apertura de la información (Open science)
+
+--
+- Código abierto para el análisis de datos
+
+--
+- Repositiorios o bases de datos públicas donde se almacene la información
+
+--
+- Software depositado en repositorios o servidores a largo plazo
+
+---
+
+## Crisis de la reproducibilidad en la ciencia
+
+&lt;img src="./Images/Repo.png" width="400px" style="display: block; margin: auto;" /&gt;
+
+
+Almacenar el proyecto en .blue[GitHub] &lt;svg viewBox="0 0 496 512" style="height:1em;position:relative;display:inline-block;top:.1em;fill:blue;" xmlns="http://www.w3.org/2000/svg"&gt;  &lt;path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"&gt;&lt;/path&gt;&lt;/svg&gt; para el control de versiones 
+
+---
+
+## Organización del proyecto  
+
+- La función del **README** es explicar la organización del proyecto y que otros entiendan su contenido
+
+- Los datos deben de almacenarse en un directorio especial (considerar espacio en disco):
+
+- Considerar almacenar los datos en un repositorio como respaldo [OSF](https://osf.io/) &lt;svg viewBox="0 0 512 512" style="height:1em;position:relative;display:inline-block;top:.1em;" xmlns="http://www.w3.org/2000/svg"&gt;  &lt;g label="icon" id="layer6" groupmode="layer"&gt;    &lt;path id="path2" d="m 255.9997,7.9999987 c -34.36057,0 -62.21509,27.8545563 -62.21509,62.2151643 0,20.303056 9.87066,38.160947 24.91769,49.517247 0.18814,-20.457899 16.79601,-36.993393 37.29685,-36.993393 20.50082,0 37.11091,16.535494 37.29909,36.993393 15.04533,-11.3563 24.9177,-29.212506 24.9177,-49.517247 C 318.21272,35.854555 290.35915,7.9999987 255.99915,7.9999987 Z M 293.29654,392.2676 c -0.18814,20.4601 -16.79601,36.99338 -37.29684,36.99338 -20.50082,0 -37.10922,-16.53551 -37.29684,-36.99338 -15.04759,11.35627 -24.91769,29.21246 -24.91769,49.51722 0,34.36059 27.85453,62.21518 62.2151,62.21518 34.36056,0 62.21508,-27.85459 62.21508,-62.21518 0,-20.30306 -9.87066,-38.16095 -24.91767,-49.51722 z M 441.78489,193.78484 c -20.30301,0 -38.16309,9.87068 -49.51717,24.91769 20.45786,0.18819 36.99333,16.79605 36.99333,37.29689 0,20.50085 -16.53547,37.11096 -36.9911,37.29916 11.35634,15.04533 29.21249,24.91769 49.51721,24.91769 C 476.14549,318.21327 504,290.35948 504,255.99942 504,221.6394 476.14549,193.78425 441.78489,193.78425 Z M 82.738898,255.99997 c 0,-20.50139 16.535509,-37.11096 36.993392,-37.29689 -11.35632,-15.04756 -29.214164,-24.91769 -49.517197,-24.91769 -34.36057,0 -62.2150945,27.85455 -62.2150945,62.21517 0,34.3606 27.8545245,62.21516 62.2150945,62.21516 20.303033,0 38.160877,-9.87068 49.517197,-24.91773 -20.457883,-0.18818 -36.993391,-16.796 -36.993391,-37.29688 z M 431.3627,80.636814 c -24.29549,-24.295544 -63.68834,-24.295544 -87.9844,0 -14.35704,14.357057 -20.00298,33.963346 -17.39331,52.633806 -0.0824,0.0809 -0.18198,0.13437 -0.26434,0.21491 -14.578,14.57799 -14.578,38.21689 0,52.79488 14.57797,14.57799 38.21681,14.57799 52.79484,0 0.0824,-0.0824 0.13455,-0.18198 0.21732,-0.26434 18.66819,2.60796 38.27445,-3.03799 52.63151,-17.39336 24.29378,-24.29778 24.29378,-63.68837 -0.003,-87.986153 z M 186.2806,378.51178 c 14.57798,-14.57799 14.57798,-38.21461 0,-52.79319 -14.57798,-14.57853 -38.21683,-14.57798 -52.79481,0 -0.0825,0.0824 -0.13448,0.18199 -0.21476,0.26215 -18.67046,-2.60795 -38.276723,3.03572 -52.63376,17.39505 -24.297753,24.29552 -24.297753,63.6884 0,87.98449 24.29551,24.29552 63.68833,24.29552 87.98439,0 14.35702,-14.35703 20.00297,-33.96333 17.39333,-52.63386 0.0848,-0.0786 0.18364,-0.13228 0.26672,-0.21505 z m 0,-245.02583 c -0.0826,-0.0824 -0.18198,-0.13436 -0.26445,-0.21494 2.60795,-18.66823 -3.038,-38.27452 -17.39332,-52.633811 -24.29777,-24.295544 -63.68832,-24.295544 -87.984405,0 -24.297747,24.297781 -24.297747,63.688381 0,87.986151 14.357042,14.35706 33.963315,20.00301 52.631515,17.39336 0.0808,0.0824 0.13447,0.18199 0.21475,0.26434 14.57799,14.57799 38.21684,14.57799 52.79482,0 14.57797,-14.57802 14.57797,-38.21689 0,-52.79488 z m 245.0821,209.89048 c -14.35703,-14.35703 -33.96329,-20.00301 -52.63378,-17.39505 -0.0809,-0.0824 -0.13228,-0.18199 -0.21506,-0.26215 -14.57797,-14.57799 -38.21685,-14.57799 -52.79482,0 -14.57797,14.57799 -14.57797,38.21461 0,52.79316 0.0827,0.0828 0.18198,0.13455 0.26434,0.21505 -2.60796,18.67053 3.03802,38.27683 17.39334,52.63386 24.29552,24.29552 63.68834,24.29552 87.98439,0 24.29775,-24.29552 24.29775,-63.68841 0.003,-87.98451 z" style="stroke-width:0.07717"&gt;&lt;/path&gt;  &lt;/g&gt;&lt;/svg&gt;
+
+- **El código es una de las partes más importantes del proyecto**
+
+---
+
+## Organización del proyecto
+## Código
+
+- Enumerar los scripts de acuerdo al orden en que serán ejecutados
+.tiny[
+```
++-- 1.QualityControl.sh
++-- 2.Trimming.sh
++-- 3.ReadAlignment.sh
++-- 4.DifferentialExpression.R
+```
+]
+
+- Utilizar rutas relativas hacia los archivos *input*
+.tiny[
+```
+fastqc ../Data/*.fastqc -o ../Results/
+```
+]
+- Comentar el script -&gt; facilita que sea entendido por humanos
+.tiny[
+```
+#Change the location of bam files
+mv ../Data/*.bam ../Results/
+```
+]
+- ¡Mejorar el código! -&gt; *Less is more*
+---
+
+.center[![cat](./Images/cat.png)]
+
+---
+
+## Organización del proyecto
+## Código
+.font80[
+.pull-left[
+- **[DRY](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself)** Don't Repeat Yourself
+- **[KISS](https://en.wikipedia.org/wiki/KISS_principle)** Keep It Simple Soldier
+- **[YAGNI](https://en.wikipedia.org/wiki/You_aren%27t_gonna_need_it)** You Aren't Gonna Need It
+- **[POLA](https://en.wikipedia.org/wiki/Principle_of_least_astonishment)** Principle of Least Astonishment
+- **[POLP](https://digitalguardian.com/blog/what-principle-least-privilege-polp-best-practice-information-security-and-compliance)** Principle of Least Privilege
+]
+.pull-right[
+&lt;img src="./Images/Development.png" width="200px" style="display: block; margin: auto 0 auto auto;" /&gt;
+]
+]
+
+---
+## Organización del proyecto
+## Resultados
+
+&lt;img src="./Images/Results.png" width="700px" style="display: block; margin: auto;" /&gt;
+
+---
+## Organización del proyecto
+&lt;img src="./Images/Proyecto.png" width="450px" style="display: block; margin: auto;" /&gt;
+
+---
+## Experimento
+
+Número de acceso GEO: GSE152699
+
+&lt;img src="./Images/Experiment_ver.png" width="800px" style="display: block; margin: auto;" /&gt;
+
+
+---
+class: inverse, center, middle
+
+# 7: Control de calidad de los datos
+---
+## ¿Porqué es importante revisar los datos crudos?
+--
+
+.full-width[.content-box-blue[Para verificar la calidad de los datos (*QC: quality control*)]]
+
+--
+
+- Los datos influencian los análisis posteriores
+
+--
+
+.pull-left[
+&lt;img src="https://miro.medium.com/max/470/1*DVLpt3zCNaqeZOGNpgME7Q.png" width="150px" style="display: block; margin: auto;" /&gt;&lt;img src="https://i.pinimg.com/originals/30/66/ac/3066ac69ae68ac200ace0ca8fe3882c3.jpg" width="150px" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+
+&lt;img src="https://memegenerator.net/img/instances/68955295.jpg" width="200px" style="display: block; margin: auto;" /&gt;
+
+]
+
+
+---
+
+## FastQC
+
+Usaremos el programa de [fastQC](https://www.bioinformatics.babraham.ac.uk/projects/download.html#fastqc) para checar la calidad de los datos.
+
+--
+
+Podemos usar la interfaz gráfica o la línea de comandos, en este caso usaremos la línea de comandos.
+
+&lt;img src="https://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc.png" width="400px" style="display: block; margin: auto;" /&gt;
+
+---
+.center2[![Handson](./Images/hands_on.png)]
+---
+
+### Pasos para installar FastQC:
+.scroll-output[
+1- Descargar el programa de su página web [fastQC](https://www.bioinformatics.babraham.ac.uk/projects/download.html#fastqc)
+
+2- Hacer el archivo ejecutable
+
+
+```bash
+# chmod 755 /Applications/FastQC.app/Contents/MacOS/fastqc
+ls -l /Applications/FastQC.app/Contents/MacOS/fastqc
+```
+
+3- Crear una liga simbolica para ejecutar `fastqc` desde cualquier ubicación
+
+
+```bash
+ln -s /Applications/FastQC.app/Contents/MacOS/fastqc /usr/local/bin/fastqc
+```
+
+4- Correr `fastqc`
+
+
+```bash
+##Imprimir el manual del programa usando el flag help
+fastqc --help
+```
+]
+
+---
+
+### Pasos para correr FastQC:
+
+.scroll-output[
+
+1- Checar los datos fastq
+
+```bash
+pwd
+ls ../data/Archivos_fastq
+```
+
+2- Crear un directorio para guardar el output
+
+
+```bash
+mkdir ../output/QC
+```
+
+3- Correr `FastQC`
+
+
+```bash
+# la opción -o es para elegir el directorio de salida
+fastqc ../data/Archivos_fastq/*.fastq.gz -o ../output/QC/
+```
+
+4- Checar los archivos generados
+
+
+```bash
+#Buscar los archivos generados por fastqc en el directorio de resultados
+ls ../output/QC
+```
+]
+
+
+
+---
+
+## Buena calidad
+
+El eje x = longitud de la read, y =  calidad (phred score)
+
+Los datos a continuación muestran reads de buena calidad (Verde = buena, amarilla = aceptable, roja = baja). 
+
+&lt;img src="https://gwu-omics2019.readthedocs.io/en/latest/_images/fastqc_good.png" width="400px" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+## Mala calidad
+
+¿Hasta donde los datos son de buena calidad? ¿Estos datos los usarías?
+
+&lt;img src="https://gwu-omics2019.readthedocs.io/en/latest/_images/fastqc_bad.png" width="550px" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+## Ejercicio
+
+¿Cómo se ven nuestros datos? 
+
+
+---
+## MultiQC
+.scroll-output[
+[MultiQC](https://multiqc.info/) te permite juntar los output en un solo archivo y poder visualizarlos mejor.
+
+*Esta parte es opcional, pero si trabajas con RNA-seq te puede intersar.
+
+
+
+1. La instalación se hace con conda, así que primero activamos un ambiente conda
+
+
+```bash
+conda activate base
+pip install multiqc
+```
+
+
+2. Correr MultiQC
+
+
+```bash
+cd ../output/.
+multiQC .
+```
+
+3. Checar el [output.html](file:///Users/user/Documents/Doctorado/Courses/Taught/minicurso_abr_2021/output/QC/multiqc_report.html#fastqc_per_base_sequence_content)
+
+
+]
+---
+class: inverse, center, middle
+
+# 8: Alineamiento
+---
+
+&lt;img src="./Images/RNAseq_workflow2.png" width="600px" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Alineamiento
+&lt;img src="./Images/ReadAlignment.jpg" width="600px" style="display: block; margin: auto;" /&gt;
+Buscar la región del genoma/transcriptoma a partir de la cual se originaron los reads
+
+---
+
+## Alineamiento
+
+- Indexar genoma/transcriptoma (FASTA, GTF3/GFF3)
+&lt;img src="./Images/GenomeIndexing.png" width="500px" style="display: block; margin: auto;" /&gt;
+
+--
+- Alinear los reads (Fastq) al genoma/transcriptoma indexado
+&lt;img src="./Images/ReadAlignment1.png" width="500px" style="display: block; margin: auto;" /&gt;
+Imágenes tomadas de [aquí](https://almob.biomedcentral.com/articles/10.1186/s13015-016-0069-5/figures/1) y [aquí](https://figshare.com/articles/figure/_Comparison_of_stranded_and_unstranded_RNA_seq_library_methods_and_their_influence_on_interpretation_and_analysis_/1504417/1)
+---
+
+## Alineamiento
+## Spliced reads 
+
+&lt;img src="./Images/SplicedReads2.png" width="600px" style="display: block; margin: auto;" /&gt;
+
+.font50[[HISAT: a fast spliced aligner with low memory requirements](https://www.nature.com/articles/nmeth.3317)]
+
+---
+
+## Splice aware
+
+- TopHat 2
+&lt;img src="./Images/SpliceAware.png" width="600px" style="display: block; margin: auto;" /&gt;
+
+--
+- HISAT
+&lt;img src="./Images/HISAT.png" width="600px" style="display: block; margin: auto;" /&gt;
+
+--
+- STAR
+&lt;img src="./Images/STAR.png" width="400px" style="display: block; margin: auto;" /&gt;
+
+.font50[[Imágenes tomadas de aqui](https://training.galaxyproject.org/training-material/topics/transcriptomics/tutorials/rb-rnaseq/tutorial.html)]
+---
+
+## Alineamiento
+## Pseudo-alineadores
+
+Pseudo-alineadores (quasi-alineadores):
+
+- Kallisto
+
+- Sailfish
+
+- **Salmon**
+
+![](https://combine-lab.github.io/salmon/images/SalmonLogo.png)&lt;!-- --&gt;
+
+---
+
+## Alineamiento
+## Pseudo-alineadores
+
+&lt;img src="./Images/Pseudoalignment.png" width="600px" style="display: block; margin: auto;" /&gt;
+
+.font50[[RapMap: a rapid, sensitive and accurate tool for mapping RNA-seq reads to transcriptomes](https://academic.oup.com/bioinformatics/article/32/12/i192/2288985)]
+
+---
+
+## Alineamiento
+## Pseudo-alineadores
+
+&lt;img src="./Images/PseudoAlignment1.png" width="500px" style="display: block; margin: auto;" /&gt;
+
+--
+&lt;img src="./Images/PseudoAlignment2.png" width="500px" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Alineamiento
+## Pseudo-alineadores
+
+&lt;img src="./Images/PseudoAlignment3.png" width="600px" style="display: block; margin: auto;" /&gt;
+
+.font50[[Near-optimal probabilistic RNA-seq quantification](https://www.nature.com/articles/nbt.3519?WT.feed_name=subjects_genome-informatics)]
+
+---
+.center2[![Handson](./Images/hands_on.png)]
+
+---
+## Generar índice del transcriptoma
+.scroll-output[
+Para ello vamos a requerir:
+
+- Archivo **Fasta** del transcriptoma de referencia del humano.
+
+Descargado del sitio de [GeneCode](https://www.gencodegenes.org/human/)
+
+Lo pueden encontrar en el folder de `Transcriptome/`
+
+
+- Código para genear el índice
+
+```
+salmon index -t --genecode path_to_transcriptome.fa.gz -i path_to_save_index
+```
+
+`-t`: Ubicación al archivo Fasta del transcriptoma
+
+`-i`: Ubicación para salvar el índice
+
+`--genecode`: El Fasta del transcriptoma de referencia está en formato de GENECODE
+
+]
+---
+## Cuantificar la abundancia de los transcritos
+.scroll-output[
+Requerimientos:
+
+- Archivos **Fastq** de las lecturas -&gt; Paired end R1 y R2
+
+Ubicados en el folder de `data`
+
+- Índice generado en el paso anterior
+
+- Código para producir cuantificar los transcritos
+
+```
+salmon quant -i path_to_index 
+             -l A -1 path_to_R1 -2 path_to_R2 
+             -o path_to_store_results
+```
+`-i`: Ubicación del índice
+
+`-l`: Tipo de librería
+
+`-1 y -2`: Ubicación a las lecturas R1 y R2
+
+`-o`: Ubicación para almacenar los resultados
+
+
+
+```bash
+##Crear un directorio para almacenar los datos de los conteos
+mkdir -p ../salmon_quant
+##Llamar salmon para realizar el conteo
+salmon quant -i ../transcriptome/genecode.v37.salmon141 \
+             -l A \
+             -1 ../Data/s1_R1.fastq.gz -2 ../Data/s1_R2.fastq.gz \
+             -p 6 --validateMappings \
+             -o ../salmon_quant/s1_quant
+```
+
+]
+---
+
+class: inverse, center, middle
+
+# 9: Tximeta y Tximport
+---
+## Recordatorio
+
+¿Dónde estamos?
+
+&lt;img src="https://biocorecrg.github.io/RNAseq_course_2019/images/RNAseq_workflow.png" width="450px" style="display: block; margin: auto;" /&gt;
+
+.tiny[Imagen tomada de [aquí](https://biocorecrg.github.io/RNAseq_course_2019/salmon.html)]
+
+
+---
+
+## Recordatorio
+
+¿Dónde estamos?
+
+&lt;img src="images/worflowTximeta.png" width="450px" style="display: block; margin: auto;" /&gt;
+ 
+.tiny[Imagen tomada de [aquí](https://biocorecrg.github.io/RNAseq_course_2019/salmon.html)]
+
+---
+
+## Tximeta
+
+Paquetería que conserva 
+
+&lt;img src="https://journals.plos.org/ploscompbiol/article/figure/image?size=large&amp;id=10.1371/journal.pcbi.1007664.g001" width="650px" style="display: block; margin: auto;" /&gt;
+ 
+
+.tiny[[Love, Michael I., et al. "Tximeta: Reference sequence checksums for provenance identification in RNA-seq." PLoS computational biology 16.2 (2020): e1007664.](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1007664)]
+
+
+---
+
+## Importar datos
+
+
+Utilizamos `tximeta` para importar los datos. 
+
+.content-box-red[
+
+Nota: `tximeta` espera dos columnas:
+
+  - `files`: con la rut a `quant.sf`
+  
+  - `names`: con los nombres de las muestras
+]
+
+---
+
+.center2[![Handson](./Images/hands_on.png)]
+---
+
+## Importar datos
+
+.scroll-output[
+Importamos la información de cada muestra
+
+
+```r
+##Leemos los datos
+coldata &lt;- read.delim(here::here("output/salmon_quants/metadata.txt"))
+##Generamos la columna "names"
+coldata &lt;- coldata %&gt;% rename(names = unique_id)
+coldata
+```
+
+```
+##    Sample Cell Treatment Replicate         names
+## 1      s1    A   Control         1   A_Control_1
+## 2      s2    A   Control         2   A_Control_2
+## 3      s3    A   Control         3   A_Control_3
+## 4      s4    M   Control         1   M_Control_1
+## 5      s5    M   Control         2   M_Control_2
+## 6      s6    M   Control         3   M_Control_3
+## 7      s7    A Verafinib         1 A_Verafinib_1
+## 8      s8    A Verafinib         2 A_Verafinib_2
+## 9      s9    A Verafinib         3 A_Verafinib_3
+## 10    s10    M Verafinib         1 M_Verafinib_1
+## 11    s11    M Verafinib         2 M_Verafinib_2
+## 12    s12    M Verafinib         3 M_Verafinib_3
+```
+
+```r
+##Ahora las cuentas generadas por `Salmon`, para ello 
+##Ubicamos el dir de trabajo
+dir &lt;- file.path(here::here("output/salmon_quants"))
+##Verificar que estén los directorios  
+list.files(dir) 
+```
+
+```
+##  [1] "Icon\r"       "metadata.txt" "s1_quant"     "s10_quant"    "s11_quant"   
+##  [6] "s12_quant"    "s2_quant"     "s3_quant"     "s4_quant"     "s5_quant"    
+## [11] "s6_quant"     "s7_quant"     "s8_quant"     "s9_quant"
+```
+
+```r
+##¿¿Que hacemos aqui?? Verificar que el path se generó correctamente
+#file.path(dir,paste0(info$Sample,"_quant"),"quant.sf")
+coldata$files &lt;- file.path(dir,paste0(coldata$Sample,"_quant"),"quant.sf")
+##Corroboramos que los archivos existan
+data.frame(coldata$Sample, file.exists(coldata$files))
+```
+
+```
+##    coldata.Sample file.exists.coldata.files.
+## 1              s1                       TRUE
+## 2              s2                       TRUE
+## 3              s3                       TRUE
+## 4              s4                       TRUE
+## 5              s5                       TRUE
+## 6              s6                       TRUE
+## 7              s7                       TRUE
+## 8              s8                       TRUE
+## 9              s9                       TRUE
+## 10            s10                       TRUE
+## 11            s11                       TRUE
+## 12            s12                       TRUE
+```
+
+Importar los datos usando `tximeta` 
+
+
+```r
+#BiocManager::install("tximeta")
+library("tximeta")
+se &lt;- tximeta(coldata)
+```
+
+]
+
+---
+class: inverse, center, middle
+
+# 10: Objeto Summarized Experiment
+---
+
+.center2[
+&lt;img src="./Images/Slots.png" width="700px" /&gt;
+]
+---
+
+## Summarized Experiment
+
+&lt;img src="./Images/Summarized_experiment.png" width="400px" style="display: block; margin: auto;" /&gt;
+
+---
+## Summarized Experiment
+
+&lt;img src="./Images/ColData.png" width="400px" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Summarized Experiment
+## ColData
+
+.scroll-output[
+- El cajón o slot correspondiente a `ColData` contiene la tabla de metadatos `coldata` creada para importar las cuentas con tximeta
+
+
+- Para acceder a **.red[ColData]** usar el siguiente comando:
+
+
+```r
+colData(se)
+```
+
+```
+## DataFrame with 12 rows and 6 columns
+##                 Sample     Cell Treatment Replicate         names Condition
+##               &lt;factor&gt; &lt;factor&gt;  &lt;factor&gt; &lt;integer&gt;      &lt;factor&gt;  &lt;factor&gt;
+## A_Control_1         s1        A   Control         1   A_Control_1   Control
+## A_Control_2         s2        A   Control         2   A_Control_2   Control
+## A_Control_3         s3        A   Control         3   A_Control_3   Control
+## M_Control_1         s4        M   Control         1   M_Control_1   Control
+## M_Control_2         s5        M   Control         2   M_Control_2   Control
+## ...                ...      ...       ...       ...           ...       ...
+## A_Verafinib_2      s8         A Verafinib         2 A_Verafinib_2 Verafinib
+## A_Verafinib_3      s9         A Verafinib         3 A_Verafinib_3 Verafinib
+## M_Verafinib_1      s10        M Verafinib         1 M_Verafinib_1 Verafinib
+## M_Verafinib_2      s11        M Verafinib         2 M_Verafinib_2 Verafinib
+## M_Verafinib_3      s12        M Verafinib         3 M_Verafinib_3 Verafinib
+```
+]
+
+---
+
+## Summarized Experiment
+## ColData
+
+- El slot **ColData** es un objeto con clase de *DataFrame*
+.code70[
+
+```r
+class(colData(se))
+```
+
+```
+## [1] "DFrame"
+## attr(,"package")
+## [1] "S4Vectors"
+```
+]
+--
+
+- *Rownames* de **ColData** corresponden a los *Colnames* en el slot **Assay**- **.red[Importante para análisis con DESeq2]**
+.code70[
+
+```r
+rownames(colData(se))
+```
+
+```
+##  [1] "A_Control_1"   "A_Control_2"   "A_Control_3"   "M_Control_1"  
+##  [5] "M_Control_2"   "M_Control_3"   "A_Verafinib_1" "A_Verafinib_2"
+##  [9] "A_Verafinib_3" "M_Verafinib_1" "M_Verafinib_2" "M_Verafinib_3"
+```
+]
+
+---
+
+## Summarized experiment
+
+&lt;img src="./Images/RowRanges.png" width="400px" style="display: block; margin: auto;" /&gt;
+
+---
+## Summarized experiment
+## rowRanges
+
+.scroll-output[
+- El cajón de `rowRanges` hace referencia a las coordenadas de cada transcrito
+
+
+- Para acceder al **.red[rowRanges]** usar:
+
+
+```r
+rowRanges(se)
+```
+
+```
+## GRanges object with 184844 ranges and 9 metadata columns:
+##                             seqnames              ranges strand |
+##                                &lt;Rle&gt;           &lt;IRanges&gt;  &lt;Rle&gt; |
+##   ENST00000631435  CHR_HSCHR7_2_CTG6 142847306-142847317      + |
+##   ENST00000415118                 14   22438547-22438554      + |
+##   ENST00000434970                 14   22439007-22439015      + |
+##   ENST00000448914                 14   22449113-22449125      + |
+##   ENST00000632524 CHR_HSCHR14_3_CTG1 105866322-105866332      - |
+##               ...                ...                 ...    ... .
+##   ENST00000444456                  1 247974741-247975653      + |
+##   ENST00000416377                  1 248003129-248004068      + |
+##   ENST00000318104                  1 248121932-248122882      + |
+##   ENST00000606902                  1 248498308-248498649      + |
+##   ENST00000427827                  1 248549444-248549762      - |
+##                             tx_id             tx_biotype tx_cds_seq_start
+##                       &lt;character&gt;            &lt;character&gt;        &lt;integer&gt;
+##   ENST00000631435 ENST00000631435              TR_D_gene        142847306
+##   ENST00000415118 ENST00000415118              TR_D_gene         22438547
+##   ENST00000434970 ENST00000434970              TR_D_gene         22439007
+##   ENST00000448914 ENST00000448914              TR_D_gene         22449113
+##   ENST00000632524 ENST00000632524              IG_D_gene        105866322
+##               ...             ...                    ...              ...
+##   ENST00000444456 ENST00000444456 unprocessed_pseudogene             &lt;NA&gt;
+##   ENST00000416377 ENST00000416377 unprocessed_pseudogene             &lt;NA&gt;
+##   ENST00000318104 ENST00000318104 unprocessed_pseudogene             &lt;NA&gt;
+##   ENST00000606902 ENST00000606902 unprocessed_pseudogene             &lt;NA&gt;
+##   ENST00000427827 ENST00000427827 unprocessed_pseudogene             &lt;NA&gt;
+##                   tx_cds_seq_end         gene_id tx_support_level
+##                        &lt;integer&gt;     &lt;character&gt;        &lt;integer&gt;
+##   ENST00000631435      142847317 ENSG00000282253             &lt;NA&gt;
+##   ENST00000415118       22438554 ENSG00000223997             &lt;NA&gt;
+##   ENST00000434970       22439015 ENSG00000237235             &lt;NA&gt;
+##   ENST00000448914       22449125 ENSG00000228985             &lt;NA&gt;
+##   ENST00000632524      105866332 ENSG00000282455             &lt;NA&gt;
+##               ...            ...             ...              ...
+##   ENST00000444456           &lt;NA&gt; ENSG00000237492             &lt;NA&gt;
+##   ENST00000416377           &lt;NA&gt; ENSG00000232215             &lt;NA&gt;
+##   ENST00000318104           &lt;NA&gt; ENSG00000177233             &lt;NA&gt;
+##   ENST00000606902           &lt;NA&gt; ENSG00000271934             &lt;NA&gt;
+##   ENST00000427827           &lt;NA&gt; ENSG00000227102             &lt;NA&gt;
+##                       tx_id_version gc_content         tx_name
+##                         &lt;character&gt;  &lt;numeric&gt;     &lt;character&gt;
+##   ENST00000631435 ENST00000631435.1    83.3333 ENST00000631435
+##   ENST00000415118 ENST00000415118.1    25.0000 ENST00000415118
+##   ENST00000434970 ENST00000434970.2    55.5556 ENST00000434970
+##   ENST00000448914 ENST00000448914.1    61.5385 ENST00000448914
+##   ENST00000632524 ENST00000632524.1    54.5455 ENST00000632524
+##               ...               ...        ...             ...
+##   ENST00000444456 ENST00000444456.1    44.0307 ENST00000444456
+##   ENST00000416377 ENST00000416377.2    45.3191 ENST00000416377
+##   ENST00000318104 ENST00000318104.2    47.7392 ENST00000318104
+##   ENST00000606902 ENST00000606902.2    45.9064 ENST00000606902
+##   ENST00000427827 ENST00000427827.2    45.4545 ENST00000427827
+##   -------
+##   seqinfo: 455 sequences from GRCh38 genome
+```
+
+]
+---
+
+## Summarized experiment
+
+&lt;img src="./Images/Assay.png" width="400px" style="display: block; margin: auto;" /&gt;
+
+---
+## Summarized experiment
+## Assay
+
+.scroll-output[
+- El slot `assay` almacena la información de las cuentas para cada transcrito dividida en tres niveles:
+
+
+```r
+assayNames(se)
+```
+
+```
+## [1] "counts"    "abundance" "length"
+```
+
+- Para acceder a la matriz de cuentas estimadas por *Salmon*, correr:
+
+
+```r
+head(assay(se), 5)
+```
+
+```
+##                 A_Control_1 A_Control_2 A_Control_3 M_Control_1 M_Control_2
+## ENST00000631435           0           0           0           0           0
+## ENST00000415118           0           0           0           0           0
+## ENST00000434970           0           0           0           0           0
+## ENST00000448914           0           0           0           0           0
+## ENST00000632524           0           0           0           0           0
+##                 M_Control_3 A_Verafinib_1 A_Verafinib_2 A_Verafinib_3
+## ENST00000631435           0             0             0             0
+## ENST00000415118           0             0             0             0
+## ENST00000434970           0             0             0             0
+## ENST00000448914           0             0             0             0
+## ENST00000632524           0             0             0             0
+##                 M_Verafinib_1 M_Verafinib_2 M_Verafinib_3
+## ENST00000631435             0             0             0
+## ENST00000415118             0             0             0
+## ENST00000434970             0             0             0
+## ENST00000448914             0             0             0
+## ENST00000632524             0             0             0
+```
+
+]
+---
+## Summarized experiment
+## Assay
+- Las matriz de abundancia *(TPM)* puede obtenerse:
+
+.code70[
+
+```r
+## Obtener matriz de TPM
+head(se@assays@data$abundance, 5)
+```
+
+```
+##                 A_Control_1 A_Control_2 A_Control_3 M_Control_1 M_Control_2
+## ENST00000631435           0           0           0           0           0
+## ENST00000415118           0           0           0           0           0
+## ENST00000434970           0           0           0           0           0
+## ENST00000448914           0           0           0           0           0
+## ENST00000632524           0           0           0           0           0
+##                 M_Control_3 A_Verafinib_1 A_Verafinib_2 A_Verafinib_3
+## ENST00000631435           0             0             0             0
+## ENST00000415118           0             0             0             0
+## ENST00000434970           0             0             0             0
+## ENST00000448914           0             0             0             0
+## ENST00000632524           0             0             0             0
+##                 M_Verafinib_1 M_Verafinib_2 M_Verafinib_3
+## ENST00000631435             0             0             0
+## ENST00000415118             0             0             0
+## ENST00000434970             0             0             0
+## ENST00000448914             0             0             0
+## ENST00000632524             0             0             0
+```
+]
+
+---
+## Summarized experiment
+
+.scroll-output[
+¿Recuerdan a qué tiene que ser igual *Rownames* del slot colData?
+
+
+.code90[
+
+```r
+rownames(colData(se))
+```
+
+```
+##  [1] "A_Control_1"   "A_Control_2"   "A_Control_3"   "M_Control_1"  
+##  [5] "M_Control_2"   "M_Control_3"   "A_Verafinib_1" "A_Verafinib_2"
+##  [9] "A_Verafinib_3" "M_Verafinib_1" "M_Verafinib_2" "M_Verafinib_3"
+```
+
+
+```r
+colnames(assay(se))
+```
+
+```
+##  [1] "A_Control_1"   "A_Control_2"   "A_Control_3"   "M_Control_1"  
+##  [5] "M_Control_2"   "M_Control_3"   "A_Verafinib_1" "A_Verafinib_2"
+##  [9] "A_Verafinib_3" "M_Verafinib_1" "M_Verafinib_2" "M_Verafinib_3"
+```
+
+
+```r
+## Comprobar que rownames de colData es igual a colnames de assay
+row.names(colData(se)) == colnames(assay(se))
+```
+
+```
+##  [1] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+```
+
+]
+]
+---
+class: inverse, center, middle
+
+# 11: Normalización de los datos
+---
+## Normalización 
+
+
+Es el primer paso del análisis de expresión diferencial y es necesario para hacer comparaciones acertadas entre muestras. 
+
+--
+
+Las cuentas crudas están conformadas por un componente "interesante" (la expresión de RNA) y componentes "no interesantes" (como los batch effects, ruido de la plataforma, etc.).
+
+--
+
+La normalzación escala las cuentas para tratar de reducir los componentes "no interesantes" y poder comparar las muestras entre si. 
+
+---
+
+## Criteríos para normalizar
+
+Se puede normalizar considerando:
+
+- La profundidad (tamaño de librería)
+
+&lt;img src="https://hbctraining.github.io/DGE_workshop/img/normalization_methods_depth.png" width="450px" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Criteríos para normalizar
+
+Se puede normalizar considerando:
+
+- El tamaño del gen
+
+&lt;img src="https://hbctraining.github.io/DGE_workshop/img/normalization_methods_length.png" width="450px" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+## Criteríos para normalizar
+
+Se puede normalizar considerando:
+
+- Composición de RNA
+
+&lt;img src="https://hbctraining.github.io/DGE_workshop/img/normalization_methods_composition.png" width="350px" style="display: block; margin: auto;" /&gt;
+
+
+
+.tiny[Imagen tomada de [aquí](https://biocorecrg.github.io/RNAseq_course_2019/salmon.html)]
+
+
+---
+## Métodos comunes
+
+.scroll-output[
+
+| Método de normalización | Descripción | Factores de evaluación | Recomendaciones de uso |
+|:-----------------------------------------------------------------------------------:|:----------------------------------------------------------------------------------------------------------------------------:|:--------------------------------------------------:|:-------------------------------------------------------------------------------------------------------------------:|
+| CPM (cuentas por millón): cuentas escalados por el número total de lecturas | profundidad de secuenciación | comparaciones de cuentas de genes entre réplicas del mismo grupo de muestras| NO para comparaciones dentro de la muestra o análisis de DE.| 
+| TPM (transcritos por kilobase por millón de lecturas): cuentas por longitud de transcripción (kb) por millón de lecturas mapeadas | profundidad de secuenciación y longitud de genes| comparaciones de cuentas de genes dentro de una muestra o entre muestras del mismo grupo de muestras| NO para análisis de DE. |
+| RPKM/FPKM (lecturas/fragmentos por kilobase de exón por millón de lecturas/fragmentos mapeados| similar a TPM, profundidad de secuenciación y longitud del gen | comparaciones de cuentas entre genes dentro de una muestra | NO para comparaciones entre muestras o análisis de DE.|
+| Mediana de ratios de DESeq2 | cuentas divididas por factores de tamaño específicos de la muestra determinados por la mediana del ratio de cuentas de genes en relación con la media geométrica por gen | profundidad de secuenciación y composición del RNA | comparaciones de cuentas de genes entre muestras y para el análisis de DE; NO para comparaciones dentro de la muestra |
+| La media cortada de los valores M de EdgeR (TMM) | utiliza una media recortada ponderada de los ratios de expresión logarítmica entre las muestras | profundidad de secuenciación | composición de RNA y longitud de los genes. |
+
+.tiny[
+
+[Tabla tomada de Intro to DGE](https://hbctraining.github.io/DGE_workshop/lessons/02_DGE_count_normalization.html#:~:text=Normalization%20is%20the%20process%20of,between%20and%2For%20within%20samples.)
+]
+
+]
+
+---
+## DESeq2
+
+- Normalización para análisis de expresión diferencial:
+
+  - Factor de normalización de `DESeq2`
+
+- Normalización para visualización u otras aplicaciones:
+
+  - Variance stabilizing transformation (VST)
+  
+  - Regularized-logarithm transformation (rlog)
+
+---
+## DESeq2
+
+.scroll-output[
+
+`DESeq2`ajusta a un modelo lineal generalizado (GLM) de la familia binomial negativa (NB).
+
+
+
+
+
+```
+## # A tibble: 2 x 3
+##   gene  muestraA muestraB
+##   &lt;chr&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+## 1 gene1     1749      943
+## 2 gene2       35       29
+```
+
+1. Crea una pseudo-referencia por muestra (promedio geometrico por fila) `sqrt(muestraA * muestra B)`
+
+```
+## # A tibble: 2 x 4
+## # Rowwise: 
+##   gene  muestraA muestraB prom_geom
+##   &lt;chr&gt;    &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+## 1 gene1     1749      943    1284. 
+## 2 gene2       35       29      31.9
+```
+
+2. Se calcula la fración `muestra/pseudo-referencia`
+
+```
+## # A tibble: 2 x 6
+## # Rowwise: 
+##   gene  muestraA muestraB prom_geom muestraA_pseudo_ref muestraB_pseudo_ref
+##   &lt;chr&gt;    &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;               &lt;dbl&gt;               &lt;dbl&gt;
+## 1 gene1     1749      943    1284.                 1.36               0.734
+## 2 gene2       35       29      31.9                1.10               0.910
+```
+
+3. Se calcula un factor de normalización (size factor) utilizando la `mediana` por columnas.
+
+```
+## [1] 1.230235
+```
+
+```
+## [1] 0.8222689
+```
+
+4. Se dividen las `cuentas crudas/size factor` para calcular las cuentas normalizadas.
+
+```
+## # A tibble: 2 x 3
+## # Rowwise: 
+##   gene  muestraA muestraB
+##   &lt;chr&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+## 1 gene1     1749      943
+## 2 gene2       35       29
+```
+
+```
+## # A tibble: 2 x 2
+## # Rowwise: 
+##   norm_muestraA norm_muestraB
+##           &lt;dbl&gt;         &lt;dbl&gt;
+## 1        1422.         1147. 
+## 2          28.4          35.3
+```
+
+
+]
+---
+
+.center2[![Image](./Images/hands_on.png)]
+---
+
+## Ejercicio 
+
+.scroll-output[
+
+Se pueden ocupar otras transformaciones en la paquetería de `DESeq2` pero no son las mas recomendadas para DE. 
+
+
+
+Para normalizar, primero construimos el objeto `DESeqDataSet`, para ello necesitamos definir el modelo de DE (Quienes son Controles y quienes tratamiento). 
+
+
+
+```r
+library("DESeq2")
+library("dplyr")
+library("ggplot2")
+library("vsn")
+```
+
+
+```r
+se$Condition &lt;- factor(se$Treatment)
+table(se$Condition)
+dds &lt;- DESeqDataSet(se, design = ~ Condition)
+keep &lt;- rowSums(counts(dds) &gt;= 3) &gt;= 6
+dds &lt;- dds[keep, ]
+dds &lt;- DESeq(dds)
+```
+
+]
+
+
+---
+
+## Otras transformaciones
+
+.scroll-output[
+
+Puedes realizar otras transformaciones en `DESeq2` para estabilizar la varianza a través de los differentes valores promedio de expresión.  
+
+![](Slides_files/figure-html/unnamed-chunk-94-1.png)&lt;!-- --&gt;![](Slides_files/figure-html/unnamed-chunk-94-2.png)&lt;!-- --&gt;
+
+
+
+```r
+# variance stabilizing transformation (VST), (Anders and Huber 2010)
+vsd &lt;- vst(dds, blind = FALSE)
+head(assay(vsd), 3)
+```
+
+```
+##                 A_Control_1 A_Control_2 A_Control_3 M_Control_1 M_Control_2
+## ENST00000641506    3.865118    3.422182    3.848937    3.623564    3.489049
+## ENST00000611116    3.495553    3.505576    2.865362    2.820665    3.107486
+## ENST00000390289    3.169221    3.689848    3.380771    3.187240    2.128322
+##                 M_Control_3 A_Verafinib_1 A_Verafinib_2 A_Verafinib_3
+## ENST00000641506    3.732776      4.358633      3.959656      4.298823
+## ENST00000611116    3.953500      3.112915      2.128322      2.128322
+## ENST00000390289    3.458380      3.495493      2.128322      3.456609
+##                 M_Verafinib_1 M_Verafinib_2 M_Verafinib_3
+## ENST00000641506      4.721364      5.021378      4.313511
+## ENST00000611116      3.748725      3.468794      3.740271
+## ENST00000390289      4.470129      3.744108      3.962053
+```
+
+```r
+# regularized-logarithm transformation (rlog), (Love, Huber, and Anders 2014)
+rld &lt;- rlog(dds, blind = FALSE)
+head(assay(rld), 3)
+```
+
+```
+##                 A_Control_1 A_Control_2 A_Control_3 M_Control_1 M_Control_2
+## ENST00000641506    2.906661    2.240003   2.8840528    2.556455   2.4041915
+## ENST00000611116    1.835586    1.851542   0.6230815    0.515502   1.1635331
+## ENST00000390289    1.415209    2.293577   1.8006843    1.448514   0.1659518
+##                 M_Control_3 A_Verafinib_1 A_Verafinib_2 A_Verafinib_3
+## ENST00000641506    2.740182      3.525234    3.03844125     3.4556640
+## ENST00000611116    2.451214      1.172982   -0.07298106    -0.0787367
+## ENST00000390289    1.919847      1.975780    0.14501562     1.9171496
+##                 M_Verafinib_1 M_Verafinib_2 M_Verafinib_3
+## ENST00000641506      3.935368      4.255909      3.472852
+## ENST00000611116      2.169723      1.754765      2.158369
+## ENST00000390289      3.271490      2.341449      2.640103
+```
+
+```r
+dds &lt;- estimateSizeFactors(dds)
+```
+
+```
+## using 'avgTxLength' from assays(dds), correcting for library size
+```
+
+```r
+df &lt;- bind_rows(
+  as_data_frame(log2(counts(dds, normalized=TRUE)[, 1:2]+1)) %&gt;%
+         mutate(transformation = "log2(x + 1)"),
+  as_data_frame(assay(vsd)[, 1:2]) %&gt;% mutate(transformation = "vst"),
+  as_data_frame(assay(rld)[, 1:2]) %&gt;% mutate(transformation = "rlog"))
+```
+
+```
+## Warning: `as_data_frame()` was deprecated in tibble 2.0.0.
+## Please use `as_tibble()` instead.
+## The signature and semantics have changed, see `?as_tibble`.
+```
+
+```r
+colnames(df)[1:2] &lt;- c("x", "y")  
+lvls &lt;- c("log2(x + 1)", "vst", "rlog")
+df$transformation &lt;- factor(df$transformation, levels=lvls)
+ggplot(df, aes(x = x, y = y)) + geom_hex(bins = 80) +
+  coord_fixed() + facet_grid( . ~ transformation)  
+```
+
+![](Slides_files/figure-html/unnamed-chunk-95-1.png)&lt;!-- --&gt;
+
+
+]
+
+---
+class: inverse, center, middle
+
+# 12: Exploración de los datos
+---
+
+
+.center2[
+&lt;img src="./Images/PCAplot.png" width="700px" /&gt;
+]
+
+---
+## Exploración de datos
+## ¿Por qué es importante explorar los datos?
+
+--
+
+- Paso previo al análisis de expresión diferencial
+
+--
+
+- Análisis de calidad de los datos
+
+--
+
+- Permite conocer la congurencian entre individuos o réplicas 
+
+--
+
+- Mediante gráficos, visualizar comportamiento de los datos -&gt; Outliers
+
+---
+## Exploración de datos
+
+.pull-left[
+&lt;img src="./Images/PCAplot2.png" width="400px" /&gt;
+
+]
+--
+.pull-right[
+&lt;img src="./Images/Heatmap.png" width="400px" /&gt;
+
+]
+
+---
+## Exploración de datos
+
+.pull-left[
+&lt;img src="./Images/PCAplot2.png" width="400px" /&gt;
+**.red[PCA]**
+]
+
+.pull-right[
+&lt;img src="./Images/Heatmap.png" width="400px" /&gt;
+**.red[Heatmap]**
+]
+
+---
+## PCA
+
+--
+
+- Análisis de componentes principales
+
+--
+
+- Método algebraico para reducir la dimensionalidad de sets de datos complejos (múltiples variables)
+
+--
+
+- Reducción de dimensionalidad o variables permite un análisis exploratorio más intuitivo
+
+--
+
+.content-box-red[Reducción de variables implica  preservar y captar la mayor información sobre los datos
+]
+
+---
+## PCA
+## Normalización de los datos
+--
+
+&lt;img src="./Images/zscore.png" width="350px" style="display: block; margin: auto;" /&gt;
+
+Escalación de los datos -&gt; Normalización para hacerlos más comparables
+
+--
+
+&lt;img src="./Images/covariancematrix.png" width="350px" style="display: block; margin: auto;" /&gt;
+
+Busqueda de correlación entre las variables -&gt; correlación positiva o negativa
+
+---
+## PCA
+
+.center[
+![PCA](https://builtin.com/sites/default/files/inline-images/Principal%20Component%20Analysis%20second%20principal.gif)
+]
+
+--
+.content-box-red[Los componentes principales son los nuevos ejes que maximizan la distancia de los datos al origen
+]
+
+---
+## PCA
+## Componentes principales
+
+--
+
+- El .green[primer componente] es aquel en el que los datos presentan la mayor separación (variación)
+
+--
+
+- El .orange[segundo componente] es el que tiene la segunda mayor separación entre los datos y es perpendicular al primer componente
+
+--
+
+- ¿Cuantos componentes existen? -&gt; tantas variables en el set de datos
+
+
+
+---
+## PCA
+## Componentes principales
+
+- Cada componente principal tiene asociado un eigenvector (vector unitario) y un eigenvalue (cantidad escalar)
+
+--
+
+- Los eigenvalues son la suma del cuadrado de las distancias de los puntos proyectados sobre dicho componente principal
+
+--
+
+- Los eigenvalues permiten seleccionar cuál es el componente principal que explica la mayor variación en los datos
+
+---
+## PCA
+
+&lt;img src="./Images/Screeplot.png" width="450px" style="display: block; margin: auto;" /&gt;
+Screeplot
+
+
+---
+## PCA
+
+- En sets de datos de RNAseq, el PCA permite visualizar la distancia o congruencia de los datos
+
+--
+
+- Generalmente son gráficas de puntos (muestras) en dos dimensiones (dos componentes) que resumen las principales fuentes de varianza
+
+--
+.center[
+&lt;img src="./Images/PCARNAseq.png" width="400px" /&gt;
+]
+
+---
+## PCA
+## ¿Cómo crear nuestro propio PCA?
+
+.scroll-output[
+Primero instalen las siguientes librerías:
+
+
+```r
+library(DESeq2)
+library(PCAtools)
+```
+
+Usemos la siguiente normalización logarítmica de las cuentas (toma en cuenta el tamaño de la librería)
+
+
+```r
+## Transformación recomendada para sets de con menos de 30 muestras
+rld &lt;- rlog(dds, blind = F)
+```
+
+Si tuvieramos un número mayor de muestras (n &gt; 30) entonces conviene
+
+
+```r
+vsd &lt;- vst(dds, blind = T)
+```
+]
+
+---
+## PCA
+.scroll-output[
+- Usemos la función interna de *DESeq2* para graficar nuestro PCA:
+
+
+```r
+## El argumento intgroup permite especificar mediante cuál variable colorear los datos
+plotPCA(rld, intgroup = "Condition")
+```
+
+
+**DESeq2 evalúa los 500 genes con mayor varianza del set de datos**
+
+- Con la librería de *PCAtools*:
+
+
+```r
+## Crear un objeto que contenga los datos del PCA
+PCA &lt;- pca(assay(rld), scale = T, metadata = coldata) 
+## Graficar en 2D los resultados
+biplot(PCA, colby = "Treatment")
+## Generar un screeplot para visualizar la varianza asociada a cada componente
+screeplot(PCA)
+```
+
+]
+---
+
+.center2[![Image](./Images/hands_on.png)
+]
+
+---
+## PCA
+## ¿Cómo ven los resultados?
+
+
+--
+
+.pull-left[**DESeq2**
+&lt;img src="Slides_files/figure-html/unnamed-chunk-111-1.png" width="350px" style="display: block; margin: auto;" /&gt;
+]
+--
+.pull-right[**PCA tools**
+&lt;img src="Slides_files/figure-html/unnamed-chunk-112-1.png" width="350px" style="display: block; margin: auto;" /&gt;
+]
+
+---
+## PCA
+## ¿Cuánta varianza es explicada por cada componente?
+
+&lt;img src="Slides_files/figure-html/unnamed-chunk-113-1.png" width="400px" style="display: block; margin: auto;" /&gt;
+
+---
+## PCA y MDS
+.scroll-output[
+Generemos un MDS plot interactivo con los datos. Para ello usemos la librería de *Glimma* y la función de `GlimmaMDS`
+
+
+```r
+glimmaMDS(dds)
+```
+]
+
+---
+class: inverse, center, middle
+
+# 13: Análisis de expresión diferencial
+---
+## Análisis de expresión diferencial (DE)
+
+Paso para obtener cuáles son los genes que varían entre las condiciones
+
+&lt;img src="https://raw.githubusercontent.com/hbctraining/DGE_workshop/master/img/de_theory.png" width="750px" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Pasos en el DE
+
+&lt;img src="https://github.com/hbctraining/DGE_workshop/raw/master/img/deseq2_workflow_separate.png" width="350px" style="display: block; margin: auto;" /&gt;
+
+---
+## Dispersión
+
+La dispersión es una medida de la variabilidad de los datos como (varianza, sd, etc.). En `DESeq2` se utiliza `α`:
+
+$$ \alpha \propto 1/mean $$ 
+$$ \alpha \propto variance $$ 
+
+Así que **La dispersión es mayor para cuentas más bajas y menor para cuenas más altas**. 
+
+Y la **dispersión refleja la varianza**.
+
+.full-width[.content-box-red[
+`DESeq2` asume que los genes con similar expresión tienen similar dispersión
+]]
+
+---
+
+## Ajustando la dispersión
+
+
+&lt;img src="https://github.com/hbctraining/DGE_workshop/raw/master/img/deseq_dispersion1.png" width="450px" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+## Reduciendo la dispersión
+
+&lt;img src="https://github.com/hbctraining/DGE_workshop/raw/master/img/deseq_dispersion2.png" width="750px" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+.center2[![Image](./Images/hands_on.png)]
+---
+
+## Ejercicio
+
+.scroll-output[
+
+La librería de `DESeq2` normaliza y realiza el análisis de expresión diferencial en una sola función. Así que ya realizamos el análisis, vamos a verlo:
+
+
+
+
+
+```r
+library("DESeq2")
+library("dplyr")
+library("ggplot2")
+```
+
+
+
+Para ver los resultados podemos usar la función `results`
+
+
+```r
+res &lt;- results(dds)
+res
+```
+
+```
+## log2 fold change (MLE): Condition Verafinib vs Control 
+## Wald test p-value: Condition Verafinib vs Control 
+## DataFrame with 36927 rows and 6 columns
+##                   baseMean log2FoldChange     lfcSE       stat      pvalue
+##                  &lt;numeric&gt;      &lt;numeric&gt; &lt;numeric&gt;  &lt;numeric&gt;   &lt;numeric&gt;
+## ENST00000641506   10.05295      1.3587257  0.360242  3.7716981 1.62140e-04
+## ENST00000611116    3.26116     -0.0446795  0.807814 -0.0553091 9.55892e-01
+## ENST00000390289    4.55091      0.9101406  0.601132  1.5140438 1.30015e-01
+## ENST00000361390 3377.06764      2.1112640  0.379290  5.5663616 2.60113e-08
+## ENST00000361453 6519.27598      1.5883633  0.385637  4.1188086 3.80836e-05
+## ...                    ...            ...       ...        ...         ...
+## ENST00000622095    7.43476       0.767322  0.620245   1.237127 2.16040e-01
+## ENST00000605551   40.04745      -0.849691  0.397600  -2.137050 3.25939e-02
+## ENST00000579209    9.61056       1.595292  0.387011   4.122088 3.75454e-05
+## ENST00000500626    3.45987       0.796230  0.733548   1.085450 2.77722e-01
+## ENST00000314835   17.49136       0.164460  0.675468   0.243476 8.07637e-01
+##                        padj
+##                   &lt;numeric&gt;
+## ENST00000641506 1.70008e-03
+## ENST00000611116 9.82431e-01
+## ENST00000390289 3.28176e-01
+## ENST00000361390 7.75205e-07
+## ENST00000361453 4.92844e-04
+## ...                     ...
+## ENST00000622095 0.455109940
+## ENST00000605551 0.124381089
+## ENST00000579209 0.000486903
+## ENST00000500626 0.529506067
+## ENST00000314835 0.917487993
+```
+
+```r
+summary(res)
+```
+
+```
+## 
+## out of 36927 with nonzero total read count
+## adjusted p-value &lt; 0.1
+## LFC &gt; 0 (up)       : 4545, 12%
+## LFC &lt; 0 (down)     : 4429, 12%
+## outliers [1]       : 19, 0.051%
+## low counts [2]     : 0, 0%
+## (mean count &lt; 1)
+## [1] see 'cooksCutoff' argument of ?results
+## [2] see 'independentFiltering' argument of ?results
+```
+
+Para ver que hay en cada columna:
+
+```r
+mcols(res, use.names = TRUE)
+```
+
+```
+## DataFrame with 6 rows and 2 columns
+##                        type            description
+##                 &lt;character&gt;            &lt;character&gt;
+## baseMean       intermediate mean of normalized c..
+## log2FoldChange      results log2 fold change (ML..
+## lfcSE               results standard error: Cond..
+## stat                results Wald statistic: Cond..
+## pvalue              results Wald test p-value: C..
+## padj                results   BH adjusted p-values
+```
+
+Podemos hacer cortes:
+
+```r
+resLFC1 &lt;- results(dds, lfcThreshold=1)
+table(resLFC1$padj &lt; 0.1)
+```
+
+```
+## 
+## FALSE  TRUE 
+## 34994  1198
+```
+]
+
+---
+class: inverse, center, middle
+
+# 14: Visualización de los resultados
+---
+
+.center[
+### ¿Cuántos tipos de gráficos conoces para visualizar resultados del análisis DE?
+]
+
+.pull-left[
+&lt;img src="./Images/MAplot.png" width="350px" /&gt;
+]
+
+.pull-right[
+&lt;img src="./Images/Volcanoplot.png" width="350px" /&gt;
+]
+
+---
+.center[
+### ¿Cuántos tipos de gráficos conoces para visualizar resultados del análisis DE?
+]
+
+.pull-left[
+&lt;img src="./Images/MAplot.png" width="350px" /&gt;
+**.green[MAplot]**
+]
+
+.pull-right[
+&lt;img src="./Images/Volcanoplot.png" width="350px" /&gt;
+**.green[Volcano plot]**
+]
+
+---
+# MAplot
+.scroll-output[
+Gráfico que representa la distribución de los genes o transcritos en las comparaciones de interés
+
+**M** eje y de *minus*:
+
+.content-box-blue[$$logTx - logCT = logTx/CT$$
+]
+
+**A** eje x de *average* -&gt; Promedio de las cuentas normalizadas para cada gen en todas las muestras
+
+Para generar el **MAplot** usemos el siguiente comando:
+
+.code90[
+
+```r
+##Es importante que recuerden que la hipótesis nula que se probó fue
+##"El lfc del gen n es igual a 0" por lo tanto los genes coloreados son...
+plotMA(res)
+```
+]
+]
+---
+# MAplot
+
+&lt;img src="Slides_files/figure-html/unnamed-chunk-130-1.png" width="450px" style="display: block; margin: auto;" /&gt;
+
+---
+# MAplot
+
+Para tener una mejor estimación del LFC de genes que:
+
+- Son poco abundantes
+
+- Tienen alta dispersión
+
+Usemos la función `lfcShrink` de la librería *.red[apeglm]*
+
+
+
+```r
+##En el argumento coef indicar el contraste entre los grupos experimentales
+res_lfc &lt;- lfcShrink(dds, coef = "Condition_Verafinib_vs_Control",  type = "apeglm")
+##Si desconocemos el nombre del contraste, usar:
+resultsNames(dds)
+```
+
+
+---
+# MAplot
+
+.pull-left[
+Sin `lfcshrink` 
+
+&lt;img src="Slides_files/figure-html/unnamed-chunk-132-1.png" width="450px" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+Con `lfcshrink` 
+
+&lt;img src="Slides_files/figure-html/unnamed-chunk-133-1.png" width="450px" style="display: block; margin: auto;" /&gt;
+]
+---
+# MAplot
+.scroll-output[
+También pueden generar un MAplot interactivo con la librería de *Glimma*
+
+```r
+##Para los objetos creados con DESeq2 es importante que incluyas un nivel llamado group
+group &lt;- info$Treatment
+dds$group &lt;- group
+glimmaMA(dds)
+```
+]
+---
+# Volcano plot
+
+De manera similar al MAplot con el volcano plot visualizamos los genes que muestran expresión diferencial en nuestra condición de interés
+
+- En el eje y se grafica el -log10 de padj
+
+- En el eje x se grafica el lfc o *log2foldchange*
+
+.code80[
+
+```r
+##Para crear un volcano plot necesitas convertir los resultados de DESeq a un data frame
+DEG &lt;- as.data.frame(res)
+##En el script de funciones encontrarás la función de volcanoplotR para generar tu gráfico
+#los valores de los argumentos logfc y p.adj deben ser iguales al threshold utilizado para generar los resultados
+#en type debes indicar que los resultados provienen de DESeq
+volcanoplotR(DEG, logfc = 0, p.adj = 0.1, type = "DESeq")
+```
+]
+
+---
+# Volcano plot
+
+&lt;img src="Slides_files/figure-html/unnamed-chunk-136-1.png" width="450px" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Heatmap
+
+El *heatmap* nos permite visualizar la expresión de los genes diferencialmente expresados en terminos de las cuentas normalizadas
+
+Consideraciones:
+
+- Usar los valores de las cuentas normalizadas para una mejor comparación entre muestras
+
+- Escalar los valores de las cuentas (renglones) para visualizar las diferencias en la expresión
+
+Usaremos la librería de *.red[pheatmap]*
+
+---
+# Heatmap
+
+.code90[
+
+```r
+##Guardar la lista de transcritos que mostraron expresión diferencial significativa
+significant &lt;- DEG %&gt;% filter(log2FoldChange &gt; 0 &amp; padj &lt; 0.1 |
+                                   log2FoldChange &lt; 0 &amp; padj &lt; 0.1)
+##Generar la matriz de cuentas normalizadas
+norm_counts &lt;- counts(dds, normalized = T)
+##Cortar la matriz de cuentas normalizadas con los id de los transcritos diferencialmente expresados
+norm_counts &lt;- norm_counts[rownames(significant), ]
+##Generar una tabla de anotaciones preservando el tratamiento y el tipo de células
+annotation_col &lt;- coldata[, c(2, 3)]
+##Generar el heatmap empleando clustering jerarquico
+pheatmap(norm_counts, 
+         border_color = NA, 
+         scale = "row",
+         clustering_distance_rows = "euclidean", 
+         clustering_distance_cols = "euclidean", 
+         clustering_method = "average", 
+         show_colnames = F, 
+         show_rownames = F, 
+         annotation_col = annotation_col)
+```
+]
+
+---
+# Heatmap
+
+&lt;img src="Slides_files/figure-html/unnamed-chunk-138-1.png" width="450px" style="display: block; margin: auto;" /&gt;
+
+
+
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"navigation": {
+"scroll": false
+}
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
