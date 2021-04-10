@@ -971,7 +971,7 @@ knitr::include_graphics("./Images/RNAseq_workflow2.png")
 
 ## Alineamiento
 ```{r, out.width="600px", fig.align='center', echo = F}
-knitr::include_graphics("./Images/ReadAlignment.jpg")
+knitr::include_graphics("./Images/ReadAlignment.png")
 ```
 Buscar la región del genoma/transcriptoma a partir de la cual se originaron los reads
 
@@ -1216,7 +1216,7 @@ Importamos la información de cada muestra
 ##Leemos los datos
 coldata <- read.delim(here::here("output/salmon_quants/metadata.txt"))
 ##Generamos la columna "names"
-coldata <- coldata %>% rename(names = unique_id)
+coldata <- coldata %>% dplyr::rename(names = unique_id)
 coldata
 ##Ahora las cuentas generadas por `Salmon`, para ello 
 ##Ubicamos el dir de trabajo

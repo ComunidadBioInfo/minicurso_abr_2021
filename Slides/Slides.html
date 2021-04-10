@@ -4,7 +4,7 @@
     <title>Minicurso</title>
     <meta charset="utf-8" />
     <meta name="author" content="Ana BVA, Rodolfo LCD" />
-    <meta name="date" content="2021-04-08" />
+    <meta name="date" content="2021-04-09" />
     <script src="libs/header-attrs-2.7/header-attrs.js"></script>
     <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
     <link href="libs/remark-css-0.0.1/default-fonts.css" rel="stylesheet" />
@@ -18,7 +18,7 @@ class: center, middle, inverse, title-slide
 
 # Minicurso
 ### Ana BVA, Rodolfo LCD
-### 2021-04-08
+### 2021-04-09
 
 ---
 
@@ -430,7 +430,7 @@ class: inverse, center, middle
 
 
 ```
-## @SRR12038075.1 D00635:426:CD19YANXX:5:2301:1410:2130/1
+## gzcat: can't stat: ../Data/s1_R1.fastq.gz (../Data/s1_R1.fastq.gz.gz): No such file or directory
 ```
 
 ---
@@ -904,7 +904,7 @@ class: inverse, center, middle
 ---
 
 ## Alineamiento
-&lt;img src="./Images/ReadAlignment.jpg" width="600px" style="display: block; margin: auto;" /&gt;
+&lt;img src="./Images/ReadAlignment.png" width="600px" style="display: block; margin: auto;" /&gt;
 Buscar la región del genoma/transcriptoma a partir de la cual se originaron los reads
 
 ---
@@ -1122,7 +1122,7 @@ Importamos la información de cada muestra
 ##Leemos los datos
 coldata &lt;- read.delim(here::here("output/salmon_quants/metadata.txt"))
 ##Generamos la columna "names"
-coldata &lt;- coldata %&gt;% rename(names = unique_id)
+coldata &lt;- coldata %&gt;% dplyr::rename(names = unique_id)
 coldata
 ```
 
@@ -1229,19 +1229,32 @@ colData(se)
 
 ```
 ## DataFrame with 12 rows and 6 columns
-##                 Sample     Cell Treatment Replicate         names Condition
-##               &lt;factor&gt; &lt;factor&gt;  &lt;factor&gt; &lt;integer&gt;      &lt;factor&gt;  &lt;factor&gt;
-## A_Control_1         s1        A   Control         1   A_Control_1   Control
-## A_Control_2         s2        A   Control         2   A_Control_2   Control
-## A_Control_3         s3        A   Control         3   A_Control_3   Control
-## M_Control_1         s4        M   Control         1   M_Control_1   Control
-## M_Control_2         s5        M   Control         2   M_Control_2   Control
-## ...                ...      ...       ...       ...           ...       ...
-## A_Verafinib_2      s8         A Verafinib         2 A_Verafinib_2 Verafinib
-## A_Verafinib_3      s9         A Verafinib         3 A_Verafinib_3 Verafinib
-## M_Verafinib_1      s10        M Verafinib         1 M_Verafinib_1 Verafinib
-## M_Verafinib_2      s11        M Verafinib         2 M_Verafinib_2 Verafinib
-## M_Verafinib_3      s12        M Verafinib         3 M_Verafinib_3 Verafinib
+##                    Sample        Cell   Treatment Replicate         names
+##               &lt;character&gt; &lt;character&gt; &lt;character&gt; &lt;integer&gt;   &lt;character&gt;
+## A_Control_1            s1           A     Control         1   A_Control_1
+## A_Control_2            s2           A     Control         2   A_Control_2
+## A_Control_3            s3           A     Control         3   A_Control_3
+## M_Control_1            s4           M     Control         1   M_Control_1
+## M_Control_2            s5           M     Control         2   M_Control_2
+## ...                   ...         ...         ...       ...           ...
+## A_Verafinib_2          s8           A   Verafinib         2 A_Verafinib_2
+## A_Verafinib_3          s9           A   Verafinib         3 A_Verafinib_3
+## M_Verafinib_1         s10           M   Verafinib         1 M_Verafinib_1
+## M_Verafinib_2         s11           M   Verafinib         2 M_Verafinib_2
+## M_Verafinib_3         s12           M   Verafinib         3 M_Verafinib_3
+##               Condition
+##                &lt;factor&gt;
+## A_Control_1     Control
+## A_Control_2     Control
+## A_Control_3     Control
+## M_Control_1     Control
+## M_Control_2     Control
+## ...                 ...
+## A_Verafinib_2 Verafinib
+## A_Verafinib_3 Verafinib
+## M_Verafinib_1 Verafinib
+## M_Verafinib_2 Verafinib
+## M_Verafinib_3 Verafinib
 ```
 ]
 
