@@ -58,7 +58,7 @@ el código usado para generar las [slides]() las puedes encontrar en [Github](ht
 Está práctica está basada en Mike love vignette y ocuparemos los siguientes 
 programas para analizar los datos del GSExxx.
 
-- [Descargar los datos que ocuparemos en está práctica]()
+- [Descargar los datos que ocuparemos en está práctica](https://drive.google.com/file/d/1n8dQHFotDc-fHxrLZOPVFoS8D29Pf5SZ/view?usp=sharing)
 
 - FastQC
 
@@ -75,12 +75,12 @@ programas para analizar los datos del GSExxx.
 - Paquetería de R:
 
 
-Analizar archivos curdos de RNAseq requiere poder de computo, si quieres hacer 
-el análisis completo desde cero, necesitas una computadora con al menos RAM 8 GB
+Analizar archivos crudos de RNAseq requiere poder de computo, si quieres hacer 
+el análisis completo desde cero, necesitarás una computadora con al menos RAM 8 GB
 y espacio para almacenar los archivos crudos (`.fastq`), aún así todo el proceso
 puede tomar más tiempo del que tendremos en la práctica. Normalmente estos 
 análisis se realizan en un cluster o servidor que suelen tener mayor capacidad 
-que una laptop. Por lo que se verán los comando para hacer el alineamiento en 
+que una laptop. Por lo que se verán los comandos para hacer el alineamiento en 
 `Salmon`  pero **NO** correremos este paso. 
 
 ## Instalación
@@ -130,7 +130,19 @@ pip install multiqc
 <div class="alert alert-warning">
 ### Instalación de Salmon
 
-Seguir los pasos de la página de [Salmon]()
+Descargar el archivo salmon-1.4.0_linux_x86_64.tar.gz
+desde la página de [Salmon](https://github.com/COMBINE-lab/salmon/releases) y seguir
+las instrucciones.
+
+Si lo prefieres, la instalación la puedes realizar empleando conda:
+
+```{bash, echo = T, eval = F}
+#Descarga e instala el gestor de paquetes de python miniconda desde https://conda.io/projects/conda/en/latest/user-guide/install/index.html
+conda activate miniconda
+conda install -c bioconda salmon
+```
+
+
 </div>
 
 ---
@@ -259,12 +271,16 @@ multiQC .
 
 # 8-Alineadores
 
+Si deseas realizar el pseudo-alineamiento con `Salmon` 
+te recomendamos descargar los archivos `.fastq` de las líneas celulares así como el
+archivo `.fasta` del transcriptoma humano. 
+
 ## Generar índice del transcriptoma
 
 <div class="alert alert-warning">
 Para ello vamos a requerir:
 
-- Archivo **Fasta** del transcriptoma de referencia del humano. Descargado del sitio de [GeneCode](https://www.gencodegenes.org/human/). Lo pueden encontrar en el folder de `Transcriptome/`
+- Archivo **Fasta** del transcriptoma de referencia del humano. Descargado del sitio de [GeneCode](https://www.gencodegenes.org/human/). Lo pueden encontrar en el folder de `Reference/`
 
 </div>
 
