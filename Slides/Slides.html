@@ -4,7 +4,7 @@
     <title>Minicurso</title>
     <meta charset="utf-8" />
     <meta name="author" content="Ana BVA, Rodolfo LCD" />
-    <meta name="date" content="2021-04-08" />
+    <meta name="date" content="2021-04-11" />
     <script src="libs/header-attrs-2.7/header-attrs.js"></script>
     <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
     <link href="libs/remark-css-0.0.1/default-fonts.css" rel="stylesheet" />
@@ -18,13 +18,13 @@ class: center, middle, inverse, title-slide
 
 # Minicurso
 ### Ana BVA, Rodolfo LCD
-### 2021-04-08
+### 11 April 2021
 
 ---
 
 class: inverse, center, middle
 
-# 1: Introduccion a RNA-seq 
+# Agradecimientos
 
 
 
@@ -87,7 +87,11 @@ También está basado en el curso de ["Next generation sequencing bioiformatics"
 &lt;img src="./Images/module7.png" width="600px" style="display: block; margin: auto;" /&gt;
 
 ---
+class: inverse, center, middle
 
+# 1: Introducción al RNA-seq
+
+---
 ## Transcriptómica
 
 Estudio de la expresión genética
@@ -95,8 +99,6 @@ Estudio de la expresión genética
 - ¿Cuánto RNA hay?
 
 &lt;img src="./Images/transcriptomica.png" width="900px" style="display: block; margin: auto;" /&gt;
-
-
 
 ---
 
@@ -124,265 +126,123 @@ Estudio de la expresión genética
 &lt;img src="./Images/book.png" width="450px" style="display: block; margin: auto;" /&gt;
 
 ---
+
 class: inverse, center, middle
 
-# 2: Aplicaciones más comúnes del RNA-seq
----
-## Aplicaciones
-
-&lt;img src="./Images/RNA_seq_apps.png" width="400px" style="display: block; margin: auto;" /&gt;
+# 6: Organización de un proyecto bioinformático
 
 ---
 
-## Expresión cuantitativa de loci (EQTL)
+## Organización del proyecto
 
---
+&lt;img src="./Images/Repo.png" width="400px" style="display: block; margin: auto;" /&gt;
 
-- Asociación entre cambios en la expresión de genes a SNPs conocidos
 
---
-
-- WGS y (variantes) y epigenómica (silencialmiento) para complementar los datos
-
---
-
-- Útil para la investigación de enfermedades o agronomía
-
---
-
-![eqtl](./Images/eqtl2.png)
-.font50[[Living in an adaptive world: Genomic dissection of the genus Homo and its immune response](https://rupress.org/jem/article/214/4/877/42247/Living-in-an-adaptive-world-Genomic-dissection-of)]
----
-
-## Detección de variantes
-
---
-
-- Alternativa al estudio clásico de variantes (WGS o WES)
-
---
-
-- Presenta limitaciones relacionadas con la cobertura y la profundidad (cobertura mayor a 10X)
-
---
-
-![variants](./Images/variants.png)
+Almacenar el proyecto en .blue[GitHub] &lt;svg viewBox="0 0 496 512" style="height:1em;position:relative;display:inline-block;top:.1em;fill:blue;" xmlns="http://www.w3.org/2000/svg"&gt;  &lt;path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"&gt;&lt;/path&gt;&lt;/svg&gt; para el control de versiones 
 
 ---
 
-## Redes de co-expresión
+## Organización del proyecto  
 
---
+- La función del **README** es explicar la organización del proyecto y que otros entiendan su contenido
 
-- Asociación entre dos o más genes por medio de expresión coordinada
+- Los datos deben de almacenarse en un directorio especial (considerar espacio en disco):
 
---
+- Considerar almacenar los datos en un repositorio como respaldo [OSF](https://osf.io/) &lt;svg viewBox="0 0 512 512" style="height:1em;position:relative;display:inline-block;top:.1em;" xmlns="http://www.w3.org/2000/svg"&gt;  &lt;g label="icon" id="layer6" groupmode="layer"&gt;    &lt;path id="path2" d="m 255.9997,7.9999987 c -34.36057,0 -62.21509,27.8545563 -62.21509,62.2151643 0,20.303056 9.87066,38.160947 24.91769,49.517247 0.18814,-20.457899 16.79601,-36.993393 37.29685,-36.993393 20.50082,0 37.11091,16.535494 37.29909,36.993393 15.04533,-11.3563 24.9177,-29.212506 24.9177,-49.517247 C 318.21272,35.854555 290.35915,7.9999987 255.99915,7.9999987 Z M 293.29654,392.2676 c -0.18814,20.4601 -16.79601,36.99338 -37.29684,36.99338 -20.50082,0 -37.10922,-16.53551 -37.29684,-36.99338 -15.04759,11.35627 -24.91769,29.21246 -24.91769,49.51722 0,34.36059 27.85453,62.21518 62.2151,62.21518 34.36056,0 62.21508,-27.85459 62.21508,-62.21518 0,-20.30306 -9.87066,-38.16095 -24.91767,-49.51722 z M 441.78489,193.78484 c -20.30301,0 -38.16309,9.87068 -49.51717,24.91769 20.45786,0.18819 36.99333,16.79605 36.99333,37.29689 0,20.50085 -16.53547,37.11096 -36.9911,37.29916 11.35634,15.04533 29.21249,24.91769 49.51721,24.91769 C 476.14549,318.21327 504,290.35948 504,255.99942 504,221.6394 476.14549,193.78425 441.78489,193.78425 Z M 82.738898,255.99997 c 0,-20.50139 16.535509,-37.11096 36.993392,-37.29689 -11.35632,-15.04756 -29.214164,-24.91769 -49.517197,-24.91769 -34.36057,0 -62.2150945,27.85455 -62.2150945,62.21517 0,34.3606 27.8545245,62.21516 62.2150945,62.21516 20.303033,0 38.160877,-9.87068 49.517197,-24.91773 -20.457883,-0.18818 -36.993391,-16.796 -36.993391,-37.29688 z M 431.3627,80.636814 c -24.29549,-24.295544 -63.68834,-24.295544 -87.9844,0 -14.35704,14.357057 -20.00298,33.963346 -17.39331,52.633806 -0.0824,0.0809 -0.18198,0.13437 -0.26434,0.21491 -14.578,14.57799 -14.578,38.21689 0,52.79488 14.57797,14.57799 38.21681,14.57799 52.79484,0 0.0824,-0.0824 0.13455,-0.18198 0.21732,-0.26434 18.66819,2.60796 38.27445,-3.03799 52.63151,-17.39336 24.29378,-24.29778 24.29378,-63.68837 -0.003,-87.986153 z M 186.2806,378.51178 c 14.57798,-14.57799 14.57798,-38.21461 0,-52.79319 -14.57798,-14.57853 -38.21683,-14.57798 -52.79481,0 -0.0825,0.0824 -0.13448,0.18199 -0.21476,0.26215 -18.67046,-2.60795 -38.276723,3.03572 -52.63376,17.39505 -24.297753,24.29552 -24.297753,63.6884 0,87.98449 24.29551,24.29552 63.68833,24.29552 87.98439,0 14.35702,-14.35703 20.00297,-33.96333 17.39333,-52.63386 0.0848,-0.0786 0.18364,-0.13228 0.26672,-0.21505 z m 0,-245.02583 c -0.0826,-0.0824 -0.18198,-0.13436 -0.26445,-0.21494 2.60795,-18.66823 -3.038,-38.27452 -17.39332,-52.633811 -24.29777,-24.295544 -63.68832,-24.295544 -87.984405,0 -24.297747,24.297781 -24.297747,63.688381 0,87.986151 14.357042,14.35706 33.963315,20.00301 52.631515,17.39336 0.0808,0.0824 0.13447,0.18199 0.21475,0.26434 14.57799,14.57799 38.21684,14.57799 52.79482,0 14.57797,-14.57802 14.57797,-38.21689 0,-52.79488 z m 245.0821,209.89048 c -14.35703,-14.35703 -33.96329,-20.00301 -52.63378,-17.39505 -0.0809,-0.0824 -0.13228,-0.18199 -0.21506,-0.26215 -14.57797,-14.57799 -38.21685,-14.57799 -52.79482,0 -14.57797,14.57799 -14.57797,38.21461 0,52.79316 0.0827,0.0828 0.18198,0.13455 0.26434,0.21505 -2.60796,18.67053 3.03802,38.27683 17.39334,52.63386 24.29552,24.29552 63.68834,24.29552 87.98439,0 24.29775,-24.29552 24.29775,-63.68841 0.003,-87.98451 z" style="stroke-width:0.07717"&gt;&lt;/path&gt;  &lt;/g&gt;&lt;/svg&gt;
 
-- Genes co-expresados -&gt; funciones relacionadas, mecanismos de regulación similar 
-
---
-
-- RNA-seq permite obtener redes de co-expresión más completas que los microarreglos
-
---
-
-- Requiere amplio número de muestras (al menos 20) 
+- **El código es una de las partes más importantes del proyecto**
 
 ---
 
-## Fusión de genes
+## Organización del proyecto
+## Código
 
-![fusion](./Images/Fusions.jpeg)
-.font50[[Frequent CTLA4-CD28 gene fusion in diverse types of T-cell lymphoma](https://www.haematologica.org/article/view/7742)]
+- Enumerar los scripts de acuerdo al orden en que serán ejecutados
+.tiny[
+```
++-- 1.QualityControl.sh
++-- 2.Trimming.sh
++-- 3.ReadAlignment.sh
++-- 4.DifferentialExpression.R
+```
+]
+
+- Utilizar rutas relativas hacia los archivos *input*
+.tiny[
+```
+fastqc ../Data/*.fastqc -o ../Results/
+```
+]
+- Comentar el script -&gt; facilita que sea entendido por humanos
+.tiny[
+```
+#Change the location of bam files
+mv ../Data/*.bam ../Results/
+```
+]
+- ¡Mejorar el código! -&gt; *Less is more*
 ---
 
-## Análisis de expresión diferencial
-
-
-
-- Aplicación más común del RNA-seq
-
---
-
-- Permite identificar y cuantificar la expresión de transcritos entre dos grupos distintos
-
---
-
-- Etapas del desarrollo, tejidos distintos, efecto de estímulos o tratamientos
-
---
-
-- Requiere del uso de modelos estadísticos que evaluen la expresión diferencial 
-
---
-
-- Normalización de los datos (tamaño de la librería, longitud de los genes, composición de la librería...)
+.center[![cat](./Images/cat.png)]
 
 ---
+## Organización del proyecto
+&lt;img src="./Images/Proyecto.png" width="450px" style="display: block; margin: auto;" /&gt;
+
+---
+## Experimento
+
+Número de acceso GEO: GSE152699
+
+&lt;img src="./Images/Experiment_ver.png" width="800px" style="display: block; margin: auto;" /&gt;
+
+---
+
 class: inverse, center, middle
 
-# 3: Consideraciones para el diseño experimental
+# 5: Flujo de trabajo para el análisis de RNA-seq
 ---
-## ¿Cúal es la pregunta que se quiere contestar?
+## Flujo general de trabajo
 
 
-&lt;img src="./Images/experiment.png" width="290px" style="display: block; margin: auto;" /&gt;
+&lt;img src="https://biocorecrg.github.io/RNAseq_course_2019/images/RNAseq_workflow.png" width="550px" style="display: block; margin: auto;" /&gt;
 
-
-
----
-
-## ¿Cúal es la pregunta que se quiere contestar?
-
---
-
-Consideraciones importantes:
-
-.font70[
-.pull-left[
-- **Single vs paired-end** (análisis de isoformas)
-
-- **Stranded vs unstranded** (antisense y overlapping
-transcripts)
-]
-
-.pull-right[
-- **Profundidad de la secuenciación** (detección de transcritos con baja abundancia). 
-- **Número de replicas**:
-
-  - *Biológicas* = independientes, muestras biologicamente distintas.
-
-  - *Técnicas* = repetir la medición de la misma muestra.
-]
-
-.full-width[.content-box-red[Para el análisis de expresión diferencial es mejor **incrementar el número de replicas** que incrementar la profundidad de la secuenciación.]]
-]
+.tiny[Imagen tomada de [aquí](https://biocorecrg.github.io/RNAseq_course_2019/salmon.html)]
 
 ---
 
-# ¿Qué es single-end y paired-end?
-
-.small[
-**Single-end**:  Lectura de un único extremo de cada fragmento. 
-
-&lt;img src="./Images/s-p-end.png" width="900px" style="display: block; margin: auto;" /&gt;
-
-**Paired-end**: La secuenciación pareada proporciona la secuencia de ambos extremos de cada fragmento, siempre separados por una distancia conocida.
+## Primeros pasos
 
 
-[Martínez, Javier María Rodríguez. "Secuenciación de genomas." Arbor 177.698 (2004): 285-310.](http://www.encuentros.uma.es/encuentros138_9/secuenciacion.pdf)
-]
----
-
-# Profundidad de la secuenciación
-
-- Mayor profundidad permite deterctar transcritos con baja expresión (Entre más *reads* tengas, encontrarás mayor cantidad de genes)
-- Se requiere un incremento logarítmico en la profundidad de secuenciación para obtener un aumento lineal el la deteción de los genes
-
-&lt;img src="./Images/depth.png" width="500px" style="display: block; margin: auto;" /&gt;
+&lt;img src="./Images/step1.png" width="540px" style="display: block; margin: auto;" /&gt;
 
 
 ---
 
-# Precios
-
-Es importante contemplar los costos dentro del diseño. La tabla muestra costos NO actualizados pero la tendencia es similar:
-
-- Single-end es más baráto que paired-end.
-
---
-
-- Mayor profundidad de secuenciación es más costoso. 
-
---
-
-- Mayor longitud de bp por read aumenta el precio.
-
---
-&lt;img src="./Images/cost.png" width="800px" style="display: block; margin: auto;" /&gt;
-
----
-
-# Precios del langebio
-.font70[
-Tomados de su página de internet [langebio](http://labsergen.langebio.cinvestav.mx/en/?services=sbssequencing)
-
-.pull-left[
-### Precios de librerias
-
-- 1 Library from DNA: $ 222.00
-
-- 16 Libraries from DNA: $ 89.00 c/u
-
-- 1 Library from total RNA or messenger RNA: $ 408.00
-
-- 16 Libraries from RNA: $ 153.00 c/u
-
-- 8 Small libraries RNA: $ 191.00 c/u
-
-]
-
-.pull-right[
-### Precios de secuenciación
+## Alineamiento y Quantificación
 
 
-- Running on MiSeq 2x300: $ 2,687.00
-
-- Run on NextSeq 2x150, High Yield: $ 7,396.00
-
-- Running on a HiSeq 2x100 lane : $ 3,490.00
-
-]
-
-.small[
-*Note: The price of libraries may vary depending on the number of samples to process.
-]
-
-]
-
----
-
-## ¿Cuáles son las posibles fuentes de variación? 
-
-.full-width[.content-box-blue[Conoce el fenómeno que quieres estudiar]]
-.font80[
-.pull-left[
-
-&lt;img src="./Images/experiment.png" width="200px" style="display: block; margin: auto;" /&gt;
-]
-
-.pull-right[
-
-- **Variación biológica**: Sexo, edad, background genético, etnicidad, etc.
-
-- **Variación técnica**: Día de procesamiento de la muestra, lotes de reactivos, tiempo de recoleción de muestras, personal, etc.
-]
-]
----
-
-## Diseño experimental 
-
-Es importante considerar la **variación biológica** al planear el experimento, porque puede generar variación no deseada que no puede ser eliminada.
-
-&lt;img src="./Images/batch.jpeg" width="900px" style="display: block; margin: auto;" /&gt;
-
-
-.footnotesize[[doi.org/10.1101/025528](http://doi.org/10.1101/025528)]
+&lt;img src="./Images/step2.png" width="950px" style="display: block; margin: auto;" /&gt;
 
 
 ---
 
-## Diseño experimental balanceado
-.font80[
-Cuando las muestras se colectan en diferentes lotes es importante incluir diferentes grupos para detectar la **variación técnica**. Visualizar los datos usando algoritmos de redución de dimensiones ayuda a observar si las muestras tienen efectos por lote
-]
-
-&lt;img src="./Images/balanced.jpeg" width="700px" style="display: block; margin: auto;" /&gt;
+## Expresión Diferencial y análisis funcionales
 
 
-.footnotesize[[doi.org/10.1101/025528](http://doi.org/10.1101/025528)]
+&lt;img src="./Images/step3.png" width="750px" style="display: block; margin: auto;" /&gt;
 
 ---
+
+## Flujo general de trabajo
+
+
+&lt;img src="https://biocorecrg.github.io/RNAseq_course_2019/images/RNAseq_workflow.png" width="550px" style="display: block; margin: auto;" /&gt;
+
+.tiny[Imagen tomada de [aquí](https://biocorecrg.github.io/RNAseq_course_2019/salmon.html)]
+
+---
+
 class: inverse, center, middle
 
 # 4: Tipos de archivos 
@@ -430,7 +290,7 @@ class: inverse, center, middle
 
 
 ```
-## @SRR12038075.1 D00635:426:CD19YANXX:5:2301:1410:2130/1
+## gzcat: can't stat: ../Data/s1_R1.fastq.gz (../Data/s1_R1.fastq.gz.gz): No such file or directory
 ```
 
 ---
@@ -493,237 +353,6 @@ Valores de **p** cercanos a cero -&gt; Alta calidad
 
 
 &lt;img src="./Images/Fastq.png" width="700px" style="display: block; margin: auto;" /&gt;
-
----
-
-## SAM/BAM
-
---
-
-- De manera posterior al alineamiento se generan archivos **"Sequence Alignment Map"** -&gt; **SAM**
-
---
-
-- Archivos delimitados por tabuladores (TAB)
-
---
-
-- Convertidos a valores binarios como **"Binary Alignment Map"** -&gt; **BAM**
-
---
-
-- **BAM** -&gt; Mayor espacio en disco -&gt; Acceso aleatorio más eficiente
-
---
-
-- Las secuencias en formato BAM se pueden ordenar por coordenadas
-
---
-
-- Conversion entre formatos [SamTools!](https://github.com/samtools/samtools)
-
----
-
-## SAM/BAM
-
-- Los archivos en formato **SAM** se dividen en dos secciones:
-
---
-
-- **HEADER**: Información general del archivo
-
---
-
-- **ALIGNMENT**: Información relacionada con el alineamiento de los reads
-
---
-&lt;img src="./Images/SAM-BAM.png" width="550px" style="display: block; margin: auto;" /&gt;
-
----
-class: inverse, center, middle
-
-# 5: Flujo de trabajo para el análisis de RNA-seq
----
-## Flujo general de trabajo
-
-
-&lt;img src="https://biocorecrg.github.io/RNAseq_course_2019/images/RNAseq_workflow.png" width="550px" style="display: block; margin: auto;" /&gt;
-
-.tiny[Imagen tomada de [aquí](https://biocorecrg.github.io/RNAseq_course_2019/salmon.html)]
-
----
-
-## Primeros pasos
-
-
-&lt;img src="./Images/step1.png" width="540px" style="display: block; margin: auto;" /&gt;
-
-
----
-
-## Alineamiento y Quantificación
-
-
-&lt;img src="./Images/step2.png" width="950px" style="display: block; margin: auto;" /&gt;
-
-
----
-
-## Expresión Diferencial y análisis funcionales
-
-
-&lt;img src="./Images/step3.png" width="750px" style="display: block; margin: auto;" /&gt;
-
----
-
-## Flujo general de trabajo
-
-
-&lt;img src="https://biocorecrg.github.io/RNAseq_course_2019/images/RNAseq_workflow.png" width="550px" style="display: block; margin: auto;" /&gt;
-
-.tiny[Imagen tomada de [aquí](https://biocorecrg.github.io/RNAseq_course_2019/salmon.html)]
----
-class: inverse, center, middle
-
-# 6: Organización de un proyecto bioinformático
-
----
-
-## Crisis de reproducibilidad en la ciencia
-
-Para que dos o más personas realicen el mismo experimento bajo condiciones experimentales similares y obtengan resultados similares se requiere:
-
---
-
-- Descripción de materiales y métodos
-
---
-
-- Datos crudos o semi-crudos
-
---
-
-- Código de cómputo utilizado
-
---
-
-- Versión del software utilizado
-
---
-
-- Información suplementaria para realizar el análisis de los datos
-
----
-
-## Crisis de reproducibilidad en la ciencia
-
-**Crisis de reproducibilidad** en la ciencia -&gt; Perseguir explicaciones incorrectas -&gt; Diseñar tratamientos incorrectos para ciertas enfermedades
-
-Para combatir este problema:
-
-
---
-- Transparencia de datos en publicaciones científicas
-
---
-- Apertura de la información (Open science)
-
---
-- Código abierto para el análisis de datos
-
---
-- Repositiorios o bases de datos públicas donde se almacene la información
-
---
-- Software depositado en repositorios o servidores a largo plazo
-
----
-
-## Crisis de la reproducibilidad en la ciencia
-
-&lt;img src="./Images/Repo.png" width="400px" style="display: block; margin: auto;" /&gt;
-
-
-Almacenar el proyecto en .blue[GitHub] &lt;svg viewBox="0 0 496 512" style="height:1em;position:relative;display:inline-block;top:.1em;fill:blue;" xmlns="http://www.w3.org/2000/svg"&gt;  &lt;path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"&gt;&lt;/path&gt;&lt;/svg&gt; para el control de versiones 
-
----
-
-## Organización del proyecto  
-
-- La función del **README** es explicar la organización del proyecto y que otros entiendan su contenido
-
-- Los datos deben de almacenarse en un directorio especial (considerar espacio en disco):
-
-- Considerar almacenar los datos en un repositorio como respaldo [OSF](https://osf.io/) &lt;svg viewBox="0 0 512 512" style="height:1em;position:relative;display:inline-block;top:.1em;" xmlns="http://www.w3.org/2000/svg"&gt;  &lt;g label="icon" id="layer6" groupmode="layer"&gt;    &lt;path id="path2" d="m 255.9997,7.9999987 c -34.36057,0 -62.21509,27.8545563 -62.21509,62.2151643 0,20.303056 9.87066,38.160947 24.91769,49.517247 0.18814,-20.457899 16.79601,-36.993393 37.29685,-36.993393 20.50082,0 37.11091,16.535494 37.29909,36.993393 15.04533,-11.3563 24.9177,-29.212506 24.9177,-49.517247 C 318.21272,35.854555 290.35915,7.9999987 255.99915,7.9999987 Z M 293.29654,392.2676 c -0.18814,20.4601 -16.79601,36.99338 -37.29684,36.99338 -20.50082,0 -37.10922,-16.53551 -37.29684,-36.99338 -15.04759,11.35627 -24.91769,29.21246 -24.91769,49.51722 0,34.36059 27.85453,62.21518 62.2151,62.21518 34.36056,0 62.21508,-27.85459 62.21508,-62.21518 0,-20.30306 -9.87066,-38.16095 -24.91767,-49.51722 z M 441.78489,193.78484 c -20.30301,0 -38.16309,9.87068 -49.51717,24.91769 20.45786,0.18819 36.99333,16.79605 36.99333,37.29689 0,20.50085 -16.53547,37.11096 -36.9911,37.29916 11.35634,15.04533 29.21249,24.91769 49.51721,24.91769 C 476.14549,318.21327 504,290.35948 504,255.99942 504,221.6394 476.14549,193.78425 441.78489,193.78425 Z M 82.738898,255.99997 c 0,-20.50139 16.535509,-37.11096 36.993392,-37.29689 -11.35632,-15.04756 -29.214164,-24.91769 -49.517197,-24.91769 -34.36057,0 -62.2150945,27.85455 -62.2150945,62.21517 0,34.3606 27.8545245,62.21516 62.2150945,62.21516 20.303033,0 38.160877,-9.87068 49.517197,-24.91773 -20.457883,-0.18818 -36.993391,-16.796 -36.993391,-37.29688 z M 431.3627,80.636814 c -24.29549,-24.295544 -63.68834,-24.295544 -87.9844,0 -14.35704,14.357057 -20.00298,33.963346 -17.39331,52.633806 -0.0824,0.0809 -0.18198,0.13437 -0.26434,0.21491 -14.578,14.57799 -14.578,38.21689 0,52.79488 14.57797,14.57799 38.21681,14.57799 52.79484,0 0.0824,-0.0824 0.13455,-0.18198 0.21732,-0.26434 18.66819,2.60796 38.27445,-3.03799 52.63151,-17.39336 24.29378,-24.29778 24.29378,-63.68837 -0.003,-87.986153 z M 186.2806,378.51178 c 14.57798,-14.57799 14.57798,-38.21461 0,-52.79319 -14.57798,-14.57853 -38.21683,-14.57798 -52.79481,0 -0.0825,0.0824 -0.13448,0.18199 -0.21476,0.26215 -18.67046,-2.60795 -38.276723,3.03572 -52.63376,17.39505 -24.297753,24.29552 -24.297753,63.6884 0,87.98449 24.29551,24.29552 63.68833,24.29552 87.98439,0 14.35702,-14.35703 20.00297,-33.96333 17.39333,-52.63386 0.0848,-0.0786 0.18364,-0.13228 0.26672,-0.21505 z m 0,-245.02583 c -0.0826,-0.0824 -0.18198,-0.13436 -0.26445,-0.21494 2.60795,-18.66823 -3.038,-38.27452 -17.39332,-52.633811 -24.29777,-24.295544 -63.68832,-24.295544 -87.984405,0 -24.297747,24.297781 -24.297747,63.688381 0,87.986151 14.357042,14.35706 33.963315,20.00301 52.631515,17.39336 0.0808,0.0824 0.13447,0.18199 0.21475,0.26434 14.57799,14.57799 38.21684,14.57799 52.79482,0 14.57797,-14.57802 14.57797,-38.21689 0,-52.79488 z m 245.0821,209.89048 c -14.35703,-14.35703 -33.96329,-20.00301 -52.63378,-17.39505 -0.0809,-0.0824 -0.13228,-0.18199 -0.21506,-0.26215 -14.57797,-14.57799 -38.21685,-14.57799 -52.79482,0 -14.57797,14.57799 -14.57797,38.21461 0,52.79316 0.0827,0.0828 0.18198,0.13455 0.26434,0.21505 -2.60796,18.67053 3.03802,38.27683 17.39334,52.63386 24.29552,24.29552 63.68834,24.29552 87.98439,0 24.29775,-24.29552 24.29775,-63.68841 0.003,-87.98451 z" style="stroke-width:0.07717"&gt;&lt;/path&gt;  &lt;/g&gt;&lt;/svg&gt;
-
-- **El código es una de las partes más importantes del proyecto**
-
----
-
-## Organización del proyecto
-## Código
-
-- Enumerar los scripts de acuerdo al orden en que serán ejecutados
-.tiny[
-```
-+-- 1.QualityControl.sh
-+-- 2.Trimming.sh
-+-- 3.ReadAlignment.sh
-+-- 4.DifferentialExpression.R
-```
-]
-
-- Utilizar rutas relativas hacia los archivos *input*
-.tiny[
-```
-fastqc ../Data/*.fastqc -o ../Results/
-```
-]
-- Comentar el script -&gt; facilita que sea entendido por humanos
-.tiny[
-```
-#Change the location of bam files
-mv ../Data/*.bam ../Results/
-```
-]
-- ¡Mejorar el código! -&gt; *Less is more*
----
-
-.center[![cat](./Images/cat.png)]
-
----
-
-## Organización del proyecto
-## Código
-.font80[
-.pull-left[
-- **[DRY](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself)** Don't Repeat Yourself
-- **[KISS](https://en.wikipedia.org/wiki/KISS_principle)** Keep It Simple Soldier
-- **[YAGNI](https://en.wikipedia.org/wiki/You_aren%27t_gonna_need_it)** You Aren't Gonna Need It
-- **[POLA](https://en.wikipedia.org/wiki/Principle_of_least_astonishment)** Principle of Least Astonishment
-- **[POLP](https://digitalguardian.com/blog/what-principle-least-privilege-polp-best-practice-information-security-and-compliance)** Principle of Least Privilege
-]
-.pull-right[
-&lt;img src="./Images/Development.png" width="200px" style="display: block; margin: auto 0 auto auto;" /&gt;
-]
-]
-
----
-## Organización del proyecto
-## Resultados
-
-&lt;img src="./Images/Results.png" width="700px" style="display: block; margin: auto;" /&gt;
-
----
-## Organización del proyecto
-&lt;img src="./Images/Proyecto.png" width="450px" style="display: block; margin: auto;" /&gt;
-
----
-## Experimento
-
-Número de acceso GEO: GSE152699
-
-&lt;img src="./Images/Experiment_ver.png" width="800px" style="display: block; margin: auto;" /&gt;
 
 
 ---
@@ -904,7 +533,7 @@ class: inverse, center, middle
 ---
 
 ## Alineamiento
-&lt;img src="./Images/ReadAlignment.jpg" width="600px" style="display: block; margin: auto;" /&gt;
+&lt;img src="./Images/ReadAlignment.png" width="600px" style="display: block; margin: auto;" /&gt;
 Buscar la región del genoma/transcriptoma a partir de la cual se originaron los reads
 
 ---
@@ -1122,7 +751,7 @@ Importamos la información de cada muestra
 ##Leemos los datos
 coldata &lt;- read.delim(here::here("output/salmon_quants/metadata.txt"))
 ##Generamos la columna "names"
-coldata &lt;- coldata %&gt;% rename(names = unique_id)
+coldata &lt;- coldata %&gt;% dplyr::rename(names = unique_id)
 coldata
 ```
 
@@ -1229,19 +858,32 @@ colData(se)
 
 ```
 ## DataFrame with 12 rows and 6 columns
-##                 Sample     Cell Treatment Replicate         names Condition
-##               &lt;factor&gt; &lt;factor&gt;  &lt;factor&gt; &lt;integer&gt;      &lt;factor&gt;  &lt;factor&gt;
-## A_Control_1         s1        A   Control         1   A_Control_1   Control
-## A_Control_2         s2        A   Control         2   A_Control_2   Control
-## A_Control_3         s3        A   Control         3   A_Control_3   Control
-## M_Control_1         s4        M   Control         1   M_Control_1   Control
-## M_Control_2         s5        M   Control         2   M_Control_2   Control
-## ...                ...      ...       ...       ...           ...       ...
-## A_Verafinib_2      s8         A Verafinib         2 A_Verafinib_2 Verafinib
-## A_Verafinib_3      s9         A Verafinib         3 A_Verafinib_3 Verafinib
-## M_Verafinib_1      s10        M Verafinib         1 M_Verafinib_1 Verafinib
-## M_Verafinib_2      s11        M Verafinib         2 M_Verafinib_2 Verafinib
-## M_Verafinib_3      s12        M Verafinib         3 M_Verafinib_3 Verafinib
+##                    Sample        Cell   Treatment Replicate         names
+##               &lt;character&gt; &lt;character&gt; &lt;character&gt; &lt;integer&gt;   &lt;character&gt;
+## A_Control_1            s1           A     Control         1   A_Control_1
+## A_Control_2            s2           A     Control         2   A_Control_2
+## A_Control_3            s3           A     Control         3   A_Control_3
+## M_Control_1            s4           M     Control         1   M_Control_1
+## M_Control_2            s5           M     Control         2   M_Control_2
+## ...                   ...         ...         ...       ...           ...
+## A_Verafinib_2          s8           A   Verafinib         2 A_Verafinib_2
+## A_Verafinib_3          s9           A   Verafinib         3 A_Verafinib_3
+## M_Verafinib_1         s10           M   Verafinib         1 M_Verafinib_1
+## M_Verafinib_2         s11           M   Verafinib         2 M_Verafinib_2
+## M_Verafinib_3         s12           M   Verafinib         3 M_Verafinib_3
+##               Condition
+##                &lt;factor&gt;
+## A_Control_1     Control
+## A_Control_2     Control
+## A_Control_3     Control
+## M_Control_1     Control
+## M_Control_2     Control
+## ...                 ...
+## A_Verafinib_2 Verafinib
+## A_Verafinib_3 Verafinib
+## M_Verafinib_1 Verafinib
+## M_Verafinib_2 Verafinib
+## M_Verafinib_3 Verafinib
 ```
 ]
 
@@ -1691,7 +1333,7 @@ dds &lt;- DESeq(dds)
 
 Puedes realizar otras transformaciones en `DESeq2` para estabilizar la varianza a través de los differentes valores promedio de expresión.  
 
-![](Slides_files/figure-html/unnamed-chunk-94-1.png)&lt;!-- --&gt;![](Slides_files/figure-html/unnamed-chunk-94-2.png)&lt;!-- --&gt;
+![](Slides_files/figure-html/unnamed-chunk-83-1.png)&lt;!-- --&gt;![](Slides_files/figure-html/unnamed-chunk-83-2.png)&lt;!-- --&gt;
 
 
 
@@ -1767,7 +1409,7 @@ ggplot(df, aes(x = x, y = y)) + geom_hex(bins = 80) +
   coord_fixed() + facet_grid( . ~ transformation)  
 ```
 
-![](Slides_files/figure-html/unnamed-chunk-95-1.png)&lt;!-- --&gt;
+![](Slides_files/figure-html/unnamed-chunk-84-1.png)&lt;!-- --&gt;
 
 
 ]
@@ -1997,18 +1639,18 @@ screeplot(PCA)
 --
 
 .pull-left[**DESeq2**
-&lt;img src="Slides_files/figure-html/unnamed-chunk-111-1.png" width="350px" style="display: block; margin: auto;" /&gt;
+&lt;img src="Slides_files/figure-html/unnamed-chunk-100-1.png" width="350px" style="display: block; margin: auto;" /&gt;
 ]
 --
 .pull-right[**PCA tools**
-&lt;img src="Slides_files/figure-html/unnamed-chunk-112-1.png" width="350px" style="display: block; margin: auto;" /&gt;
+&lt;img src="Slides_files/figure-html/unnamed-chunk-101-1.png" width="350px" style="display: block; margin: auto;" /&gt;
 ]
 
 ---
 ## PCA
 ## ¿Cuánta varianza es explicada por cada componente?
 
-&lt;img src="Slides_files/figure-html/unnamed-chunk-113-1.png" width="400px" style="display: block; margin: auto;" /&gt;
+&lt;img src="Slides_files/figure-html/unnamed-chunk-102-1.png" width="400px" style="display: block; margin: auto;" /&gt;
 
 ---
 ## PCA y MDS
@@ -2240,7 +1882,7 @@ plotMA(res)
 ---
 # MAplot
 
-&lt;img src="Slides_files/figure-html/unnamed-chunk-130-1.png" width="450px" style="display: block; margin: auto;" /&gt;
+&lt;img src="Slides_files/figure-html/unnamed-chunk-119-1.png" width="450px" style="display: block; margin: auto;" /&gt;
 
 ---
 # MAplot
@@ -2269,13 +1911,13 @@ resultsNames(dds)
 .pull-left[
 Sin `lfcshrink` 
 
-&lt;img src="Slides_files/figure-html/unnamed-chunk-132-1.png" width="450px" style="display: block; margin: auto;" /&gt;
+&lt;img src="Slides_files/figure-html/unnamed-chunk-121-1.png" width="450px" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
 Con `lfcshrink` 
 
-&lt;img src="Slides_files/figure-html/unnamed-chunk-133-1.png" width="450px" style="display: block; margin: auto;" /&gt;
+&lt;img src="Slides_files/figure-html/unnamed-chunk-122-1.png" width="450px" style="display: block; margin: auto;" /&gt;
 ]
 ---
 # MAplot
@@ -2313,7 +1955,7 @@ volcanoplotR(DEG, logfc = 0, p.adj = 0.1, type = "DESeq")
 ---
 # Volcano plot
 
-&lt;img src="Slides_files/figure-html/unnamed-chunk-136-1.png" width="450px" style="display: block; margin: auto;" /&gt;
+&lt;img src="Slides_files/figure-html/unnamed-chunk-125-1.png" width="450px" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -2360,7 +2002,7 @@ pheatmap(norm_counts,
 ---
 # Heatmap
 
-&lt;img src="Slides_files/figure-html/unnamed-chunk-138-1.png" width="450px" style="display: block; margin: auto;" /&gt;
+&lt;img src="Slides_files/figure-html/unnamed-chunk-127-1.png" width="450px" style="display: block; margin: auto;" /&gt;
 
 
 
