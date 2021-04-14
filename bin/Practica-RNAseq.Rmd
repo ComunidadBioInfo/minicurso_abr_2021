@@ -28,7 +28,7 @@ knitr::knit_hooks$set(time_it = local({
   }
 }))
 
-knitr::opts_chunk$set(time_it = TRUE)
+knitr::opts_chunk$set(time_it = TRUE, eval = F)
 ```
 
 # Descripción general
@@ -36,27 +36,35 @@ knitr::opts_chunk$set(time_it = TRUE)
 Este documento encontrarás el código que se ocupará en el mini curso de RNA-seq, 
 el código usado para generar las [slides]() las puedes encontrar en [Github](https://github.com/ComunidadBioInfo/minicurso_abr_2021).
 
-|    | Tema                                                        | Práctica | Tiempo (min) | Encargado |
+|    | [Tema](https://comunidadbioinfo.github.io/minicurso_abr_2021/Slides/Slides.html#1)                                                         | [Práctica](https://comunidadbioinfo.github.io/minicurso_abr_2021/bin/Practica-RNAseq.html) | Tiempo (min) | Encargado |
 |----|-------------------------------------------------------------|--------|--------------|-----------|
-| 1  | Introducción a RNA-seq                                      | NA     | 5            | AnaB      |
-| 2  | ¿Cuáles son las aplicaciones más comunes?                   | NA     | 5            | Rodolfo   |
-| 3  | Consideraciones para el diseño experimental  (batch effect) | NA     | 5            | AnaB      |
-| 4  | ¿Qué tipo de archivos se necesitan?                         | NA     | 15           | Rodolfo   |
-| 5  | Flujo de trabajo para el análisis de RNA-seq                | NA     | 10           | AnaB      |
-| 6  | Organización del proyecto (folder de datos, fig, scripts)   | NA     | 10           | Rodolfo   |
-| 7  | Limpieza de datos (Trimming y filtrado)                     | Si     | 15           | AnaB      |
-| 8  | Alineadores (Salmon)                                        | Si     | 15           | Rodolfo   |
-| 9  | tximeta, tximport                                           | Si     | 10           | AnaB      |
-| 10 | Objeto SummarizedExperiment en R                            | Si     | 10           | Rodolfo   |
-| 11 | Normalización de los datos (RPKM, TPM)                      | Si     | 10           | AnaB      |
-| 12 | PCA (outliers)                                              | Si     | 10           | Rodolfo   |
-| 13 | DE (analysis)                                               | Si     | 10           | AnaB      |
-| 14 | DE (visualization/resultados)                               | Si     | 10           | Rodolfo   |
+| 1  | [Introducción a RNA-seq](https://comunidadbioinfo.github.io/minicurso_abr_2021/Slides/Slides.html#6)                                      | NA     | 5            | AnaB      |
+| 2  | [Organización del proyecto (folder de datos, fig, scripts](https://comunidadbioinfo.github.io/minicurso_abr_2021/Slides/Slides.html#12)   | NA     | 5            | Rodolfo   |
+| 3  | [Flujo de trabajo para el análisis de RNA-seq](https://comunidadbioinfo.github.io/minicurso_abr_2021/Slides/Slides.html#22)               | NA     | 5            | AnaB      |
+| 4  | [Tipos de archivos](https://comunidadbioinfo.github.io/minicurso_abr_2021/Slides/Slides.html#28])                                         | NA     | 5            | Rodolfo   |
+| 5  | [Control de calidad de los datos](https://comunidadbioinfo.github.io/minicurso_abr_2021/Slides/Slides.html#49)                            | Si     | 10           | AnaB      |
+| 6  | [Alineamiento (Salmon)](https://comunidadbioinfo.github.io/minicurso_abr_2021/Slides/Slides.html#63)                                      | Si     | 10           | Rodolfo   |
+| 7  | [tximeta, tximport](https://comunidadbioinfo.github.io/minicurso_abr_2021/Slides/Slides.html#80)                                          | Si     | 10           | AnaB      |
+| 8  | [Objeto SummarizedExperiment en R](https://comunidadbioinfo.github.io/minicurso_abr_2021/Slides/Slides.html#87)                           | Si     | 10           | Rodolfo   |
+| 9  | [Normalización de los datos (RPKM, TPM)](https://comunidadbioinfo.github.io/minicurso_abr_2021/Slides/Slides.html#100)                    | Si     | 15           | AnaB      |
+| 10 | [Exploración de los datos](https://comunidadbioinfo.github.io/minicurso_abr_2021/Slides/Slides.html#113)                                  | Si     | 15           | Rodolfo   |
+| 11 | [DE (analysis)](https://comunidadbioinfo.github.io/minicurso_abr_2021/Slides/Slides.html#152)                                             | Si     | 15           | AnaB      |
+| 12 | [DE (visualization/resultados)](https://comunidadbioinfo.github.io/minicurso_abr_2021/Slides/Slides.html#161)                             | Si     | 15           | Rodolfo   |
+
 
 ## Requisitos 
 
 Está práctica está basada en Mike love vignette y ocuparemos los siguientes 
-programas para analizar los datos del GSExxx.
+programas para analizar los datos del [GSE152699](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE152699).
+
+## Experimento
+
+Número de acceso GEO: GSE152699
+
+```{r, out.width="800px", fig.align='center', echo=F}
+knitr::include_graphics("./Images/Experiment_ver.png")
+```
+
 
 - [Descargar los datos que ocuparemos en está práctica](https://drive.google.com/file/d/1n8dQHFotDc-fHxrLZOPVFoS8D29Pf5SZ/view?usp=sharing)
 
@@ -82,6 +90,17 @@ puede tomar más tiempo del que tendremos en la práctica. Normalmente estos
 análisis se realizan en un cluster o servidor que suelen tener mayor capacidad 
 que una laptop. Por lo que se verán los comandos para hacer el alineamiento en 
 `Salmon`  pero **NO** correremos este paso. 
+
+## Archivos
+
+Si decides realizar toda la práctica necesitarás estos archivos. Descargar el archivo en formato zip llamado **Files.zip** desde este [vínculo](https://drive.google.com/file/d/1n8dQHFotDc-fHxrLZOPVFoS8D29Pf5SZ/view?usp=sharing) y colocalo en el folder principal de este repositiorio. Descomprime el archivo y sigue las indicaciones de los instructores.
+En el archivo **Files.zip** encontrarás:
+
+* `Archivos_fastq/`: Folder que contiene los archivos en formato .fastq
+* `Salmon_quants/`: Folder que contiene las matrices de cuentas generadas por Salmon
+* `genecode.v37.transcripts.fa`: Transcriptoma de referencia para realizar el alineamiento y conteo con Salmon
+* `ObjetosR.RData`: Archivo de R que contiene los objetos de *SummarizedExperiment* y *DESeq* para realizar el análisis de expresión diferencial. **Descarga este [objeto](https://drive.google.com/file/d/1_j2Py3ifDRN-O_6ygq627xuKTAI2HmGb/view?usp=sharing) si no tienes suficiente espacio en tu computadora** 
+
 
 ## Instalación
 
@@ -115,14 +134,24 @@ fastqc --help
 <div class="alert alert-warning">
 ### Instalación de MultiQC
 
-Esta parte es opcional, pero si trabajas con RNA-seq te puede intersar.
+Esta parte es opcional, pero si trabajas con RNA-seq te puede intersar. 
+[MultiQC](https://multiqc.info/) es un programa que te perimte juntar los archivos de `fastQC`en uno 
+solo y facilita su visualización.
 
-1. La instalación se hace con conda, así que primero activamos un ambiente conda
+- **Conda**: La instalación se puede hacer con conda, así que primero activamos un ambiente conda
 
 ```{bash echo=TRUE, eval=FALSE}
 conda activate base
+conda install -c bioconda -c conda-forge multiqc
+```
+
+- **Pip**: o con `pip`
+
+```{bash echo=TRUE, eval=FALSE}
 pip install multiqc
 ```
+
+
 </div>
 
 ---
@@ -150,7 +179,7 @@ conda install -c bioconda salmon
 <div class="alert alert-warning">
 ### Instalación de R y Rstudio
 
-Puedes instalar [R]() a través de [Rstudio](), asegurate de tener una versión de
+Puedes instalar [R](https://www.r-project.org/) a través de [Rstudio](https://www.rstudio.com/), asegurate de tener una versión de
 R > 4.0. Puedes checar la versión de `R` que tienes si ejecutas `version` 
 en tu consola de R:
 
@@ -204,7 +233,27 @@ install.packages('tidyverse')
 </div>
 
 
-# 6-Flujo general de trabajo
+---
+# 2: Organización del proyecto
+
+[Slides](https://comunidadbioinfo.github.io/minicurso_abr_2021/Slides/Slides.html#12)
+
+```{r, out.width="450px", fig.align='center', echo = F}
+knitr::include_graphics("../Slides/Images/Proyecto.png")
+```
+
+## Experimento
+
+Número de acceso GEO: GSE152699
+
+```{r, out.width="800px", fig.align='center', echo=F}
+knitr::include_graphics("../Slides/Images/Experiment_ver.png")
+```
+
+
+# 3: Flujo de trabajo para el análisis de RNA-seq
+
+[Slides](https://comunidadbioinfo.github.io/minicurso_abr_2021/Slides/Slides.html#22)
 
 En este mini curso veremos brevemente como analizar datos de RNA-seq, tendremos 
 una breve introdución a RNA-seq, así como los pasos a seguir en el análisis bioinformático
@@ -216,9 +265,14 @@ knitr::include_graphics("https://biocorecrg.github.io/RNAseq_course_2019/images/
 
 Imagen tomada de [BiCore RNAseq course 2019](https://biocorecrg.github.io/RNAseq_course_2019/salmon.html)
 
+
 ---
 
-# 7-QC
+# 5: Control de calidad de los datos
+
+[Slides](https://comunidadbioinfo.github.io/minicurso_abr_2021/Slides/Slides.html#28)
+
+Muchas veces a esté paso se le conoce como *QC (Quality Check)*.
 
 
 ## Pasos para correr FastQC:
@@ -269,7 +323,9 @@ multiQC .
 
 ---
 
-# 8-Alineadores
+# 6: Alineamiento (Salmon)
+
+[Slides](https://comunidadbioinfo.github.io/minicurso_abr_2021/Slides/Slides.html#63)
 
 Si deseas realizar el pseudo-alineamiento con `Salmon` 
 te recomendamos descargar los archivos `.fastq` de las líneas celulares así como el
@@ -335,7 +391,9 @@ salmon quant -i ../transcriptome/genecode.v37.salmon141 \
 
 ---
 
-# 9-Tximeta
+# 7: Tximeta
+
+[Slides](https://comunidadbioinfo.github.io/minicurso_abr_2021/Slides/Slides.html#80)
 
 
 ```{r, out.width = "650px",fig.align='center'}
@@ -416,11 +474,21 @@ coldata
 se <- tximeta(coldata)
 ```
 
+```{r, eval=F}
+# Opción si no funciona tximeta
+#load("../data/ObjetosR.RData")
+```
+
+
 ---
 
-# 10-Summarized experiment
+# 8: Objeto SummarizedExperiment en R
 
-Image
+[Slides](https://comunidadbioinfo.github.io/minicurso_abr_2021/Slides/Slides.html#87)
+
+```{r, out.width="700px", echo=FALSE}
+knitr::include_graphics("../Slides/Images/Slots.png")
+```
 
 ```{r  include=FALSE}
 library(SummarizedExperiment)
@@ -506,7 +574,10 @@ row.names(colData(se)) == colnames(assay(se))
 
 ---
 
-# 11-Normalización
+# 9: Normalización de los datos (RPKM, TPM)
+
+[Slides](https://comunidadbioinfo.github.io/minicurso_abr_2021/Slides/Slides.html#100)
+
 
 - Es el primer paso del análisis de expresión diferencial y es necesario para hacer comparaciones acertadas entre muestras. 
 
@@ -683,7 +754,7 @@ colnames(df)[1:2] <- c("x", "y")
 # Nombre de las graficas
 lvls <- c("log2(x + 1)", "vst", "rlog")
 
-# Agrupar los tres tipos de normalizacion
+# Agrupar los tres tipos de normalizacion en grupos como factores
 df$transformation <- factor(df$transformation, levels=lvls)
 
 # Plotear los datos
@@ -696,7 +767,9 @@ ggplot(df, aes(x = x, y = y)) + geom_hex(bins = 80) +
 
 ---
 
-# 12-Exploración de datos
+# 10: Exploración de los datos
+
+[Slides](https://comunidadbioinfo.github.io/minicurso_abr_2021/Slides/Slides.html#113) 
 
 ## PCA
 
@@ -765,7 +838,9 @@ screeplot(PCA)
 
 ---
 
-# 13-Análisis de expresión diferencial (DE)
+# 11: Análisis de expresión diferencial
+
+[Slides](https://comunidadbioinfo.github.io/minicurso_abr_2021/Slides/Slides.html#152)
 
 Paso para obtener cuales son los genes que varían entre las condiciones
 
@@ -775,6 +850,7 @@ knitr::include_graphics("https://raw.githubusercontent.com/hbctraining/DGE_works
 
 [Imagen tomada de Intro to DGE](https://github.com/hbctraining/DGE_workshop)
 
+Recordemos el objeto que creeamos
 
 ```{r echo=TRUE}
 # Checar objeto generado 
@@ -801,7 +877,9 @@ resLFC1 <- results(dds, lfcThreshold=1)
 table(resLFC1$padj < 0.1)
 ```
 
-# 14- Visualización de DE
+# 12: Visualización de los resultados
+
+[Slides](https://comunidadbioinfo.github.io/minicurso_abr_2021/Slides/Slides.html#161) 
 
 ## MAplot
 
@@ -828,7 +906,7 @@ De manera similar al MAplot con el volcano plot visualizamos los genes que muest
 - En el eje x se grafica el lfc o *log2foldchange*
 
 
-```{r, eval=T}
+```{r}
 ##Para crear un volcano plot necesitas convertir los resultados de DESeq a un data frame
 DEG <- as.data.frame(res)
 ##En el script de funciones encontrarás la función de volcanoplotR para generar tu gráfico
@@ -871,7 +949,7 @@ pheatmap(norm_counts,
          annotation_col = annotation_col)
 ```
 
-```{r, eval = T}
+```{r}
 library(pheatmap)
 pheatmap(norm_counts, 
          border_color = NA, 

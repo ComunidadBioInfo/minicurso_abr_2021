@@ -4,7 +4,7 @@
     <title>Minicurso</title>
     <meta charset="utf-8" />
     <meta name="author" content="Ana BVA, Rodolfo LCD" />
-    <meta name="date" content="2021-04-13" />
+    <meta name="date" content="2021-04-14" />
     <script src="libs/header-attrs-2.7/header-attrs.js"></script>
     <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
     <link href="libs/remark-css-0.0.1/default-fonts.css" rel="stylesheet" />
@@ -18,7 +18,7 @@ class: center, middle, inverse, title-slide
 
 # Minicurso
 ### Ana BVA, Rodolfo LCD
-### 13 April 2021
+### 14 April 2021
 
 ---
 
@@ -189,6 +189,9 @@ fastqc ../Data/*.fastqc -o ../Results/
 mv ../Data/*.bam ../Results/
 ```
 ]
+
+**Checa el paquete [`here`](https://github.com/jennybc/here_here) desarrollado por Jenny B.
+
 - ¡Mejorar el código! -&gt; *Less is more*
 ---
 
@@ -713,7 +716,7 @@ class: inverse, center, middle
 
 ¿Dónde estamos?
 
-&lt;img src="images/worflowTximeta.png" width="450px" style="display: block; margin: auto;" /&gt;
+&lt;img src="Images/worflowTximeta.png" width="450px" style="display: block; margin: auto;" /&gt;
  
 .tiny[Imagen tomada de [aquí](https://biocorecrg.github.io/RNAseq_course_2019/salmon.html)]
 
@@ -952,61 +955,48 @@ rowRanges(se)
 ```
 
 ```
-## GRanges object with 184844 ranges and 9 metadata columns:
-##                             seqnames              ranges strand |
-##                                &lt;Rle&gt;           &lt;IRanges&gt;  &lt;Rle&gt; |
-##   ENST00000631435  CHR_HSCHR7_2_CTG6 142847306-142847317      + |
-##   ENST00000415118                 14   22438547-22438554      + |
-##   ENST00000434970                 14   22439007-22439015      + |
-##   ENST00000448914                 14   22449113-22449125      + |
-##   ENST00000632524 CHR_HSCHR14_3_CTG1 105866322-105866332      - |
-##               ...                ...                 ...    ... .
-##   ENST00000444456                  1 247974741-247975653      + |
-##   ENST00000416377                  1 248003129-248004068      + |
-##   ENST00000318104                  1 248121932-248122882      + |
-##   ENST00000606902                  1 248498308-248498649      + |
-##   ENST00000427827                  1 248549444-248549762      - |
-##                             tx_id             tx_biotype tx_cds_seq_start
-##                       &lt;character&gt;            &lt;character&gt;        &lt;integer&gt;
-##   ENST00000631435 ENST00000631435              TR_D_gene        142847306
-##   ENST00000415118 ENST00000415118              TR_D_gene         22438547
-##   ENST00000434970 ENST00000434970              TR_D_gene         22439007
-##   ENST00000448914 ENST00000448914              TR_D_gene         22449113
-##   ENST00000632524 ENST00000632524              IG_D_gene        105866322
-##               ...             ...                    ...              ...
-##   ENST00000444456 ENST00000444456 unprocessed_pseudogene             &lt;NA&gt;
-##   ENST00000416377 ENST00000416377 unprocessed_pseudogene             &lt;NA&gt;
-##   ENST00000318104 ENST00000318104 unprocessed_pseudogene             &lt;NA&gt;
-##   ENST00000606902 ENST00000606902 unprocessed_pseudogene             &lt;NA&gt;
-##   ENST00000427827 ENST00000427827 unprocessed_pseudogene             &lt;NA&gt;
-##                   tx_cds_seq_end         gene_id tx_support_level
-##                        &lt;integer&gt;     &lt;character&gt;        &lt;integer&gt;
-##   ENST00000631435      142847317 ENSG00000282253             &lt;NA&gt;
-##   ENST00000415118       22438554 ENSG00000223997             &lt;NA&gt;
-##   ENST00000434970       22439015 ENSG00000237235             &lt;NA&gt;
-##   ENST00000448914       22449125 ENSG00000228985             &lt;NA&gt;
-##   ENST00000632524      105866332 ENSG00000282455             &lt;NA&gt;
-##               ...            ...             ...              ...
-##   ENST00000444456           &lt;NA&gt; ENSG00000237492             &lt;NA&gt;
-##   ENST00000416377           &lt;NA&gt; ENSG00000232215             &lt;NA&gt;
-##   ENST00000318104           &lt;NA&gt; ENSG00000177233             &lt;NA&gt;
-##   ENST00000606902           &lt;NA&gt; ENSG00000271934             &lt;NA&gt;
-##   ENST00000427827           &lt;NA&gt; ENSG00000227102             &lt;NA&gt;
-##                       tx_id_version gc_content         tx_name
-##                         &lt;character&gt;  &lt;numeric&gt;     &lt;character&gt;
-##   ENST00000631435 ENST00000631435.1    83.3333 ENST00000631435
-##   ENST00000415118 ENST00000415118.1    25.0000 ENST00000415118
-##   ENST00000434970 ENST00000434970.2    55.5556 ENST00000434970
-##   ENST00000448914 ENST00000448914.1    61.5385 ENST00000448914
-##   ENST00000632524 ENST00000632524.1    54.5455 ENST00000632524
-##               ...               ...        ...             ...
-##   ENST00000444456 ENST00000444456.1    44.0307 ENST00000444456
-##   ENST00000416377 ENST00000416377.2    45.3191 ENST00000416377
-##   ENST00000318104 ENST00000318104.2    47.7392 ENST00000318104
-##   ENST00000606902 ENST00000606902.2    45.9064 ENST00000606902
-##   ENST00000427827 ENST00000427827.2    45.4545 ENST00000427827
+## GRanges object with 172103 ranges and 6 metadata columns:
+##                   seqnames              ranges strand |           tx_id
+##                      &lt;Rle&gt;           &lt;IRanges&gt;  &lt;Rle&gt; |     &lt;character&gt;
+##   ENST00000415118       14   22438547-22438554      + | ENST00000415118
+##   ENST00000434970       14   22439007-22439015      + | ENST00000434970
+##   ENST00000448914       14   22449113-22449125      + | ENST00000448914
+##   ENST00000604642       15   20003840-20003862      - | ENST00000604642
+##   ENST00000603326       15   20004797-20004815      - | ENST00000603326
+##               ...      ...                 ...    ... .             ...
+##   ENST00000444456        1 247974741-247975653      + | ENST00000444456
+##   ENST00000416377        1 248003129-248004068      + | ENST00000416377
+##   ENST00000318104        1 248121932-248122882      + | ENST00000318104
+##   ENST00000606902        1 248498308-248498649      + | ENST00000606902
+##   ENST00000427827        1 248549444-248549762      - | ENST00000427827
+##                               tx_biotype tx_cds_seq_start tx_cds_seq_end
+##                              &lt;character&gt;        &lt;integer&gt;      &lt;integer&gt;
+##   ENST00000415118              TR_D_gene         22438547       22438554
+##   ENST00000434970              TR_D_gene         22439007       22439015
+##   ENST00000448914              TR_D_gene         22449113       22449125
+##   ENST00000604642              IG_D_gene         20003840       20003862
+##   ENST00000603326              IG_D_gene         20004797       20004815
+##               ...                    ...              ...            ...
+##   ENST00000444456 unprocessed_pseudogene             &lt;NA&gt;           &lt;NA&gt;
+##   ENST00000416377 unprocessed_pseudogene             &lt;NA&gt;           &lt;NA&gt;
+##   ENST00000318104 unprocessed_pseudogene             &lt;NA&gt;           &lt;NA&gt;
+##   ENST00000606902 unprocessed_pseudogene             &lt;NA&gt;           &lt;NA&gt;
+##   ENST00000427827 unprocessed_pseudogene             &lt;NA&gt;           &lt;NA&gt;
+##                           gene_id         tx_name
+##                       &lt;character&gt;     &lt;character&gt;
+##   ENST00000415118 ENSG00000223997 ENST00000415118
+##   ENST00000434970 ENSG00000237235 ENST00000434970
+##   ENST00000448914 ENSG00000228985 ENST00000448914
+##   ENST00000604642 ENSG00000270961 ENST00000604642
+##   ENST00000603326 ENSG00000271317 ENST00000603326
+##               ...             ...             ...
+##   ENST00000444456 ENSG00000237492 ENST00000444456
+##   ENST00000416377 ENSG00000232215 ENST00000416377
+##   ENST00000318104 ENSG00000177233 ENST00000318104
+##   ENST00000606902 ENSG00000271934 ENST00000606902
+##   ENST00000427827 ENSG00000227102 ENST00000427827
 ##   -------
-##   seqinfo: 455 sequences from GRCh38 genome
+##   seqinfo: 47 sequences from GRCh38 genome
 ```
 
 ]
@@ -1041,23 +1031,23 @@ head(assay(se), 5)
 
 ```
 ##                 A_Control_1 A_Control_2 A_Control_3 M_Control_1 M_Control_2
-## ENST00000631435           0           0           0           0           0
 ## ENST00000415118           0           0           0           0           0
 ## ENST00000434970           0           0           0           0           0
 ## ENST00000448914           0           0           0           0           0
-## ENST00000632524           0           0           0           0           0
+## ENST00000604642           0           0           0           0           0
+## ENST00000603326           0           0           0           0           0
 ##                 M_Control_3 A_Verafinib_1 A_Verafinib_2 A_Verafinib_3
-## ENST00000631435           0             0             0             0
 ## ENST00000415118           0             0             0             0
 ## ENST00000434970           0             0             0             0
 ## ENST00000448914           0             0             0             0
-## ENST00000632524           0             0             0             0
+## ENST00000604642           0             0             0             0
+## ENST00000603326           0             0             0             0
 ##                 M_Verafinib_1 M_Verafinib_2 M_Verafinib_3
-## ENST00000631435             0             0             0
 ## ENST00000415118             0             0             0
 ## ENST00000434970             0             0             0
 ## ENST00000448914             0             0             0
-## ENST00000632524             0             0             0
+## ENST00000604642             0             0             0
+## ENST00000603326             0             0             0
 ```
 
 ]
@@ -1075,23 +1065,23 @@ head(se@assays@data$abundance, 5)
 
 ```
 ##                 A_Control_1 A_Control_2 A_Control_3 M_Control_1 M_Control_2
-## ENST00000631435           0           0           0           0           0
 ## ENST00000415118           0           0           0           0           0
 ## ENST00000434970           0           0           0           0           0
 ## ENST00000448914           0           0           0           0           0
-## ENST00000632524           0           0           0           0           0
+## ENST00000604642           0           0           0           0           0
+## ENST00000603326           0           0           0           0           0
 ##                 M_Control_3 A_Verafinib_1 A_Verafinib_2 A_Verafinib_3
-## ENST00000631435           0             0             0             0
 ## ENST00000415118           0             0             0             0
 ## ENST00000434970           0             0             0             0
 ## ENST00000448914           0             0             0             0
-## ENST00000632524           0             0             0             0
+## ENST00000604642           0             0             0             0
+## ENST00000603326           0             0             0             0
 ##                 M_Verafinib_1 M_Verafinib_2 M_Verafinib_3
-## ENST00000631435             0             0             0
 ## ENST00000415118             0             0             0
 ## ENST00000434970             0             0             0
 ## ENST00000448914             0             0             0
-## ENST00000632524             0             0             0
+## ENST00000604642             0             0             0
+## ENST00000603326             0             0             0
 ```
 ]
 
@@ -1308,13 +1298,12 @@ Se puede normalizar considerando:
 
 Se pueden ocupar otras transformaciones en la paquetería de `DESeq2` pero no son las mas recomendadas para DE. 
 
-
-
 Para normalizar, primero construimos el objeto `DESeqDataSet`, para ello necesitamos definir el modelo de DE (Quienes son Controles y quienes tratamiento). 
 
 
 
 ```r
+# Importamos las librerías que necesitemos
 library("DESeq2")
 library("dplyr")
 library("ggplot2")
@@ -1323,11 +1312,16 @@ library("vsn")
 
 
 ```r
-se$Condition &lt;- factor(se$Treatment)
+# Definir los grupos que se desean comparar
+se$Condition &lt;- factor(se$Condition)
+
+# Checar cantidad de muestras
 table(se$Condition)
+
+# Generar el objeto de DESeq 
 dds &lt;- DESeqDataSet(se, design = ~ Condition)
-keep &lt;- rowSums(counts(dds) &gt;= 3) &gt;= 6
-dds &lt;- dds[keep, ]
+
+# Funcion que normaliza los datos y realiza el analisis de expresión differencial
 dds &lt;- DESeq(dds)
 ```
 
@@ -1342,7 +1336,7 @@ dds &lt;- DESeq(dds)
 
 Puedes realizar otras transformaciones en `DESeq2` para estabilizar la varianza a través de los differentes valores promedio de expresión.  
 
-![](Slides_files/figure-html/unnamed-chunk-84-1.png)&lt;!-- --&gt;![](Slides_files/figure-html/unnamed-chunk-84-2.png)&lt;!-- --&gt;
+![](Slides_files/figure-html/unnamed-chunk-83-1.png)&lt;!-- --&gt;![](Slides_files/figure-html/unnamed-chunk-83-2.png)&lt;!-- --&gt;
 
 
 
@@ -1354,17 +1348,17 @@ head(assay(vsd), 3)
 
 ```
 ##                 A_Control_1 A_Control_2 A_Control_3 M_Control_1 M_Control_2
-## ENST00000641506    3.865118    3.422182    3.848937    3.623564    3.489049
-## ENST00000611116    3.495553    3.505576    2.865362    2.820665    3.107486
-## ENST00000390289    3.169221    3.689848    3.380771    3.187240    2.128322
+## ENST00000641506    5.243738    5.022432    5.236241    5.121340    5.055195
+## ENST00000611116    5.058149    5.063223    4.758866    4.737813    4.871766
+## ENST00000390289    4.900795    5.154803    5.002771    4.909267    4.423150
 ##                 M_Control_3 A_Verafinib_1 A_Verafinib_2 A_Verafinib_3
-## ENST00000641506    3.732776      4.358633      3.959656      4.298823
-## ENST00000611116    3.953500      3.112915      2.128322      2.128322
-## ENST00000390289    3.458380      3.495493      2.128322      3.456609
+## ENST00000641506    5.176386      5.508017      5.293662      5.474252
+## ENST00000611116    5.289621      4.874653      4.423150      4.423150
+## ENST00000390289    5.040044      5.058810      4.423150      5.039269
 ##                 M_Verafinib_1 M_Verafinib_2 M_Verafinib_3
-## ENST00000641506      4.721364      5.021378      4.313511
-## ENST00000611116      3.748725      3.468794      3.740271
-## ENST00000390289      4.470129      3.744108      3.962053
+## ENST00000641506      5.716058      5.895262      5.482647
+## ENST00000611116      5.185938      5.045729      5.180529
+## ENST00000390289      5.571450      5.182835      5.294481
 ```
 
 ```r
@@ -1375,20 +1369,21 @@ head(assay(rld), 3)
 
 ```
 ##                 A_Control_1 A_Control_2 A_Control_3 M_Control_1 M_Control_2
-## ENST00000641506    2.906661    2.240003   2.8840528    2.556455   2.4041915
-## ENST00000611116    1.835586    1.851542   0.6230815    0.515502   1.1635331
-## ENST00000390289    1.415209    2.293577   1.8006843    1.448514   0.1659518
+## ENST00000641506    2.905283    2.239445   2.8848975   2.5548691   2.4040501
+## ENST00000611116    1.829812    1.846142   0.6284644   0.5186003   1.1642110
+## ENST00000390289    1.416904    2.289820   1.8015912   1.4496085   0.1791245
 ##                 M_Control_3 A_Verafinib_1 A_Verafinib_2 A_Verafinib_3
-## ENST00000641506    2.740182      3.525234    3.03844125     3.4556640
-## ENST00000611116    2.451214      1.172982   -0.07298106    -0.0787367
-## ENST00000390289    1.919847      1.975780    0.14501562     1.9171496
+## ENST00000641506    2.739348      3.526028    3.03947595    3.45477910
+## ENST00000611116    2.444677      1.174766   -0.05979834   -0.07010645
+## ENST00000390289    1.918379      1.975739    0.15929486    1.91598057
 ##                 M_Verafinib_1 M_Verafinib_2 M_Verafinib_3
-## ENST00000641506      3.935368      4.255909      3.472852
-## ENST00000611116      2.169723      1.754765      2.158369
-## ENST00000390289      3.271490      2.341449      2.640103
+## ENST00000641506      3.938412      4.256634      3.472666
+## ENST00000611116      2.166800      1.752071      2.152501
+## ENST00000390289      3.267274      2.339360      2.635467
 ```
 
 ```r
+# Normalización con el factor de normalizacion 
 dds &lt;- estimateSizeFactors(dds)
 ```
 
@@ -1397,6 +1392,7 @@ dds &lt;- estimateSizeFactors(dds)
 ```
 
 ```r
+# Juntar los datos de las tres normalizaciones
 df &lt;- bind_rows(
   as_data_frame(log2(counts(dds, normalized=TRUE)[, 1:2]+1)) %&gt;%
          mutate(transformation = "log2(x + 1)"),
@@ -1411,14 +1407,21 @@ df &lt;- bind_rows(
 ```
 
 ```r
+# Renombrar columnas
 colnames(df)[1:2] &lt;- c("x", "y")  
+
+# Nombre de las graficas
 lvls &lt;- c("log2(x + 1)", "vst", "rlog")
+
+# Agrupar los tres tipos de normalizacion en grupos como factores
 df$transformation &lt;- factor(df$transformation, levels=lvls)
+
+# Plotear los datos
 ggplot(df, aes(x = x, y = y)) + geom_hex(bins = 80) +
   coord_fixed() + facet_grid( . ~ transformation)  
 ```
 
-![](Slides_files/figure-html/unnamed-chunk-85-1.png)&lt;!-- --&gt;
+![](Slides_files/figure-html/unnamed-chunk-84-1.png)&lt;!-- --&gt;
 
 
 ]
@@ -1648,18 +1651,18 @@ screeplot(PCA)
 --
 
 .pull-left[**DESeq2**
-&lt;img src="Slides_files/figure-html/unnamed-chunk-101-1.png" width="350px" style="display: block; margin: auto;" /&gt;
+&lt;img src="Slides_files/figure-html/unnamed-chunk-100-1.png" width="350px" style="display: block; margin: auto;" /&gt;
 ]
 --
 .pull-right[**PCA tools**
-&lt;img src="Slides_files/figure-html/unnamed-chunk-102-1.png" width="350px" style="display: block; margin: auto;" /&gt;
+&lt;img src="Slides_files/figure-html/unnamed-chunk-101-1.png" width="350px" style="display: block; margin: auto;" /&gt;
 ]
 
 ---
 ## PCA
 ## ¿Cuánta varianza es explicada por cada componente?
 
-&lt;img src="Slides_files/figure-html/unnamed-chunk-103-1.png" width="400px" style="display: block; margin: auto;" /&gt;
+&lt;img src="Slides_files/figure-html/unnamed-chunk-102-1.png" width="400px" style="display: block; margin: auto;" /&gt;
 
 ---
 ## PCA y MDS
@@ -1675,7 +1678,7 @@ glimmaMDS(dds)
 ---
 class: inverse, center, middle
 
-# 11: Análisis de expresión diferencial
+# 13: Análisis de expresión diferencial
 ---
 ## Análisis de expresión diferencial (DE)
 
@@ -1754,33 +1757,33 @@ res
 ```
 ## log2 fold change (MLE): Condition Verafinib vs Control 
 ## Wald test p-value: Condition Verafinib vs Control 
-## DataFrame with 36927 rows and 6 columns
+## DataFrame with 35483 rows and 6 columns
 ##                   baseMean log2FoldChange     lfcSE       stat      pvalue
 ##                  &lt;numeric&gt;      &lt;numeric&gt; &lt;numeric&gt;  &lt;numeric&gt;   &lt;numeric&gt;
-## ENST00000641506   10.05295      1.3587257  0.360242  3.7716981 1.62140e-04
-## ENST00000611116    3.26116     -0.0446795  0.807814 -0.0553091 9.55892e-01
-## ENST00000390289    4.55091      0.9101406  0.601132  1.5140438 1.30015e-01
-## ENST00000361390 3377.06764      2.1112640  0.379290  5.5663616 2.60113e-08
-## ENST00000361453 6519.27598      1.5883633  0.385637  4.1188086 3.80836e-05
+## ENST00000641506   10.05792      1.3610503  0.360096  3.7796900 1.57024e-04
+## ENST00000611116    3.26143     -0.0421221  0.808389 -0.0521062 9.58444e-01
+## ENST00000390289    4.55373      0.9128357  0.601744  1.5169831 1.29271e-01
+## ENST00000361390 3379.18027      2.1135181  0.379169  5.5740792 2.48843e-08
+## ENST00000361453 6522.68449      1.5906491  0.385459  4.1266327 3.68114e-05
 ## ...                    ...            ...       ...        ...         ...
-## ENST00000622095    7.43476       0.767322  0.620245   1.237127 2.16040e-01
-## ENST00000605551   40.04745      -0.849691  0.397600  -2.137050 3.25939e-02
-## ENST00000579209    9.61056       1.595292  0.387011   4.122088 3.75454e-05
-## ENST00000500626    3.45987       0.796230  0.733548   1.085450 2.77722e-01
-## ENST00000314835   17.49136       0.164460  0.675468   0.243476 8.07637e-01
+## ENST00000622095    7.43638       0.769911  0.620186   1.241418 2.14451e-01
+## ENST00000605551   40.04273      -0.846855  0.397376  -2.131115 3.30797e-02
+## ENST00000579209    9.61591       1.597767  0.386827   4.130447 3.62059e-05
+## ENST00000500626    3.46026       0.798818  0.733797   1.088610 2.76326e-01
+## ENST00000314835   17.48904       0.166453  0.674825   0.246661 8.05171e-01
 ##                        padj
 ##                   &lt;numeric&gt;
-## ENST00000641506 1.70008e-03
-## ENST00000611116 9.82431e-01
-## ENST00000390289 3.28176e-01
-## ENST00000361390 7.75205e-07
-## ENST00000361453 4.92844e-04
+## ENST00000641506 1.62737e-03
+## ENST00000611116 9.82689e-01
+## ENST00000390289 3.24642e-01
+## ENST00000361390 7.31775e-07
+## ENST00000361453 4.68935e-04
 ## ...                     ...
-## ENST00000622095 0.455109940
-## ENST00000605551 0.124381089
-## ENST00000579209 0.000486903
-## ENST00000500626 0.529506067
-## ENST00000314835 0.917487993
+## ENST00000622095 0.451633725
+## ENST00000605551 0.124474321
+## ENST00000579209 0.000463051
+## ENST00000500626 0.525737614
+## ENST00000314835 0.915847174
 ```
 
 ```r
@@ -1789,11 +1792,11 @@ summary(res)
 
 ```
 ## 
-## out of 36927 with nonzero total read count
+## out of 35483 with nonzero total read count
 ## adjusted p-value &lt; 0.1
-## LFC &gt; 0 (up)       : 4545, 12%
-## LFC &lt; 0 (down)     : 4429, 12%
-## outliers [1]       : 19, 0.051%
+## LFC &gt; 0 (up)       : 4420, 12%
+## LFC &lt; 0 (down)     : 4315, 12%
+## outliers [1]       : 18, 0.051%
 ## low counts [2]     : 0, 0%
 ## (mean count &lt; 1)
 ## [1] see 'cooksCutoff' argument of ?results
@@ -1828,14 +1831,14 @@ table(resLFC1$padj &lt; 0.1)
 ```
 ## 
 ## FALSE  TRUE 
-## 34994  1198
+## 34309  1156
 ```
 ]
 
 ---
 class: inverse, center, middle
 
-# 12: Visualización de los resultados
+# 14: Visualización de los resultados
 ---
 
 .center[
@@ -1891,7 +1894,7 @@ plotMA(res)
 ---
 # MAplot
 
-&lt;img src="Slides_files/figure-html/unnamed-chunk-120-1.png" width="450px" style="display: block; margin: auto;" /&gt;
+&lt;img src="Slides_files/figure-html/unnamed-chunk-119-1.png" width="450px" style="display: block; margin: auto;" /&gt;
 
 ---
 # MAplot
@@ -1920,13 +1923,13 @@ resultsNames(dds)
 .pull-left[
 Sin `lfcshrink` 
 
-&lt;img src="Slides_files/figure-html/unnamed-chunk-122-1.png" width="450px" style="display: block; margin: auto;" /&gt;
+&lt;img src="Slides_files/figure-html/unnamed-chunk-121-1.png" width="450px" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
 Con `lfcshrink` 
 
-&lt;img src="Slides_files/figure-html/unnamed-chunk-123-1.png" width="450px" style="display: block; margin: auto;" /&gt;
+&lt;img src="Slides_files/figure-html/unnamed-chunk-122-1.png" width="450px" style="display: block; margin: auto;" /&gt;
 ]
 ---
 # MAplot
@@ -1934,7 +1937,7 @@ Con `lfcshrink`
 También pueden generar un MAplot interactivo con la librería de *Glimma*
 
 ```r
-##Para los objetos creados con DESeq2 es importante que incluyas un nivel llamado group al objeto dds
+##Para los objetos creados con DESeq2 es importante que incluyas un nivel llamado group
 group &lt;- info$Treatment
 dds$group &lt;- group
 glimmaMA(dds)
@@ -1964,7 +1967,7 @@ volcanoplotR(DEG, logfc = 0, p.adj = 0.1, type = "DESeq")
 ---
 # Volcano plot
 
-&lt;img src="Slides_files/figure-html/unnamed-chunk-126-1.png" width="450px" style="display: block; margin: auto;" /&gt;
+&lt;img src="Slides_files/figure-html/unnamed-chunk-125-1.png" width="450px" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -2011,8 +2014,7 @@ pheatmap(norm_counts,
 ---
 # Heatmap
 
-&lt;img src="Slides_files/figure-html/unnamed-chunk-128-1.png" width="450px" style="display: block; margin: auto;" /&gt;
-
+&lt;img src="Slides_files/figure-html/unnamed-chunk-127-1.png" width="450px" style="display: block; margin: auto;" /&gt;
 
 
 

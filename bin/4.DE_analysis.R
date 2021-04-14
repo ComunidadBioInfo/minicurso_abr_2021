@@ -14,6 +14,9 @@ list.files(dir)
 coldata$files <- file.path(dir,paste0(coldata$Sample,"_quant"),"quant.sf")
 data.frame(coldata$Sample, file.exists(coldata$files))
 
+# tximeta Error: failed to load resource name: database disk image is malformed
+# Solved: redownloading sqlite file 
+# > ah2 = refreshHub(hubClass="AnnotationHub")
 se <- tximeta(coldata)
 se$Condition <- factor(se$Treatment)
 table(se$Condition)

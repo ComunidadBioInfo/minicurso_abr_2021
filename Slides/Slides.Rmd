@@ -208,6 +208,9 @@ fastqc ../Data/*.fastqc -o ../Results/
 mv ../Data/*.bam ../Results/
 ```
 ]
+
+**Checa el paquete [`here`](https://github.com/jennybc/here_here) desarrollado por Jenny B.
+
 - ¡Mejorar el código! -> *Less is more*
 ---
 
@@ -785,7 +788,7 @@ knitr::include_graphics("https://biocorecrg.github.io/RNAseq_course_2019/images/
 ¿Dónde estamos?
 
 ```{r, out.width = "450px",fig.align='center'}
-knitr::include_graphics("images/worflowTximeta.png")
+knitr::include_graphics("Images/worflowTximeta.png")
 ```
  
 .tiny[Imagen tomada de [aquí](https://biocorecrg.github.io/RNAseq_course_2019/salmon.html)]
@@ -1110,6 +1113,7 @@ library(tidyverse)
 
 
 ```{r}
+# tabla con cuentas 
 df <- tibble(gene = c("gene1", "gene2"),
                  muestraA = c(1749, 35),
                  muestraB = c(943, 29)
@@ -1119,6 +1123,7 @@ df
 
 1. Crea una pseudo-referencia por muestra (promedio geometrico por fila) `sqrt(muestraA * muestra B)`
 ```{r}
+# Calcular el promedio geometrico
 df <- df %>%
   rowwise() %>% 
   mutate(prom_geom = sqrt(muestraA * muestraB))
@@ -1127,6 +1132,7 @@ df
 
 2. Se calcula la fración `muestra/pseudo-referencia`
 ```{r}
+# Dividir las cuentas entre el promedio geometrico
 df <- df %>% 
   rowwise() %>% 
   mutate(muestraA_pseudo_ref = muestraA / prom_geom) %>% 
@@ -1136,18 +1142,27 @@ df
 
 3. Se calcula un factor de normalización (size factor) utilizando la `mediana` por columnas.
 ```{r}
+# Se calcula el factor de normalizacion usando la mediana para cada muestra
 norm_factor_muestraA <- median(df$muestraA_pseudo_ref)
 norm_factor_muestraA
+
+# Repetimos el proceso para la muestra B
 norm_factor_muestraB <- median(df$muestraB_pseudo_ref)
 norm_factor_muestraB
+
 ```
 
 4. Se dividen las `cuentas crudas/size factor` para calcular las cuentas normalizadas.
 ```{r}
+# Columnas con las cuentas crudas
 df %>% 
   select(gene, muestraA, muestraB)
+
+# Dividir las cuentras entre el factor de normalización
 df$norm_muestraA <- df$muestraA/norm_factor_muestraA
 df$norm_muestraB <- df$muestraB/norm_factor_muestraB
+
+# Columnas con las cuentas normalizadas
 df %>%  
   select(norm_muestraA, norm_muestraB)
 ```
@@ -1165,20 +1180,11 @@ df %>%
 
 Se pueden ocupar otras transformaciones en la paquetería de `DESeq2` pero no son las mas recomendadas para DE. 
 
-```{r include=FALSE, eval=F}
-#Cambio
-#info <- read.delim(here::here("output/salmon_quants/metadata.txt"))
-#info$names <- info$Unique_id
-#dir <- file.path(here::here("output/salmon_quants"))
-#info$files <- file.path(dir,paste0(info$Sample,"_quant"),"quant.sf")
-#library("tximeta")
-#gse <- tximeta(info)
-```
-
 Para normalizar, primero construimos el objeto `DESeqDataSet`, para ello necesitamos definir el modelo de DE (Quienes son Controles y quienes tratamiento). 
 
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Importamos las librerías que necesitemos
 library("DESeq2")
 library("dplyr")
 library("ggplot2")
@@ -1186,11 +1192,16 @@ library("vsn")
 ```
 
 ```{r echo=TRUE, eval = F}
-se$Condition <- factor(se$Treatment)
+# Definir los grupos que se desean comparar
+se$Condition <- factor(se$Condition)
+
+# Checar cantidad de muestras
 table(se$Condition)
+
+# Generar el objeto de DESeq 
 dds <- DESeqDataSet(se, design = ~ Condition)
-keep <- rowSums(counts(dds) >= 3) >= 6
-dds <- dds[keep, ]
+
+# Funcion que normaliza los datos y realiza el analisis de expresión differencial
 dds <- DESeq(dds)
 ```
 
@@ -1206,7 +1217,10 @@ dds <- DESeq(dds)
 Puedes realizar otras transformaciones en `DESeq2` para estabilizar la varianza a través de los differentes valores promedio de expresión.  
 
 ```{r, dpi=300}
+# Grafica de cuentas crudas
 meanSdPlot(counts(dds), ranks = F)
+
+# Gráfica de cuentas en escala log2
 meanSdPlot(log2(counts(dds) +1), ranks = F)
 ```
 
@@ -1215,21 +1229,34 @@ meanSdPlot(log2(counts(dds) +1), ranks = F)
 # variance stabilizing transformation (VST), (Anders and Huber 2010)
 vsd <- vst(dds, blind = FALSE)
 head(assay(vsd), 3)
+
 # regularized-logarithm transformation (rlog), (Love, Huber, and Anders 2014)
 rld <- rlog(dds, blind = FALSE)
 head(assay(rld), 3)
+
+# Normalización con el factor de normalizacion 
 dds <- estimateSizeFactors(dds)
+
+# Juntar los datos de las tres normalizaciones
 df <- bind_rows(
   as_data_frame(log2(counts(dds, normalized=TRUE)[, 1:2]+1)) %>%
          mutate(transformation = "log2(x + 1)"),
   as_data_frame(assay(vsd)[, 1:2]) %>% mutate(transformation = "vst"),
   as_data_frame(assay(rld)[, 1:2]) %>% mutate(transformation = "rlog"))
   
+# Renombrar columnas
 colnames(df)[1:2] <- c("x", "y")  
+
+# Nombre de las graficas
 lvls <- c("log2(x + 1)", "vst", "rlog")
+
+# Agrupar los tres tipos de normalizacion en grupos como factores
 df$transformation <- factor(df$transformation, levels=lvls)
+
+# Plotear los datos
 ggplot(df, aes(x = x, y = y)) + geom_hex(bins = 80) +
   coord_fixed() + facet_grid( . ~ transformation)  
+ 
 ```
 
 
@@ -1512,7 +1539,7 @@ glimmaMDS(dds)
 ---
 class: inverse, center, middle
 
-# 11: Análisis de expresión diferencial
+# 13: Análisis de expresión diferencial
 ---
 ## Análisis de expresión diferencial (DE)
 
@@ -1624,7 +1651,7 @@ table(resLFC1$padj < 0.1)
 ---
 class: inverse, center, middle
 
-# 12: Visualización de los resultados
+# 14: Visualización de los resultados
 ---
 
 .center[
@@ -1734,7 +1761,7 @@ plotMA(res_lfc)
 .scroll-output[
 También pueden generar un MAplot interactivo con la librería de *Glimma*
 ```{r, eval = F, echo = T}
-##Para los objetos creados con DESeq2 es importante que incluyas un nivel llamado group al objeto dds
+##Para los objetos creados con DESeq2 es importante que incluyas un nivel llamado group
 group <- info$Treatment
 dds$group <- group
 glimmaMA(dds)
@@ -1822,7 +1849,6 @@ pheatmap(norm_counts[rownames(significant), ],
          show_rownames = F, 
          annotation_col = annotation_col)
 ```
-
 
 
 
