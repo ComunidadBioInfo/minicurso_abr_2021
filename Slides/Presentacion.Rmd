@@ -92,6 +92,14 @@ knitr::include_graphics("./Images/module7.png")
 ```
 
 ---
+## Agradecimientos
+
+
+```{r, out.width = "600px", fig.align = "center"}
+knitr::include_graphics("https://i0.wp.com/alcanzandoelconocimiento.com/wp-content/uploads/2019/11/Conabio-Logo-02.jpg?w=1024&ssl=1")
+```
+
+---
 class: inverse, center, middle
 
 # 1: Introducción al RNA-seq
@@ -144,7 +152,7 @@ knitr::include_graphics("./Images/book.png")
 
 class: inverse, center, middle
 
-# 6: Organización de un proyecto bioinformático
+# 2: Organización de un proyecto bioinformático
 
 ---
 
@@ -162,10 +170,13 @@ Almacenar el proyecto en .blue[GitHub] `r icons::icon_style(icons::fontawesome("
 ## Organización del proyecto  
 
 - La función del **README** es explicar la organización del proyecto y que otros entiendan su contenido
+--
 
 - Los datos deben de almacenarse en un directorio especial (considerar espacio en disco):
+--
 
 - Considerar almacenar los datos en un repositorio como respaldo [OSF](https://osf.io/) `r icons::academicons("osf")`
+--
 
 - **El código es una de las partes más importantes del proyecto**
 
@@ -221,7 +232,7 @@ knitr::include_graphics("./Images/Experiment_ver.png")
 
 class: inverse, center, middle
 
-# 5: Flujo de trabajo para el análisis de RNA-seq
+# 3: Flujo de trabajo para el análisis de RNA-seq
 ---
 ## Flujo general de trabajo
 
@@ -398,7 +409,7 @@ knitr::include_graphics("./Images/Fastq.png")
 ---
 class: inverse, center, middle
 
-# 7: Control de calidad de los datos
+# 5: Control de calidad de los datos
 ---
 ## ¿Porqué es importante revisar los datos crudos?
 --
@@ -567,7 +578,7 @@ multiQC .
 ---
 class: inverse, center, middle
 
-# 8: Alineamiento
+# 6: Alineamiento
 ---
 
 ```{r, out.width="600px", fig.align='center', echo = F}
@@ -754,7 +765,7 @@ salmon quant -i ../transcriptome/genecode.v37.salmon141 \
 
 class: inverse, center, middle
 
-# 9: Tximeta y Tximport
+# 7: Tximeta y Tximport
 ---
 ## Recordatorio
 
@@ -850,7 +861,7 @@ se <- tximeta(coldata)
 ---
 class: inverse, center, middle
 
-# 10: Objeto Summarized Experiment
+# 8: Objeto Summarized Experiment
 ---
 
 .center2[
@@ -996,7 +1007,7 @@ row.names(colData(se)) == colnames(assay(se))
 ---
 class: inverse, center, middle
 
-# 11: Normalización de los datos
+# 9: Normalización de los datos
 ---
 ## Normalización 
 
@@ -1227,7 +1238,7 @@ ggplot(df, aes(x = x, y = y)) + geom_hex(bins = 80) +
 ---
 class: inverse, center, middle
 
-# 12: Exploración de los datos
+# 10: Exploración de los datos
 ---
 
 
@@ -1399,7 +1410,6 @@ knitr::include_graphics("./Images/PCARNAseq.png")
 ]
 
 ---
-## PCA
 ## ¿Cómo crear nuestro propio PCA?
 
 .scroll-output[
@@ -1417,7 +1427,7 @@ Usemos la siguiente normalización logarítmica de las cuentas (toma en cuenta e
 rld <- rlog(dds, blind = F)
 ```
 
-Si tuvieramos un número mayor de muestras (n > 30) entonces conviene
+Si tuvieramos un número mayor de muestras (n > 30) entonces conviene:
 
 ```{r, eval = F, echo = T}
 vsd <- vst(dds, blind = T)
@@ -1436,6 +1446,7 @@ plotPCA(rld, intgroup = "Condition")
 
 
 **DESeq2 evalúa los 500 genes con mayor varianza del set de datos**
+
 
 - Con la librería de *PCAtools*:
 
@@ -1501,7 +1512,7 @@ glimmaMDS(dds)
 ---
 class: inverse, center, middle
 
-# 13: Análisis de expresión diferencial
+# 11: Análisis de expresión diferencial
 ---
 ## Análisis de expresión diferencial (DE)
 
@@ -1613,7 +1624,7 @@ table(resLFC1$padj < 0.1)
 ---
 class: inverse, center, middle
 
-# 14: Visualización de los resultados
+# 12: Visualización de los resultados
 ---
 
 .center[
@@ -1723,7 +1734,7 @@ plotMA(res_lfc)
 .scroll-output[
 También pueden generar un MAplot interactivo con la librería de *Glimma*
 ```{r, eval = F, echo = T}
-##Para los objetos creados con DESeq2 es importante que incluyas un nivel llamado group
+##Para los objetos creados con DESeq2 es importante que incluyas un nivel llamado group al objeto dds
 group <- info$Treatment
 dds$group <- group
 glimmaMA(dds)

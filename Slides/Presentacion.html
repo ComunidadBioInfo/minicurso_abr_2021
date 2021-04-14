@@ -4,7 +4,7 @@
     <title>Minicurso</title>
     <meta charset="utf-8" />
     <meta name="author" content="Ana BVA, Rodolfo LCD" />
-    <meta name="date" content="2021-04-11" />
+    <meta name="date" content="2021-04-13" />
     <script src="libs/header-attrs-2.7/header-attrs.js"></script>
     <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
     <link href="libs/remark-css-0.0.1/default-fonts.css" rel="stylesheet" />
@@ -18,7 +18,7 @@ class: center, middle, inverse, title-slide
 
 # Minicurso
 ### Ana BVA, Rodolfo LCD
-### 11 April 2021
+### 13 April 2021
 
 ---
 
@@ -87,6 +87,12 @@ También está basado en el curso de ["Next generation sequencing bioiformatics"
 &lt;img src="./Images/module7.png" width="600px" style="display: block; margin: auto;" /&gt;
 
 ---
+## Agradecimientos
+
+
+&lt;img src="https://i0.wp.com/alcanzandoelconocimiento.com/wp-content/uploads/2019/11/Conabio-Logo-02.jpg?w=1024&amp;ssl=1" width="600px" style="display: block; margin: auto;" /&gt;
+
+---
 class: inverse, center, middle
 
 # 1: Introducción al RNA-seq
@@ -129,7 +135,7 @@ Estudio de la expresión genética
 
 class: inverse, center, middle
 
-# 6: Organización de un proyecto bioinformático
+# 2: Organización de un proyecto bioinformático
 
 ---
 
@@ -145,10 +151,13 @@ Almacenar el proyecto en .blue[GitHub] &lt;svg viewBox="0 0 496 512" style="heig
 ## Organización del proyecto  
 
 - La función del **README** es explicar la organización del proyecto y que otros entiendan su contenido
+--
 
 - Los datos deben de almacenarse en un directorio especial (considerar espacio en disco):
+--
 
 - Considerar almacenar los datos en un repositorio como respaldo [OSF](https://osf.io/) &lt;svg viewBox="0 0 512 512" style="height:1em;position:relative;display:inline-block;top:.1em;" xmlns="http://www.w3.org/2000/svg"&gt;  &lt;g label="icon" id="layer6" groupmode="layer"&gt;    &lt;path id="path2" d="m 255.9997,7.9999987 c -34.36057,0 -62.21509,27.8545563 -62.21509,62.2151643 0,20.303056 9.87066,38.160947 24.91769,49.517247 0.18814,-20.457899 16.79601,-36.993393 37.29685,-36.993393 20.50082,0 37.11091,16.535494 37.29909,36.993393 15.04533,-11.3563 24.9177,-29.212506 24.9177,-49.517247 C 318.21272,35.854555 290.35915,7.9999987 255.99915,7.9999987 Z M 293.29654,392.2676 c -0.18814,20.4601 -16.79601,36.99338 -37.29684,36.99338 -20.50082,0 -37.10922,-16.53551 -37.29684,-36.99338 -15.04759,11.35627 -24.91769,29.21246 -24.91769,49.51722 0,34.36059 27.85453,62.21518 62.2151,62.21518 34.36056,0 62.21508,-27.85459 62.21508,-62.21518 0,-20.30306 -9.87066,-38.16095 -24.91767,-49.51722 z M 441.78489,193.78484 c -20.30301,0 -38.16309,9.87068 -49.51717,24.91769 20.45786,0.18819 36.99333,16.79605 36.99333,37.29689 0,20.50085 -16.53547,37.11096 -36.9911,37.29916 11.35634,15.04533 29.21249,24.91769 49.51721,24.91769 C 476.14549,318.21327 504,290.35948 504,255.99942 504,221.6394 476.14549,193.78425 441.78489,193.78425 Z M 82.738898,255.99997 c 0,-20.50139 16.535509,-37.11096 36.993392,-37.29689 -11.35632,-15.04756 -29.214164,-24.91769 -49.517197,-24.91769 -34.36057,0 -62.2150945,27.85455 -62.2150945,62.21517 0,34.3606 27.8545245,62.21516 62.2150945,62.21516 20.303033,0 38.160877,-9.87068 49.517197,-24.91773 -20.457883,-0.18818 -36.993391,-16.796 -36.993391,-37.29688 z M 431.3627,80.636814 c -24.29549,-24.295544 -63.68834,-24.295544 -87.9844,0 -14.35704,14.357057 -20.00298,33.963346 -17.39331,52.633806 -0.0824,0.0809 -0.18198,0.13437 -0.26434,0.21491 -14.578,14.57799 -14.578,38.21689 0,52.79488 14.57797,14.57799 38.21681,14.57799 52.79484,0 0.0824,-0.0824 0.13455,-0.18198 0.21732,-0.26434 18.66819,2.60796 38.27445,-3.03799 52.63151,-17.39336 24.29378,-24.29778 24.29378,-63.68837 -0.003,-87.986153 z M 186.2806,378.51178 c 14.57798,-14.57799 14.57798,-38.21461 0,-52.79319 -14.57798,-14.57853 -38.21683,-14.57798 -52.79481,0 -0.0825,0.0824 -0.13448,0.18199 -0.21476,0.26215 -18.67046,-2.60795 -38.276723,3.03572 -52.63376,17.39505 -24.297753,24.29552 -24.297753,63.6884 0,87.98449 24.29551,24.29552 63.68833,24.29552 87.98439,0 14.35702,-14.35703 20.00297,-33.96333 17.39333,-52.63386 0.0848,-0.0786 0.18364,-0.13228 0.26672,-0.21505 z m 0,-245.02583 c -0.0826,-0.0824 -0.18198,-0.13436 -0.26445,-0.21494 2.60795,-18.66823 -3.038,-38.27452 -17.39332,-52.633811 -24.29777,-24.295544 -63.68832,-24.295544 -87.984405,0 -24.297747,24.297781 -24.297747,63.688381 0,87.986151 14.357042,14.35706 33.963315,20.00301 52.631515,17.39336 0.0808,0.0824 0.13447,0.18199 0.21475,0.26434 14.57799,14.57799 38.21684,14.57799 52.79482,0 14.57797,-14.57802 14.57797,-38.21689 0,-52.79488 z m 245.0821,209.89048 c -14.35703,-14.35703 -33.96329,-20.00301 -52.63378,-17.39505 -0.0809,-0.0824 -0.13228,-0.18199 -0.21506,-0.26215 -14.57797,-14.57799 -38.21685,-14.57799 -52.79482,0 -14.57797,14.57799 -14.57797,38.21461 0,52.79316 0.0827,0.0828 0.18198,0.13455 0.26434,0.21505 -2.60796,18.67053 3.03802,38.27683 17.39334,52.63386 24.29552,24.29552 63.68834,24.29552 87.98439,0 24.29775,-24.29552 24.29775,-63.68841 0.003,-87.98451 z" style="stroke-width:0.07717"&gt;&lt;/path&gt;  &lt;/g&gt;&lt;/svg&gt;
+--
 
 - **El código es una de las partes más importantes del proyecto**
 
@@ -200,7 +209,7 @@ Número de acceso GEO: GSE152699
 
 class: inverse, center, middle
 
-# 5: Flujo de trabajo para el análisis de RNA-seq
+# 3: Flujo de trabajo para el análisis de RNA-seq
 ---
 ## Flujo general de trabajo
 
@@ -358,7 +367,7 @@ Valores de **p** cercanos a cero -&gt; Alta calidad
 ---
 class: inverse, center, middle
 
-# 7: Control de calidad de los datos
+# 5: Control de calidad de los datos
 ---
 ## ¿Porqué es importante revisar los datos crudos?
 --
@@ -525,7 +534,7 @@ multiQC .
 ---
 class: inverse, center, middle
 
-# 8: Alineamiento
+# 6: Alineamiento
 ---
 
 &lt;img src="./Images/RNAseq_workflow2.png" width="600px" style="display: block; margin: auto;" /&gt;
@@ -687,7 +696,7 @@ salmon quant -i ../transcriptome/genecode.v37.salmon141 \
 
 class: inverse, center, middle
 
-# 9: Tximeta y Tximport
+# 7: Tximeta y Tximport
 ---
 ## Recordatorio
 
@@ -823,7 +832,7 @@ se &lt;- tximeta(coldata)
 ---
 class: inverse, center, middle
 
-# 10: Objeto Summarized Experiment
+# 8: Objeto Summarized Experiment
 ---
 
 .center2[
@@ -1131,7 +1140,7 @@ row.names(colData(se)) == colnames(assay(se))
 ---
 class: inverse, center, middle
 
-# 11: Normalización de los datos
+# 9: Normalización de los datos
 ---
 ## Normalización 
 
@@ -1333,7 +1342,7 @@ dds &lt;- DESeq(dds)
 
 Puedes realizar otras transformaciones en `DESeq2` para estabilizar la varianza a través de los differentes valores promedio de expresión.  
 
-![](Slides_files/figure-html/unnamed-chunk-83-1.png)&lt;!-- --&gt;![](Slides_files/figure-html/unnamed-chunk-83-2.png)&lt;!-- --&gt;
+![](Slides_files/figure-html/unnamed-chunk-84-1.png)&lt;!-- --&gt;![](Slides_files/figure-html/unnamed-chunk-84-2.png)&lt;!-- --&gt;
 
 
 
@@ -1409,7 +1418,7 @@ ggplot(df, aes(x = x, y = y)) + geom_hex(bins = 80) +
   coord_fixed() + facet_grid( . ~ transformation)  
 ```
 
-![](Slides_files/figure-html/unnamed-chunk-84-1.png)&lt;!-- --&gt;
+![](Slides_files/figure-html/unnamed-chunk-85-1.png)&lt;!-- --&gt;
 
 
 ]
@@ -1417,7 +1426,7 @@ ggplot(df, aes(x = x, y = y)) + geom_hex(bins = 80) +
 ---
 class: inverse, center, middle
 
-# 12: Exploración de los datos
+# 10: Exploración de los datos
 ---
 
 
@@ -1571,7 +1580,6 @@ Screeplot
 ]
 
 ---
-## PCA
 ## ¿Cómo crear nuestro propio PCA?
 
 .scroll-output[
@@ -1591,7 +1599,7 @@ Usemos la siguiente normalización logarítmica de las cuentas (toma en cuenta e
 rld &lt;- rlog(dds, blind = F)
 ```
 
-Si tuvieramos un número mayor de muestras (n &gt; 30) entonces conviene
+Si tuvieramos un número mayor de muestras (n &gt; 30) entonces conviene:
 
 
 ```r
@@ -1612,6 +1620,7 @@ plotPCA(rld, intgroup = "Condition")
 
 
 **DESeq2 evalúa los 500 genes con mayor varianza del set de datos**
+
 
 - Con la librería de *PCAtools*:
 
@@ -1639,18 +1648,18 @@ screeplot(PCA)
 --
 
 .pull-left[**DESeq2**
-&lt;img src="Slides_files/figure-html/unnamed-chunk-100-1.png" width="350px" style="display: block; margin: auto;" /&gt;
+&lt;img src="Slides_files/figure-html/unnamed-chunk-101-1.png" width="350px" style="display: block; margin: auto;" /&gt;
 ]
 --
 .pull-right[**PCA tools**
-&lt;img src="Slides_files/figure-html/unnamed-chunk-101-1.png" width="350px" style="display: block; margin: auto;" /&gt;
+&lt;img src="Slides_files/figure-html/unnamed-chunk-102-1.png" width="350px" style="display: block; margin: auto;" /&gt;
 ]
 
 ---
 ## PCA
 ## ¿Cuánta varianza es explicada por cada componente?
 
-&lt;img src="Slides_files/figure-html/unnamed-chunk-102-1.png" width="400px" style="display: block; margin: auto;" /&gt;
+&lt;img src="Slides_files/figure-html/unnamed-chunk-103-1.png" width="400px" style="display: block; margin: auto;" /&gt;
 
 ---
 ## PCA y MDS
@@ -1666,7 +1675,7 @@ glimmaMDS(dds)
 ---
 class: inverse, center, middle
 
-# 13: Análisis de expresión diferencial
+# 11: Análisis de expresión diferencial
 ---
 ## Análisis de expresión diferencial (DE)
 
@@ -1826,7 +1835,7 @@ table(resLFC1$padj &lt; 0.1)
 ---
 class: inverse, center, middle
 
-# 14: Visualización de los resultados
+# 12: Visualización de los resultados
 ---
 
 .center[
@@ -1882,7 +1891,7 @@ plotMA(res)
 ---
 # MAplot
 
-&lt;img src="Slides_files/figure-html/unnamed-chunk-119-1.png" width="450px" style="display: block; margin: auto;" /&gt;
+&lt;img src="Slides_files/figure-html/unnamed-chunk-120-1.png" width="450px" style="display: block; margin: auto;" /&gt;
 
 ---
 # MAplot
@@ -1911,13 +1920,13 @@ resultsNames(dds)
 .pull-left[
 Sin `lfcshrink` 
 
-&lt;img src="Slides_files/figure-html/unnamed-chunk-121-1.png" width="450px" style="display: block; margin: auto;" /&gt;
+&lt;img src="Slides_files/figure-html/unnamed-chunk-122-1.png" width="450px" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
 Con `lfcshrink` 
 
-&lt;img src="Slides_files/figure-html/unnamed-chunk-122-1.png" width="450px" style="display: block; margin: auto;" /&gt;
+&lt;img src="Slides_files/figure-html/unnamed-chunk-123-1.png" width="450px" style="display: block; margin: auto;" /&gt;
 ]
 ---
 # MAplot
@@ -1925,7 +1934,7 @@ Con `lfcshrink`
 También pueden generar un MAplot interactivo con la librería de *Glimma*
 
 ```r
-##Para los objetos creados con DESeq2 es importante que incluyas un nivel llamado group
+##Para los objetos creados con DESeq2 es importante que incluyas un nivel llamado group al objeto dds
 group &lt;- info$Treatment
 dds$group &lt;- group
 glimmaMA(dds)
@@ -1955,7 +1964,7 @@ volcanoplotR(DEG, logfc = 0, p.adj = 0.1, type = "DESeq")
 ---
 # Volcano plot
 
-&lt;img src="Slides_files/figure-html/unnamed-chunk-125-1.png" width="450px" style="display: block; margin: auto;" /&gt;
+&lt;img src="Slides_files/figure-html/unnamed-chunk-126-1.png" width="450px" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -2002,7 +2011,7 @@ pheatmap(norm_counts,
 ---
 # Heatmap
 
-&lt;img src="Slides_files/figure-html/unnamed-chunk-127-1.png" width="450px" style="display: block; margin: auto;" /&gt;
+&lt;img src="Slides_files/figure-html/unnamed-chunk-128-1.png" width="450px" style="display: block; margin: auto;" /&gt;
 
 
 
