@@ -58,7 +58,7 @@ el código usado para generar las [slides]() las puedes encontrar en [Github](ht
 Está práctica está basada en Mike love vignette y ocuparemos los siguientes 
 programas para analizar los datos del GSExxx.
 
-- [Descargar los datos que ocuparemos en está práctica]()
+- [Descargar los datos que ocuparemos en está práctica](https://drive.google.com/file/d/1n8dQHFotDc-fHxrLZOPVFoS8D29Pf5SZ/view?usp=sharing)
 
 - FastQC
 
@@ -75,12 +75,12 @@ programas para analizar los datos del GSExxx.
 - Paquetería de R:
 
 
-Analizar archivos curdos de RNAseq requiere poder de computo, si quieres hacer 
-el análisis completo desde cero, necesitas una computadora con al menos RAM 8 GB
+Analizar archivos crudos de RNAseq requiere poder de computo, si quieres hacer 
+el análisis completo desde cero, necesitarás una computadora con al menos RAM 8 GB
 y espacio para almacenar los archivos crudos (`.fastq`), aún así todo el proceso
 puede tomar más tiempo del que tendremos en la práctica. Normalmente estos 
 análisis se realizan en un cluster o servidor que suelen tener mayor capacidad 
-que una laptop. Por lo que se verán los comando para hacer el alineamiento en 
+que una laptop. Por lo que se verán los comandos para hacer el alineamiento en 
 `Salmon`  pero **NO** correremos este paso. 
 
 ## Instalación
@@ -130,7 +130,19 @@ pip install multiqc
 <div class="alert alert-warning">
 ### Instalación de Salmon
 
-Seguir los pasos de la página de [Salmon]()
+Descargar el archivo salmon-1.4.0_linux_x86_64.tar.gz
+desde la página de [Salmon](https://github.com/COMBINE-lab/salmon/releases) y seguir
+las instrucciones.
+
+Si lo prefieres, la instalación la puedes realizar empleando conda:
+
+```{bash, echo = T, eval = F}
+#Descarga e instala el gestor de paquetes de python miniconda desde https://conda.io/projects/conda/en/latest/user-guide/install/index.html
+conda activate miniconda
+conda install -c bioconda salmon
+```
+
+
 </div>
 
 ---
@@ -214,7 +226,7 @@ Imagen tomada de [BiCore RNAseq course 2019](https://biocorecrg.github.io/RNAseq
 1- Checar los datos fastq
 ```{bash echo=TRUE}
 pwd
-ls data/Archivos_fastq
+ls ../data/Archivos_fastq
 ```
 
 
@@ -259,12 +271,16 @@ multiQC .
 
 # 8-Alineadores
 
+Si deseas realizar el pseudo-alineamiento con `Salmon` 
+te recomendamos descargar los archivos `.fastq` de las líneas celulares así como el
+archivo `.fasta` del transcriptoma humano. 
+
 ## Generar índice del transcriptoma
 
 <div class="alert alert-warning">
 Para ello vamos a requerir:
 
-- Archivo **Fasta** del transcriptoma de referencia del humano. Descargado del sitio de [GeneCode](https://www.gencodegenes.org/human/). Lo pueden encontrar en el folder de `Transcriptome/`
+- Archivo **Fasta** del transcriptoma de referencia del humano. Descargado del sitio de [GeneCode](https://www.gencodegenes.org/human/). Lo pueden encontrar en el folder de `Reference/`
 
 </div>
 
@@ -363,12 +379,12 @@ Importamos la información de cada muestra
 
 ```{r echo=TRUE}
 # Leemos los datos
-info <- read.delim(here::here("output/salmon_quants/metadata.txt"))
+coldata <- read.delim(here::here("output/salmon_quants/metadata.txt"))
 
 # Generamos la columna "names"
 # info$names <- info$Unique_id # Puedes agregar una columna nueva
-info <- dplyr::rename(info,names = Unique_id) # Renombrar la columna 
-info
+coldata <- dplyr::rename(coldata, names = unique_id) # Renombrar la columna 
+coldata
 ```
 
 Ahora las cuentas generadas por `Salmon`
@@ -381,10 +397,10 @@ list.files(dir)
 
 # Que hacemos aqui??  Checar
 # file.path(dir,paste0(info$Sample,"_quant"),"quant.sf")
-info$files <- file.path(dir,paste0(info$Sample,"_quant"),"quant.sf")
+coldata$files <- file.path(dir,paste0(coldata$Sample,"_quant"),"quant.sf")
 
 #Checamos que los archivos existan
-data.frame(info$Sample, file.exists(info$files))
+data.frame(coldata$Sample, file.exists(coldata$files))
 ```
 
 Importar los datos usando `tximeta` 
@@ -394,10 +410,10 @@ Importar los datos usando `tximeta`
 library(tximeta)
 
 # Checamos que el df tenga la columna "names" y "files"
-info
+coldata
 
 # Generamos el objeto usando tximeta()
-se <- tximeta(info)
+se <- tximeta(coldata)
 ```
 
 ---
@@ -548,7 +564,7 @@ df <- tibble(gene = c("gene1", "gene2"),
 df
 ```
 
-1. Crea una pseudo-referencia por muestra (promedio geometrico por fila) `sqrt(muestraA * mueestra B)`
+1. Crea una pseudo-referencia por muestra (promedio geometrico por fila) `sqrt(muestraA * muestra B)`
 
 ```{r}
 # Calcular el promedio geometrico
@@ -719,9 +735,9 @@ plotPCA(rld, intgroup = "Condition")
 
 ```{r, eval = F}
 ## Crear un objeto que contenga los datos del PCA
-PCA <- pca(assay(rld), scale = T, metadata = as.data.frame(colData(rld))) 
+PCA <- pca(assay(rld), scale = T, metadata = coldata) 
 ## Graficar en 2D los resultados
-biplot(PCA, colby = "Condition")
+biplot(PCA, colby = "Treatment")
 ## Generar un screeplot para visualizar la varianza asociada a cada componente
 screeplot(PCA)
 ```
@@ -812,12 +828,13 @@ De manera similar al MAplot con el volcano plot visualizamos los genes que muest
 - En el eje x se grafica el lfc o *log2foldchange*
 
 
-```{r, eval=FALSE}
+```{r, eval=T}
 ##Para crear un volcano plot necesitas convertir los resultados de DESeq a un data frame
 DEG <- as.data.frame(res)
 ##En el script de funciones encontrarás la función de volcanoplotR para generar tu gráfico
 #los valores de los argumentos logfc y p.adj deben ser iguales al threshold utilizado para generar los resultados
 #en type debes indicar que los resultados provienen de DESeq
+source("./functions.R")
 volcanoplotR(DEG, logfc = 0, p.adj = 0.1, type = "DESeq")
 ```
 
@@ -854,7 +871,8 @@ pheatmap(norm_counts,
          annotation_col = annotation_col)
 ```
 
-```{r, eval = F}
+```{r, eval = T}
+library(pheatmap)
 pheatmap(norm_counts, 
          border_color = NA, 
          scale = "row",
