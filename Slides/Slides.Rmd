@@ -1,7 +1,7 @@
 ---
 title: 'Minicurso'
 author: "Ana BVA, Rodolfo LCD"
-date: "`r Sys.Date()`"
+date: "`r BiocStyle::doc_date()`"
 output:
   xaringan::moon_reader:
     css: ["default", "default-fonts", "hygge", "xaringan-themer.css", "sydney-fonts.css"]
@@ -18,7 +18,7 @@ editor_options:
 ---
 class: inverse, center, middle
 
-# 1: Introduccion a RNA-seq 
+# Agradecimientos
 
 ```{r xaringan-themer, echo = F, include = F}
 library(xaringanthemer)
@@ -92,7 +92,19 @@ knitr::include_graphics("./Images/module7.png")
 ```
 
 ---
+## Agradecimientos
 
+
+```{r, out.width = "600px", fig.align = "center"}
+knitr::include_graphics("https://i0.wp.com/alcanzandoelconocimiento.com/wp-content/uploads/2019/11/Conabio-Logo-02.jpg?w=1024&ssl=1")
+```
+
+---
+class: inverse, center, middle
+
+# 1: Introducción al RNA-seq
+
+---
 ## Transcriptómica
 
 Estudio de la expresión genética
@@ -102,8 +114,6 @@ Estudio de la expresión genética
 ```{r, out.width = "900px",fig.align='center'}
 knitr::include_graphics("./Images/transcriptomica.png")
 ```
-
-
 
 ---
 
@@ -139,281 +149,142 @@ knitr::include_graphics("./Images/book.png")
 ```
 
 ---
+
 class: inverse, center, middle
 
-# 2: Aplicaciones más comúnes del RNA-seq
----
-## Aplicaciones
+# 2: Organización de un proyecto bioinformático
 
-```{r, out.width="400px", fig.align='center', echo = F}
-knitr::include_graphics("./Images/RNA_seq_apps.png")
+---
+
+## Organización del proyecto
+
+```{r, out.width="400px", fig.align='center', echo=F}
+knitr::include_graphics("./Images/Repo.png")
+```
+
+
+Almacenar el proyecto en .blue[GitHub] `r icons::icon_style(icons::fontawesome("github"), fill = "blue")` para el control de versiones 
+
+---
+
+## Organización del proyecto  
+
+- La función del **README** es explicar la organización del proyecto y que otros entiendan su contenido
+--
+
+- Los datos deben de almacenarse en un directorio especial (considerar espacio en disco):
+--
+
+- Considerar almacenar los datos en un repositorio como respaldo [OSF](https://osf.io/) `r icons::academicons("osf")`
+--
+
+- **El código es una de las partes más importantes del proyecto**
+
+---
+
+## Organización del proyecto
+## Código
+
+- Enumerar los scripts de acuerdo al orden en que serán ejecutados
+.tiny[
+```
++-- 1.QualityControl.sh
++-- 2.Trimming.sh
++-- 3.ReadAlignment.sh
++-- 4.DifferentialExpression.R
+```
+]
+
+- Utilizar rutas relativas hacia los archivos *input*
+.tiny[
+```
+fastqc ../Data/*.fastqc -o ../Results/
+```
+]
+- Comentar el script -> facilita que sea entendido por humanos
+.tiny[
+```
+#Change the location of bam files
+mv ../Data/*.bam ../Results/
+```
+]
+- ¡Mejorar el código! -> *Less is more*
+---
+
+.center[![cat](./Images/cat.png)]
+
+---
+## Organización del proyecto
+```{r, out.width="450px", fig.align='center', echo = F}
+knitr::include_graphics("./Images/Proyecto.png")
+```
+
+---
+## Experimento
+
+Número de acceso GEO: GSE152699
+
+```{r, out.width="800px", fig.align='center', echo=F}
+knitr::include_graphics("./Images/Experiment_ver.png")
 ```
 
 ---
 
-## Expresión cuantitativa de loci (EQTL)
-
---
-
-- Asociación entre cambios en la expresión de genes a SNPs conocidos
-
---
-
-- WGS y (variantes) y epigenómica (silencialmiento) para complementar los datos
-
---
-
-- Útil para la investigación de enfermedades o agronomía
-
---
-
-![eqtl](./Images/eqtl2.png)
-.font50[[Living in an adaptive world: Genomic dissection of the genus Homo and its immune response](https://rupress.org/jem/article/214/4/877/42247/Living-in-an-adaptive-world-Genomic-dissection-of)]
----
-
-## Detección de variantes
-
---
-
-- Alternativa al estudio clásico de variantes (WGS o WES)
-
---
-
-- Presenta limitaciones relacionadas con la cobertura y la profundidad (cobertura mayor a 10X)
-
---
-
-![variants](./Images/variants.png)
-
----
-
-## Redes de co-expresión
-
---
-
-- Asociación entre dos o más genes por medio de expresión coordinada
-
---
-
-- Genes co-expresados -> funciones relacionadas, mecanismos de regulación similar 
-
---
-
-- RNA-seq permite obtener redes de co-expresión más completas que los microarreglos
-
---
-
-- Requiere amplio número de muestras (al menos 20) 
-
----
-
-## Fusión de genes
-
-![fusion](./Images/Fusions.jpeg)
-.font50[[Frequent CTLA4-CD28 gene fusion in diverse types of T-cell lymphoma](https://www.haematologica.org/article/view/7742)]
----
-
-## Análisis de expresión diferencial
-
-
-
-- Aplicación más común del RNA-seq
-
---
-
-- Permite identificar y cuantificar la expresión de transcritos entre dos grupos distintos
-
---
-
-- Etapas del desarrollo, tejidos distintos, efecto de estímulos o tratamientos
-
---
-
-- Requiere del uso de modelos estadísticos que evaluen la expresión diferencial 
-
---
-
-- Normalización de los datos (tamaño de la librería, longitud de los genes, composición de la librería...)
-
----
 class: inverse, center, middle
 
-# 3: Consideraciones para el diseño experimental
+# 3: Flujo de trabajo para el análisis de RNA-seq
 ---
-## ¿Cúal es la pregunta que se quiere contestar?
+## Flujo general de trabajo
 
 
-```{r, out.width = "290px",fig.align='center'}
-knitr::include_graphics("./Images/experiment.png")
+```{r, out.width = "550px",fig.align='center'}
+knitr::include_graphics("https://biocorecrg.github.io/RNAseq_course_2019/images/RNAseq_workflow.png")
 ```
 
-
-
----
-
-## ¿Cúal es la pregunta que se quiere contestar?
-
---
-
-Consideraciones importantes:
-
-.font70[
-.pull-left[
-- **Single vs paired-end** (análisis de isoformas)
-
-- **Stranded vs unstranded** (antisense y overlapping
-transcripts)
-]
-
-.pull-right[
-- **Profundidad de la secuenciación** (detección de transcritos con baja abundancia). 
-- **Número de replicas**:
-
-  - *Biológicas* = independientes, muestras biologicamente distintas.
-
-  - *Técnicas* = repetir la medición de la misma muestra.
-]
-
-.full-width[.content-box-red[Para el análisis de expresión diferencial es mejor **incrementar el número de replicas** que incrementar la profundidad de la secuenciación.]]
-]
+.tiny[Imagen tomada de [aquí](https://biocorecrg.github.io/RNAseq_course_2019/salmon.html)]
 
 ---
 
-# ¿Qué es single-end y paired-end?
-
-.small[
-**Single-end**:  Lectura de un único extremo de cada fragmento. 
-
-```{r, out.width = "900px",fig.align='center'}
-knitr::include_graphics("./Images/s-p-end.png")
-```
-
-**Paired-end**: La secuenciación pareada proporciona la secuencia de ambos extremos de cada fragmento, siempre separados por una distancia conocida.
+## Primeros pasos
 
 
-[Martínez, Javier María Rodríguez. "Secuenciación de genomas." Arbor 177.698 (2004): 285-310.](http://www.encuentros.uma.es/encuentros138_9/secuenciacion.pdf)
-]
----
-
-# Profundidad de la secuenciación
-
-- Mayor profundidad permite deterctar transcritos con baja expresión (Entre más *reads* tengas, encontrarás mayor cantidad de genes)
-- Se requiere un incremento logarítmico en la profundidad de secuenciación para obtener un aumento lineal el la deteción de los genes
-
-```{r, out.width = "500px",fig.align='center'}
-knitr::include_graphics("./Images/depth.png")
+```{r, out.width = "540px",fig.align='center'}
+knitr::include_graphics("./Images/step1.png")
 ```
 
 
 ---
 
-# Precios
+## Alineamiento y Quantificación
 
-Es importante contemplar los costos dentro del diseño. La tabla muestra costos NO actualizados pero la tendencia es similar:
 
-- Single-end es más baráto que paired-end.
+```{r, out.width = "950px",fig.align='center'}
+knitr::include_graphics("./Images/step2.png")
+```
 
---
 
-- Mayor profundidad de secuenciación es más costoso. 
+---
 
---
+## Expresión Diferencial y análisis funcionales
 
-- Mayor longitud de bp por read aumenta el precio.
 
---
-```{r, out.width = "800px",fig.align='center'}
-knitr::include_graphics("./Images/cost.png")
+```{r, out.width = "750px",fig.align='center'}
+knitr::include_graphics("./Images/step3.png")
 ```
 
 ---
 
-# Precios del langebio
-.font70[
-Tomados de su página de internet [langebio](http://labsergen.langebio.cinvestav.mx/en/?services=sbssequencing)
-
-.pull-left[
-### Precios de librerias
-
-- 1 Library from DNA: $ 222.00
-
-- 16 Libraries from DNA: $ 89.00 c/u
-
-- 1 Library from total RNA or messenger RNA: $ 408.00
-
-- 16 Libraries from RNA: $ 153.00 c/u
-
-- 8 Small libraries RNA: $ 191.00 c/u
-
-]
-
-.pull-right[
-### Precios de secuenciación
+## Flujo general de trabajo
 
 
-- Running on MiSeq 2x300: $ 2,687.00
-
-- Run on NextSeq 2x150, High Yield: $ 7,396.00
-
-- Running on a HiSeq 2x100 lane : $ 3,490.00
-
-]
-
-.small[
-*Note: The price of libraries may vary depending on the number of samples to process.
-]
-
-]
-
----
-
-## ¿Cuáles son las posibles fuentes de variación? 
-
-.full-width[.content-box-blue[Conoce el fenómeno que quieres estudiar]]
-.font80[
-.pull-left[
-
-```{r, out.width = "200px",fig.align='center'}
-knitr::include_graphics("./Images/experiment.png")
-```
-]
-
-.pull-right[
-
-- **Variación biológica**: Sexo, edad, background genético, etnicidad, etc.
-
-- **Variación técnica**: Día de procesamiento de la muestra, lotes de reactivos, tiempo de recoleción de muestras, personal, etc.
-]
-]
----
-
-## Diseño experimental 
-
-Es importante considerar la **variación biológica** al planear el experimento, porque puede generar variación no deseada que no puede ser eliminada.
-
-```{r, out.width = "900px",fig.align='center'}
-knitr::include_graphics("./Images/batch.jpeg")
+```{r, out.width = "550px",fig.align='center'}
+knitr::include_graphics("https://biocorecrg.github.io/RNAseq_course_2019/images/RNAseq_workflow.png")
 ```
 
-
-.footnotesize[[doi.org/10.1101/025528](http://doi.org/10.1101/025528)]
-
+.tiny[Imagen tomada de [aquí](https://biocorecrg.github.io/RNAseq_course_2019/salmon.html)]
 
 ---
 
-## Diseño experimental balanceado
-.font80[
-Cuando las muestras se colectan en diferentes lotes es importante incluir diferentes grupos para detectar la **variación técnica**. Visualizar los datos usando algoritmos de redución de dimensiones ayuda a observar si las muestras tienen efectos por lote
-]
-
-```{r, out.width = "700px",fig.align='center'}
-knitr::include_graphics("./Images/balanced.jpeg")
-```
-
-
-.footnotesize[[doi.org/10.1101/025528](http://doi.org/10.1101/025528)]
-
----
 class: inverse, center, middle
 
 # 4: Tipos de archivos 
@@ -534,264 +405,11 @@ knitr::include_graphics("./Images/ASCII64.png")
 knitr::include_graphics("./Images/Fastq.png")
 ```
 
----
-
-## SAM/BAM
-
---
-
-- De manera posterior al alineamiento se generan archivos **"Sequence Alignment Map"** -> **SAM**
-
---
-
-- Archivos delimitados por tabuladores (TAB)
-
---
-
-- Convertidos a valores binarios como **"Binary Alignment Map"** -> **BAM**
-
---
-
-- **BAM** -> Mayor espacio en disco -> Acceso aleatorio más eficiente
-
---
-
-- Las secuencias en formato BAM se pueden ordenar por coordenadas
-
---
-
-- Conversion entre formatos [SamTools!](https://github.com/samtools/samtools)
-
----
-
-## SAM/BAM
-
-- Los archivos en formato **SAM** se dividen en dos secciones:
-
---
-
-- **HEADER**: Información general del archivo
-
---
-
-- **ALIGNMENT**: Información relacionada con el alineamiento de los reads
-
---
-```{r, out.width="550px", fig.align='center', echo = F}
-knitr::include_graphics("./Images/SAM-BAM.png")
-```
 
 ---
 class: inverse, center, middle
 
-# 5: Flujo de trabajo para el análisis de RNA-seq
----
-## Flujo general de trabajo
-
-
-```{r, out.width = "550px",fig.align='center'}
-knitr::include_graphics("https://biocorecrg.github.io/RNAseq_course_2019/images/RNAseq_workflow.png")
-```
-
-.tiny[Imagen tomada de [aquí](https://biocorecrg.github.io/RNAseq_course_2019/salmon.html)]
-
----
-
-## Primeros pasos
-
-
-```{r, out.width = "540px",fig.align='center'}
-knitr::include_graphics("./Images/step1.png")
-```
-
-
----
-
-## Alineamiento y Quantificación
-
-
-```{r, out.width = "950px",fig.align='center'}
-knitr::include_graphics("./Images/step2.png")
-```
-
-
----
-
-## Expresión Diferencial y análisis funcionales
-
-
-```{r, out.width = "750px",fig.align='center'}
-knitr::include_graphics("./Images/step3.png")
-```
-
----
-
-## Flujo general de trabajo
-
-
-```{r, out.width = "550px",fig.align='center'}
-knitr::include_graphics("https://biocorecrg.github.io/RNAseq_course_2019/images/RNAseq_workflow.png")
-```
-
-.tiny[Imagen tomada de [aquí](https://biocorecrg.github.io/RNAseq_course_2019/salmon.html)]
----
-class: inverse, center, middle
-
-# 6: Organización de un proyecto bioinformático
-
----
-
-## Crisis de reproducibilidad en la ciencia
-
-Para que dos o más personas realicen el mismo experimento bajo condiciones experimentales similares y obtengan resultados similares se requiere:
-
---
-
-- Descripción de materiales y métodos
-
---
-
-- Datos crudos o semi-crudos
-
---
-
-- Código de cómputo utilizado
-
---
-
-- Versión del software utilizado
-
---
-
-- Información suplementaria para realizar el análisis de los datos
-
----
-
-## Crisis de reproducibilidad en la ciencia
-
-**Crisis de reproducibilidad** en la ciencia -> Perseguir explicaciones incorrectas -> Diseñar tratamientos incorrectos para ciertas enfermedades
-
-Para combatir este problema:
-
-
---
-- Transparencia de datos en publicaciones científicas
-
---
-- Apertura de la información (Open science)
-
---
-- Código abierto para el análisis de datos
-
---
-- Repositiorios o bases de datos públicas donde se almacene la información
-
---
-- Software depositado en repositorios o servidores a largo plazo
-
----
-
-## Crisis de la reproducibilidad en la ciencia
-
-```{r, out.width="400px", fig.align='center', echo=F}
-knitr::include_graphics("./Images/Repo.png")
-```
-
-
-Almacenar el proyecto en .blue[GitHub] `r icons::icon_style(icons::fontawesome("github"), fill = "blue")` para el control de versiones 
-
----
-
-## Organización del proyecto  
-
-- La función del **README** es explicar la organización del proyecto y que otros entiendan su contenido
-
-- Los datos deben de almacenarse en un directorio especial (considerar espacio en disco):
-
-- Considerar almacenar los datos en un repositorio como respaldo [OSF](https://osf.io/) `r icons::academicons("osf")`
-
-- **El código es una de las partes más importantes del proyecto**
-
----
-
-## Organización del proyecto
-## Código
-
-- Enumerar los scripts de acuerdo al orden en que serán ejecutados
-.tiny[
-```
-+-- 1.QualityControl.sh
-+-- 2.Trimming.sh
-+-- 3.ReadAlignment.sh
-+-- 4.DifferentialExpression.R
-```
-]
-
-- Utilizar rutas relativas hacia los archivos *input*
-.tiny[
-```
-fastqc ../Data/*.fastqc -o ../Results/
-```
-]
-- Comentar el script -> facilita que sea entendido por humanos
-.tiny[
-```
-#Change the location of bam files
-mv ../Data/*.bam ../Results/
-```
-]
-- ¡Mejorar el código! -> *Less is more*
----
-
-.center[![cat](./Images/cat.png)]
-
----
-
-## Organización del proyecto
-## Código
-.font80[
-.pull-left[
-- **[DRY](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself)** Don't Repeat Yourself
-- **[KISS](https://en.wikipedia.org/wiki/KISS_principle)** Keep It Simple Soldier
-- **[YAGNI](https://en.wikipedia.org/wiki/You_aren%27t_gonna_need_it)** You Aren't Gonna Need It
-- **[POLA](https://en.wikipedia.org/wiki/Principle_of_least_astonishment)** Principle of Least Astonishment
-- **[POLP](https://digitalguardian.com/blog/what-principle-least-privilege-polp-best-practice-information-security-and-compliance)** Principle of Least Privilege
-]
-.pull-right[
-```{r, out.width="200px", fig.align='right', echo=F}
-knitr::include_graphics("./Images/Development.png")
-```
-]
-]
-
----
-## Organización del proyecto
-## Resultados
-
-```{r, out.width="700px", fig.align='center', echo=F}
-knitr::include_graphics("./Images/Results.png")
-```
-
----
-## Organización del proyecto
-```{r, out.width="450px", fig.align='center', echo = F}
-knitr::include_graphics("./Images/Proyecto.png")
-```
-
----
-## Experimento
-
-Número de acceso GEO: GSE152699
-
-```{r, out.width="800px", fig.align='center', echo=F}
-knitr::include_graphics("./Images/Experiment_ver.png")
-```
-
-
----
-class: inverse, center, middle
-
-# 7: Control de calidad de los datos
+# 5: Control de calidad de los datos
 ---
 ## ¿Porqué es importante revisar los datos crudos?
 --
@@ -960,7 +578,7 @@ multiQC .
 ---
 class: inverse, center, middle
 
-# 8: Alineamiento
+# 6: Alineamiento
 ---
 
 ```{r, out.width="600px", fig.align='center', echo = F}
@@ -1147,7 +765,7 @@ salmon quant -i ../transcriptome/genecode.v37.salmon141 \
 
 class: inverse, center, middle
 
-# 9: Tximeta y Tximport
+# 7: Tximeta y Tximport
 ---
 ## Recordatorio
 
@@ -1243,7 +861,7 @@ se <- tximeta(coldata)
 ---
 class: inverse, center, middle
 
-# 10: Objeto Summarized Experiment
+# 8: Objeto Summarized Experiment
 ---
 
 .center2[
@@ -1389,7 +1007,7 @@ row.names(colData(se)) == colnames(assay(se))
 ---
 class: inverse, center, middle
 
-# 11: Normalización de los datos
+# 9: Normalización de los datos
 ---
 ## Normalización 
 
@@ -1620,7 +1238,7 @@ ggplot(df, aes(x = x, y = y)) + geom_hex(bins = 80) +
 ---
 class: inverse, center, middle
 
-# 12: Exploración de los datos
+# 10: Exploración de los datos
 ---
 
 
@@ -1792,7 +1410,6 @@ knitr::include_graphics("./Images/PCARNAseq.png")
 ]
 
 ---
-## PCA
 ## ¿Cómo crear nuestro propio PCA?
 
 .scroll-output[
@@ -1810,7 +1427,7 @@ Usemos la siguiente normalización logarítmica de las cuentas (toma en cuenta e
 rld <- rlog(dds, blind = F)
 ```
 
-Si tuvieramos un número mayor de muestras (n > 30) entonces conviene
+Si tuvieramos un número mayor de muestras (n > 30) entonces conviene:
 
 ```{r, eval = F, echo = T}
 vsd <- vst(dds, blind = T)
@@ -1829,6 +1446,7 @@ plotPCA(rld, intgroup = "Condition")
 
 
 **DESeq2 evalúa los 500 genes con mayor varianza del set de datos**
+
 
 - Con la librería de *PCAtools*:
 
@@ -1894,7 +1512,7 @@ glimmaMDS(dds)
 ---
 class: inverse, center, middle
 
-# 13: Análisis de expresión diferencial
+# 11: Análisis de expresión diferencial
 ---
 ## Análisis de expresión diferencial (DE)
 
@@ -2006,7 +1624,7 @@ table(resLFC1$padj < 0.1)
 ---
 class: inverse, center, middle
 
-# 14: Visualización de los resultados
+# 12: Visualización de los resultados
 ---
 
 .center[
@@ -2116,7 +1734,7 @@ plotMA(res_lfc)
 .scroll-output[
 También pueden generar un MAplot interactivo con la librería de *Glimma*
 ```{r, eval = F, echo = T}
-##Para los objetos creados con DESeq2 es importante que incluyas un nivel llamado group
+##Para los objetos creados con DESeq2 es importante que incluyas un nivel llamado group al objeto dds
 group <- info$Treatment
 dds$group <- group
 glimmaMA(dds)

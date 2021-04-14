@@ -34,5 +34,3 @@ significant <- DEG %>% filter(log2FoldChange > 0 & padj < 0.1 |
                                 log2FoldChange < 0 & padj < 0.1)
 norm_counts <- counts(dds, normalized = T)
 annotation_col <- coldata[, c(2, 3)]
-
-save(se, dds, res, file = "../Files/ObjetosR.RData")
