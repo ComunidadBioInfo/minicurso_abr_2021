@@ -62,20 +62,20 @@ En el archivo **Files.zip** encontrarás:
 
 ## Descripción general
 
-|    | Tema                                                        | Práctica | Tiempo (min) | Encargado |
+|    | [Tema](https://comunidadbioinfo.github.io/minicurso_abr_2021/Slides/Slides.html#1)                                                         | [Práctica](https://comunidadbioinfo.github.io/minicurso_abr_2021/bin/Practica-RNAseq.html) | Tiempo (min) | Encargado |
 |----|-------------------------------------------------------------|--------|--------------|-----------|
-| 1  | Introducción a RNA-seq                                      | NA     | 5            | AnaB      |
-| 2  | Organización del proyecto (folder de datos, fig, scripts)   | NA     | 5            | Rodolfo   |
-| 3  | Flujo de trabajo para el análisis de RNA-seq                | NA     | 5            | AnaB      |
-| 4  | ¿Qué tipo de archivos se necesitan?                         | NA     | 5            | Rodolfo   |
-| 5  | Limpieza de datos (Trimming y filtrado)                     | Si     | 10           | AnaB      |
-| 6  | Alineadores (Salmon)                                        | Si     | 10           | Rodolfo   |
-| 7  | tximeta, tximport                                           | Si     | 10           | AnaB      |
-| 8  | Objeto SummarizedExperiment en R                            | Si     | 10           | Rodolfo   |
-| 9  | Normalización de los datos (RPKM, TPM)                      | Si     | 15           | AnaB      |
-| 10 | PCA (outliers)                                              | Si     | 15           | Rodolfo   |
-| 11 | DE (analysis)                                               | Si     | 15           | AnaB      |
-| 12 | DE (visualization/resultados)                               | Si     | 15           | Rodolfo   |
+| 1  | [Introducción a RNA-seq](https://comunidadbioinfo.github.io/minicurso_abr_2021/Slides/Slides.html#6)                                      | NA     | 5            | AnaB      |
+| 2  | [Organización del proyecto (folder de datos, fig, scripts](https://comunidadbioinfo.github.io/minicurso_abr_2021/Slides/Slides.html#12)   | NA     | 5            | Rodolfo   |
+| 3  | [Flujo de trabajo para el análisis de RNA-seq](https://comunidadbioinfo.github.io/minicurso_abr_2021/Slides/Slides.html#22)               | NA     | 5            | AnaB      |
+| 4  | [Tipos de archivos](https://comunidadbioinfo.github.io/minicurso_abr_2021/Slides/Slides.html#28])                                         | NA     | 5            | Rodolfo   |
+| 5  | [Control de calidad de los datos](https://comunidadbioinfo.github.io/minicurso_abr_2021/Slides/Slides.html#49)                            | Si     | 10           | AnaB      |
+| 6  | [Alineamiento (Salmon)](https://comunidadbioinfo.github.io/minicurso_abr_2021/Slides/Slides.html#63)                                      | Si     | 10           | Rodolfo   |
+| 7  | [tximeta, tximport](https://comunidadbioinfo.github.io/minicurso_abr_2021/Slides/Slides.html#80)                                          | Si     | 10           | AnaB      |
+| 8  | [Objeto SummarizedExperiment en R](https://comunidadbioinfo.github.io/minicurso_abr_2021/Slides/Slides.html#87)                           | Si     | 10           | Rodolfo   |
+| 9  | [Normalización de los datos (RPKM, TPM)](https://comunidadbioinfo.github.io/minicurso_abr_2021/Slides/Slides.html#100)                    | Si     | 15           | AnaB      |
+| 10 | [Exploración de los datos](https://comunidadbioinfo.github.io/minicurso_abr_2021/Slides/Slides.html#113)                                  | Si     | 15           | Rodolfo   |
+| 11 | [DE (analysis)](https://comunidadbioinfo.github.io/minicurso_abr_2021/Slides/Slides.html#152)                                             | Si     | 15           | AnaB      |
+| 12 | [DE (visualization/resultados)](https://comunidadbioinfo.github.io/minicurso_abr_2021/Slides/Slides.html#161)                             | Si     | 15           | Rodolfo   |
 
 
 
