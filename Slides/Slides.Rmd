@@ -1201,6 +1201,10 @@ table(se$Condition)
 # Generar el objeto de DESeq 
 dds <- DESeqDataSet(se, design = ~ Condition)
 
+# Prefiltrado para quitar genes con cuentas bajas
+keep <- rowSums(counts(dds)) >= 6
+dds <- dds[keep, ]
+
 # Funcion que normaliza los datos y realiza el analisis de expresión differencial
 dds <- DESeq(dds)
 ```
@@ -1468,7 +1472,7 @@ vsd <- vst(dds, blind = T)
 
 ```{r, eval = FALSE, echo = T}
 ## El argumento intgroup permite especificar mediante cuál variable colorear los datos
-plotPCA(rld, intgroup = "Condition")
+plotPCA(rld, intgroup = "Treatment")
 ```
 
 
@@ -1479,7 +1483,7 @@ plotPCA(rld, intgroup = "Condition")
 
 ```{r, eval = F, echo = T}
 ## Crear un objeto que contenga los datos del PCA
-PCA <- pca(assay(rld), scale = T, metadata = coldata) 
+PCA <- pca(assay(rld), scale = T, metadata = colData(rld)) 
 ## Graficar en 2D los resultados
 biplot(PCA, colby = "Treatment")
 ## Generar un screeplot para visualizar la varianza asociada a cada componente
@@ -1504,7 +1508,7 @@ ggplot()+
 
 .pull-left[**DESeq2**
 ```{r,echo = F,dpi=300, out.width= "350px", fig.align='center'}
-plotPCA(rld, intgroup = "Condition")+
+plotPCA(rld, intgroup = "Treatment")+
   geom_label_repel(aes(label = colnames(assay(rld))), 
                    segment.color = "grey50", 
                    box.padding = 0.35, 
@@ -1621,16 +1625,16 @@ library("ggplot2")
 ```
 
 ```{r echo=TRUE, eval = F, include=F}
-#
-se$Condition <- factor(se$Condition)
-table(se$Condition)
-dds <- DESeqDataSet(se, design = ~ Condition)
-dds <- DESeq(dds)
+# Checar grupos
+table(se$Treatment)
+# Checar objeto generado 
+dds
 ```
 
 Para ver los resultados podemos usar la función `results`
 
 ```{r, eval = T, echo = T}
+# Obtener los resultados del DE
 res <- results(dds)
 res
 summary(res)
@@ -1732,7 +1736,7 @@ Usemos la función `lfcShrink` de la librería *.red[apeglm]*
 
 ```{r, eval = F, echo = T}
 ##En el argumento coef indicar el contraste entre los grupos experimentales
-res_lfc <- lfcShrink(dds, coef = "Condition_Verafinib_vs_Control",  type = "apeglm")
+res_lfc <- lfcShrink(dds, coef = "Treatment_Verafinib_vs_Control",  type = "apeglm")
 ##Si desconocemos el nombre del contraste, usar:
 resultsNames(dds)
 ```

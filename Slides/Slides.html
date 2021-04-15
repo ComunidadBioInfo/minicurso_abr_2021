@@ -4,7 +4,7 @@
     <title>Minicurso</title>
     <meta charset="utf-8" />
     <meta name="author" content="Ana BVA, Rodolfo LCD" />
-    <meta name="date" content="2021-04-14" />
+    <meta name="date" content="2021-04-15" />
     <script src="libs/header-attrs-2.7/header-attrs.js"></script>
     <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
     <link href="libs/remark-css-0.0.1/default-fonts.css" rel="stylesheet" />
@@ -18,7 +18,7 @@ class: center, middle, inverse, title-slide
 
 # Minicurso
 ### Ana BVA, Rodolfo LCD
-### 14 April 2021
+### 15 April 2021
 
 ---
 
@@ -1321,6 +1321,10 @@ table(se$Condition)
 # Generar el objeto de DESeq 
 dds &lt;- DESeqDataSet(se, design = ~ Condition)
 
+# Prefiltrado para quitar genes con cuentas bajas
+keep &lt;- rowSums(counts(dds)) &gt;= 6
+dds &lt;- dds[keep, ]
+
 # Funcion que normaliza los datos y realiza el analisis de expresión differencial
 dds &lt;- DESeq(dds)
 ```
@@ -1618,7 +1622,7 @@ vsd &lt;- vst(dds, blind = T)
 
 ```r
 ## El argumento intgroup permite especificar mediante cuál variable colorear los datos
-plotPCA(rld, intgroup = "Condition")
+plotPCA(rld, intgroup = "Treatment")
 ```
 
 
@@ -1630,7 +1634,7 @@ plotPCA(rld, intgroup = "Condition")
 
 ```r
 ## Crear un objeto que contenga los datos del PCA
-PCA &lt;- pca(assay(rld), scale = T, metadata = coldata) 
+PCA &lt;- pca(assay(rld), scale = T, metadata = colData(rld)) 
 ## Graficar en 2D los resultados
 biplot(PCA, colby = "Treatment")
 ## Generar un screeplot para visualizar la varianza asociada a cada componente
@@ -1750,6 +1754,7 @@ Para ver los resultados podemos usar la función `results`
 
 
 ```r
+# Obtener los resultados del DE
 res &lt;- results(dds)
 res
 ```
@@ -1911,7 +1916,7 @@ Usemos la función `lfcShrink` de la librería *.red[apeglm]*
 
 ```r
 ##En el argumento coef indicar el contraste entre los grupos experimentales
-res_lfc &lt;- lfcShrink(dds, coef = "Condition_Verafinib_vs_Control",  type = "apeglm")
+res_lfc &lt;- lfcShrink(dds, coef = "Treatment_Verafinib_vs_Control",  type = "apeglm")
 ##Si desconocemos el nombre del contraste, usar:
 resultsNames(dds)
 ```
