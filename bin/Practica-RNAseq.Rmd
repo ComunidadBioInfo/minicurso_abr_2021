@@ -442,6 +442,7 @@ coldata <- read.delim(here::here("output/salmon_quants/metadata.txt"))
 # Generamos la columna "names"
 # info$names <- info$Unique_id # Puedes agregar una columna nueva
 coldata <- dplyr::rename(coldata, names = unique_id) # Renombrar la columna 
+rownames(coldata) <- coldata$names
 coldata
 ```
 
@@ -487,11 +488,14 @@ se <- tximeta(coldata)
 [Slides](https://comunidadbioinfo.github.io/minicurso_abr_2021/Slides/Slides.html#87)
 
 ```{r, out.width="700px", echo=FALSE}
-knitr::include_graphics("../Slides/Images/Slots.png")
+knitr::include_graphics("../Slides/Images/Summarized_experiment.png")
 ```
 
-```{r  echo = T}
+```{r message=FALSE, warning=FALSE}
 library(SummarizedExperiment)
+```
+
+```{r}
 se
 ```
 
@@ -712,7 +716,7 @@ table(se$Treatment)
 dds <- DESeqDataSet(se, design = ~ Treatment)
 
 # Prefiltrado para quitar genes con cuentas bajas
-keep <- rowSums(counts(dds)) >= 6
+keep <- rowSums(counts(dds) >= 3) >= 6
 dds <- dds[keep, ]
 
 # Funcion que normaliza los datos y realiza el analisis de expresión differencial
@@ -942,12 +946,13 @@ library(pheatmap)
 
 ##Guardar la lista de transcritos que mostraron expresión diferencial significativa
 significant <- DEG %>% filter(log2FoldChange > 0 & padj < 0.1 |
-                                log2FoldChange < 0 & padj < 0.1)
-##Cortar la matriz de cuentas normalizadas con los id de los transcritos diferencialmente expresados
+                                   log2FoldChange < 0 & padj < 0.1)
+##Generar la matriz de cuentas normalizadas
 norm_counts <- counts(dds, normalized = T)
-norm_counts <- norm_counts[rownames(significant),]
+##Cortar la matriz de cuentas normalizadas con los id de los transcritos diferencialmente expresados
+norm_counts <- norm_counts[rownames(significant), ]
 ##Generar una tabla de anotaciones preservando el tratamiento y el tipo de células
-annotation_col <- coldata[, c(3, 4)]
+annotation_col <- coldata[, c("names","Cell", "Treatment")]
 ##Generar el heatmap empleando clustering jerarquico
 pheatmap(norm_counts, 
          border_color = NA, 
@@ -972,6 +977,8 @@ pheatmap(norm_counts,
          show_rownames = F, 
          annotation_col = annotation_col)
 ```
+
+
 
 # Paquetería
 
