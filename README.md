@@ -52,7 +52,7 @@ install.packages()
 
 ## Archivos
 
-Si decides realizar toda la práctica necesitarás estos archivos. Descargar el archivo en formato zip llamado **Files.zip** desde este [vínculo](https://drive.google.com/file/d/1n8dQHFotDc-fHxrLZOPVFoS8D29Pf5SZ/view?usp=sharing) y colocalo en el folder principal de este repositiorio. Descomprime el archivo y sigue las indicaciones de los instructores.
+Si decides realizar toda la práctica necesitarás estos archivos. Descargar los archivos [.fastq.gz](https://drive.google.com/drive/folders/1JFI9xDQdNKhTlAoVe5UThXgw3ljaP1aE?usp=sharing) y [salmon_quants](https://drive.google.com/drive/folders/16bqvFStK3zID43R8nXjvKKltJYhQ1DRE?usp=sharing) y colocalos en el folder principal de este repositiorio. Descomprime el archivo y sigue las indicaciones de los instructores.
 En el archivo **Files.zip** encontrarás:
 
 * `Archivos_fastq/`: Folder que contiene los archivos en formato .fastq
